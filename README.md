@@ -14,3 +14,7 @@ See LICENSE.txt for licensing information.
 
 * Java 8 idioms including streams support
 
+***
+
+Project link: <https://github.com/run2000/java-immutable-collections>
+
