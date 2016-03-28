@@ -233,7 +233,7 @@ public final class ImmutableArrayMap<K,V> extends AbstractMap<K,V> implements Ar
     private static final class ImmutableEntryList<K,V> extends AbstractRandomAccessList<Entry<K,V>> {
         private final ArrayBackedMap<K,V> m_Map;
 
-        public ImmutableEntryList(ArrayBackedMap<K,V> map) {
+        ImmutableEntryList(ArrayBackedMap<K, V> map) {
             this.m_Map = Objects.requireNonNull(map, "map must be non-null");
         }
 

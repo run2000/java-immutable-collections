@@ -14,7 +14,7 @@ import java.util.Spliterators;
 final class ArrayBackedMapValueList<E> extends AbstractRandomAccessList<E> {
     private final ArrayBackedMap<?, E> m_Map;
 
-    public ArrayBackedMapValueList(ArrayBackedMap<?, E> map) {
+    ArrayBackedMapValueList(ArrayBackedMap<?, E> map) {
         this.m_Map = Objects.requireNonNull(map, "map must be non-null");
     }
 

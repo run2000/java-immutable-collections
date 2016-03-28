@@ -184,7 +184,7 @@ public abstract class AbstractRandomAccessList<E> extends AbstractList<E> implem
         private final int m_EndIndex;
         private int m_Index;
 
-        public RandomAccessIterator(AbstractRandomAccessList<E> list) {
+        RandomAccessIterator(AbstractRandomAccessList<E> list) {
             m_List = Objects.requireNonNull(list);
             m_EndIndex = list.size();
             m_Index = 0;

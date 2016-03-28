@@ -20,7 +20,7 @@ public final class BinarySearchUtils {
      * Searches the specified list for the specified object using the binary
      * search algorithm.  The list must be sorted into ascending order
      * according to the {@linkplain Comparable natural ordering} of its
-     * elements (as by the {@link java.util.Arrays#sort(Object[]) Arrays.sort(Object[])} method)
+     * elements (as by the {@code java.util.Arrays.sort(Object[])} method)
      * prior to making this call.  If it is not sorted, the results are undefined.
      * If the list contains multiple elements equal to the specified object,
      * there is no guarantee which one will be found.
@@ -53,7 +53,7 @@ public final class BinarySearchUtils {
      * using the binary search algorithm.
      * The range must be sorted into ascending order according to the
      * {@linkplain Comparable natural ordering} of its elements (as by the
-     * {@link java.util.Arrays#sort(Object[], int, int) Arrays.sort(Object[], int, int} method)
+     * {@code java.util.Arrays.sort(Object[], int, int} method)
      * prior to making this call. If it is not sorted, the results are undefined.
      * <p>
      * Flogged from Arrays#binarySearch(), and adjusted to take an
@@ -111,7 +111,7 @@ public final class BinarySearchUtils {
      * Searches the specified list for the specified object using the binary
      * search algorithm.  The list must be sorted into ascending order
      * according to the specified comparator (as by the
-     * {@link java.util.Arrays#sort(Object[], Comparator) Arrays.sort(Object[], Comparator)}
+     * {@code java.util.Arrays.sort(Object[], Comparator)}
      * method), prior to making this call.  If it is
      * not sorted, the results are undefined.  If the list contains multiple
      * elements equal to the specified object, there is no guarantee which one
@@ -146,8 +146,7 @@ public final class BinarySearchUtils {
      * the specified indexer for the specified object using the binary
      * search algorithm.  The array must be sorted into ascending order
      * according to the specified comparator (as by the
-     * {@link java.util.Arrays#sort(Object[], int, int, Comparator)
-     * Arrays.sort(T[], int, int, Comparator)}
+     * {@code java.util.Arrays.sort(T[], int, int, Comparator)}
      * method) prior to making this call.  If it is not sorted, the results
      * are undefined. If the array contains multiple
      * elements equal to the specified object, there is no guarantee which one

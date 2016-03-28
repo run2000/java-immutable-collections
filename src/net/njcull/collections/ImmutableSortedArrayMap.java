@@ -307,7 +307,7 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> impleme
     private static final class SortedValueEntryList<K,V> extends AbstractRandomAccessList<Entry<K,V>> {
         private final ImmutableSortedArrayMap<K,V> m_Map;
 
-        public SortedValueEntryList(ImmutableSortedArrayMap<K,V> map) {
+        SortedValueEntryList(ImmutableSortedArrayMap<K,V> map) {
             this.m_Map = Objects.requireNonNull(map, "map must be non-null");
         }
 
@@ -339,7 +339,7 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> impleme
     private static final class SortedValueList<E> extends AbstractRandomAccessList<E> {
         private final ImmutableSortedArrayMap<?,E> m_Map;
 
-        public SortedValueList(ImmutableSortedArrayMap<?, E> map) {
+        SortedValueList(ImmutableSortedArrayMap<?, E> map) {
             this.m_Map = Objects.requireNonNull(map, "map must be non-null");
         }
 
@@ -371,7 +371,7 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> impleme
     private static final class SortedBiMapValueList<E> extends AbstractRandomAccessList<E> {
         private final ImmutableSortedArrayMap<?,E> m_Map;
 
-        public SortedBiMapValueList(ImmutableSortedArrayMap<?, E> map) {
+        SortedBiMapValueList(ImmutableSortedArrayMap<?, E> map) {
             this.m_Map = Objects.requireNonNull(map, "bimap must be non-null");
         }
 

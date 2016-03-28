@@ -14,7 +14,7 @@ import java.util.Spliterators;
 final class ArrayBackedBiMapValueList<E> extends AbstractRandomAccessList<E> {
     private final ArrayBackedMap<?, E> m_Map;
 
-    public ArrayBackedBiMapValueList(ArrayBackedMap<?, E> map) {
+    ArrayBackedBiMapValueList(ArrayBackedMap<?, E> map) {
         this.m_Map = Objects.requireNonNull(map, "map must be non-null");
     }
 

@@ -6,6 +6,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
+ * Tests for ImmutableSortedArraySet.
+ *
  * @author run2000
  * @version 4/01/2016.
  */

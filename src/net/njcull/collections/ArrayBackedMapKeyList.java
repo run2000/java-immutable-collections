@@ -13,7 +13,7 @@ import java.util.Spliterators;
 final class ArrayBackedMapKeyList<E> extends AbstractRandomAccessList<E> {
     private final ArrayBackedMap<E, ?> m_Map;
 
-    public ArrayBackedMapKeyList(ArrayBackedMap<E, ?> map) {
+    ArrayBackedMapKeyList(ArrayBackedMap<E, ?> map) {
         this.m_Map = Objects.requireNonNull(map, "map must be non-null");
     }
 

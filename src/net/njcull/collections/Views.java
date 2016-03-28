@@ -28,7 +28,7 @@ public final class Views {
     private static final class SetView<E> extends AbstractSet<E> implements ArrayBackedSet<E> {
         private final List<E> m_List;
 
-        public SetView(List<E> list) {
+        SetView(List<E> list) {
             this.m_List = Objects.requireNonNull(list, "list must be non-null");
         }
 
@@ -145,13 +145,13 @@ public final class Views {
         private final int m_StartIndex;
         private final int m_EndIndex;
 
-        public ListView(ArrayBackedCollection<E> coll) {
+        ListView(ArrayBackedCollection<E> coll) {
             this.m_Coll = Objects.requireNonNull(coll);
             this.m_StartIndex = 0;
             this.m_EndIndex = coll.size();
         }
 
-        public ListView(ArrayBackedCollection<E> coll, int startIndex, int endIndex) {
+        ListView(ArrayBackedCollection<E> coll, int startIndex, int endIndex) {
             this.m_Coll = Objects.requireNonNull(coll);
             this.m_StartIndex = startIndex;
             this.m_EndIndex = endIndex;
@@ -216,7 +216,7 @@ public final class Views {
     private static final class CollectionView<E> extends AbstractCollection<E> implements ArrayBackedCollection<E> {
         private final List<E> m_List;
 
-        public CollectionView(List<E> list) {
+        CollectionView(List<E> list) {
             this.m_List = Objects.requireNonNull(list, "list must be non-null");
         }
 

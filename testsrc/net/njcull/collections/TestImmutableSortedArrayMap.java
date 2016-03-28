@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
+ * Tests for ImmutableSortedArrayMap.
+ *
  * @author run2000
  * @version 8/01/2016.
  */

@@ -15,13 +15,13 @@ final class ArrayBackedCollectionIterator<E> implements Iterator<E> {
     private final int m_EndIndex;
     private int m_Index;
 
-    public ArrayBackedCollectionIterator(ArrayBackedCollection<E> set) {
+    ArrayBackedCollectionIterator(ArrayBackedCollection<E> set) {
         m_Set = Objects.requireNonNull(set);
         m_EndIndex = set.size();
         m_Index = 0;
     }
 
-    public ArrayBackedCollectionIterator(ArrayBackedCollection<E> set, int startIndex, int endIndex) {
+    ArrayBackedCollectionIterator(ArrayBackedCollection<E> set, int startIndex, int endIndex) {
         m_Set = Objects.requireNonNull(set);
         m_EndIndex = endIndex;
         m_Index = startIndex;
