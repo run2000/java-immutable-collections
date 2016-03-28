@@ -3,6 +3,8 @@ package net.njcull.collections;
 import java.util.*;
 
 /**
+ * Builder for the {@link ImmutableArrayMap} class.
+ *
  * @author run2000
  * @version 7/01/2016.
  */
@@ -126,6 +128,9 @@ public final class ImmutableArrayMapBuilder<K,V> {
 
     /**
      * For combiner.
+     *
+     * @param entries the entries to be merged into this builder
+     * @return this builder containing the merged items
      */
     public ImmutableArrayMapBuilder<K,V> merge(ImmutableArrayMapBuilder<? extends K, ? extends V> entries) {
         int len = entries.m_Size;

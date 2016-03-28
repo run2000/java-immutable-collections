@@ -179,6 +179,9 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> impleme
      * The set is backed by the map, so changes to the map are
      * reflected in the set, and vice-versa.
      * </p>
+     *
+     * @return a set view of the mappings contained in this map,
+     *         sorted in ascending value order
      */
     public ArrayBackedSet<Entry<K,V>> entrySetByValue() {
         return Views.setView(new SortedValueEntryList<>(this));

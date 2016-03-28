@@ -3,6 +3,12 @@ package net.njcull.collections;
 import java.util.*;
 
 /**
+ * A {@link Set} backed by an array of elements. The array is the
+ * exact length required to contain the elements. Elements are tested using
+ * a linear search implementation. The set may also be view as a {@link List},
+ * which implements the {@link RandomAccess} interface to indicate constant time
+ * random access.
+ *
  * @author run2000
  * @version 9/01/2016.
  */

@@ -32,7 +32,7 @@ public final class BinarySearchUtils {
      *
      * @param  <T> the class of the objects in the list
      * @param indexer an int function that takes an index and returns the
-     *                element at the given index. Indexes must be zero-based, and valid for >= 0.
+     *                element at the given index. Indexes must be zero-based, and valid for &gt;= 0.
      * @param size the total number of elements in the index, from {@code 0} to {@code size - 1}
      * @param key the key to be found
      * @return the index of the search key, if it is contained in the index;
@@ -63,7 +63,7 @@ public final class BinarySearchUtils {
      *
      * @param  <T> the class of the objects in the list
      * @param indexer an int function that takes an index and returns the
-     *                element at the given index. Indexes must be >= 0.
+     *                element at the given index. Indexes must be &gt;= 0.
      * @param fromIndex the index of the first element (inclusive) to be
      *          searched
      * @param toIndex the index of the last element (exclusive) to be searched
@@ -124,7 +124,7 @@ public final class BinarySearchUtils {
      *
      * @param  <T> the class of the objects in the list
      * @param indexer an int function that takes an index and returns the
-     *                element at the given index. Indexes must be zero-based, and valid for >= 0.
+     *                element at the given index. Indexes must be zero-based, and valid for &gt;= 0.
      * @param size the total number of elements in the index, from {@code 0} to {@code size - 1}
      * @param key the key to be found
      * @param comparator the comparator to determine the order of the elements
@@ -159,7 +159,7 @@ public final class BinarySearchUtils {
      *
      * @param  <T> the class of the objects in the list
      * @param indexer an int function that takes an index and returns the
-     *                element at the given index. Indexes must be >= 0.
+     *                element at the given index. Indexes must be &gt;= 0.
      * @param fromIndex the index of the first element (inclusive) to be
      *          searched
      * @param toIndex the index of the last element (exclusive) to be searched

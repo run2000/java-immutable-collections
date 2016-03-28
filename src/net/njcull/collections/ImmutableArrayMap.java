@@ -179,8 +179,9 @@ public final class ImmutableArrayMap<K,V> extends AbstractMap<K,V> implements Ar
      * For a BiMap, this will return the same value as
      * {@link #indexOfValue(Object)}.
      *
-     * @param value
-     * @return
+     * @param value the value to be found in the map
+     * @return a zero or positive integer if the value is in the
+     * backing array, otherwise less than zero to indicate its absence
      */
     public int lastIndexOfValue(Object value) {
         final int size = m_Map.length / 2;

@@ -184,6 +184,9 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
 
     /**
      * For combiner.
+     *
+     * @param entries the entries to be merged into this builder
+     * @return this builder containing the merged items
      */
     public ImmutableSortedArrayMapBuilder<K,V> merge(ImmutableSortedArrayMapBuilder<? extends K, ? extends V> entries) {
         int len = entries.m_Size;
