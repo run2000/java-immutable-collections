@@ -23,6 +23,14 @@ public final class ImmutableArrayMap<K,V> extends AbstractMap<K,V> implements Ar
 
     private static final ImmutableArrayMap<?,?> EMPTY = new ImmutableArrayMap<>(new Object[0], true);
 
+    /**
+     * Returns an immutable empty array map. Each call to this method will return
+     * the same empty map.
+     *
+     * @param <K> the type of keys maintained by this map
+     * @param <V> the type of mapped values
+     * @return an immutable empty array map
+     */
     @SuppressWarnings("unchecked")
     public static <K,V> ImmutableArrayMap<K,V> emptyMap() {
         return (ImmutableArrayMap<K,V>) EMPTY;
@@ -36,16 +44,37 @@ public final class ImmutableArrayMap<K,V> extends AbstractMap<K,V> implements Ar
         this.m_BiMap = biMap;
     }
 
+    /**
+     * Returns the number of key-value mappings in this map.
+     *
+     * @return the number of key-value mappings in this map
+     */
     @Override
     public int size() {
         return m_Map.length / 2;
     }
 
+    /**
+     * Returns {@code true} if this map contains no key-value mappings.
+     *
+     * @return {@code true} if this map contains no key-value mappings
+     */
     @Override
     public boolean isEmpty() {
         return m_Map.length == 0;
     }
 
+    /**
+     * Returns {@code true} if this map contains a mapping for the specified
+     * key.  More formally, returns {@code true} if and only if
+     * this map contains a mapping for a key {@code k} such that
+     * {@code (key==null ? k==null : key.equals(k))}.  This operation
+     * requires time linear in the map size for this implementation.
+     *
+     * @param key key whose presence in this map is to be tested
+     * @return {@code true} if this map contains a mapping for the specified
+     *         key, otherwise {@code false}
+     */
     @Override
     public boolean containsKey(Object key) {
         final int size = m_Map.length / 2;
@@ -65,6 +94,17 @@ public final class ImmutableArrayMap<K,V> extends AbstractMap<K,V> implements Ar
         return false;
     }
 
+    /**
+     * Returns {@code true} if this map maps one or more keys to the
+     * specified value.  More formally, returns {@code true} if and only if
+     * this map contains at least one mapping to a value {@code v} such that
+     * {@code (value==null ? v==null : value.equals(v))}.  This operation
+     * requires time linear in the map size for this implementation.
+     *
+     * @param value value whose presence in this map is to be tested
+     * @return {@code true} if this map maps one or more keys to the
+     *         specified value, otherwise {@code false}
+     */
     @Override
     public boolean containsValue(Object value) {
         final int size = m_Map.length / 2;
@@ -84,6 +124,19 @@ public final class ImmutableArrayMap<K,V> extends AbstractMap<K,V> implements Ar
         return false;
     }
 
+    /**
+     * Returns the value to which the specified key is mapped,
+     * or {@code null} if this map contains no mapping for the key.
+     *
+     * <p>More formally, if this map contains a mapping from a key
+     * {@code k} to a value {@code v} such that {@code (key==null ? k==null :
+     * key.equals(k))}, then this method returns {@code v}; otherwise
+     * it returns {@code null}.  (There can be at most one such mapping.)
+     *
+     * @param key the key whose associated value is to be returned
+     * @return the value to which the specified key is mapped, or
+     *         {@code null} if this map contains no mapping for the key
+     */
     @SuppressWarnings("unchecked")
     @Override
     public V get(Object key) {

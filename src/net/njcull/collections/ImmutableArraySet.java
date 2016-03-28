@@ -9,6 +9,7 @@ import java.util.*;
  * which implements the {@link RandomAccess} interface to indicate constant time
  * random access.
  *
+ * @param <E> the type of elements maintained by this set and backing list
  * @author run2000
  * @version 9/01/2016.
  */
@@ -18,6 +19,13 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
 
     private static final ImmutableArraySet<?> EMPTY = new ImmutableArraySet<>(new Object[0]);
 
+    /**
+     * Returns an immutable empty array set. Each call to this method will return
+     * the same empty set.
+     *
+     * @param <E> the type of elements maintained by this set and backing list
+     * @return an immutable empty array set
+     */
     @SuppressWarnings("unchecked")
     public static <E> ImmutableArraySet<E> emptySet() {
         return (ImmutableArraySet<E>) EMPTY;
@@ -45,6 +53,15 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
         this.m_Elements = Arrays.copyOfRange(elements, start, end);
     }
 
+    /**
+     * Adds all of the elements in the specified collection to this collection.
+     * (optional operation).
+     *
+     * @param c collection containing elements to be added to this collection
+     * @return {@code false} this collection is not changed as a result of the call
+     * @throws UnsupportedOperationException the {@code addAll} operation
+     *         is not supported by this collection
+     */
     @Override
     public boolean addAll(Collection<? extends E> c) {
         if(!c.isEmpty()) {
@@ -53,11 +70,32 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
         return false;
     }
 
+    /**
+     * Retains only the elements in this set that are contained in the
+     * specified collection (optional operation).
+     *
+     * @param  c collection containing elements to be retained in this set
+     * @return {@code false} this set is not changed as a result of the call
+     * @throws UnsupportedOperationException the retainAll operation
+     *         is not supported by this set
+     */
     @Override
     public boolean retainAll(Collection<?> c) {
         throw new UnsupportedOperationException("No removals");
     }
 
+    /**
+     * Removes from this set all of its elements that are contained in the
+     * specified collection (optional operation).  If the specified
+     * collection is also a set, this operation effectively modifies this
+     * set so that its value is the <i>asymmetric set difference</i> of
+     * the two sets.
+     *
+     * @param  c collection containing elements to be removed from this set
+     * @return {@code false} this set is not changed as a result of the call
+     * @throws UnsupportedOperationException the {@code removeAll} operation
+     *         is not supported by this set
+     */
     @Override
     public boolean removeAll(Collection<?> c) {
         if(!c.isEmpty()) {
@@ -66,6 +104,13 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
         return false;
     }
 
+    /**
+     * Removes all of the elements from this set (optional operation).
+     * The set will be empty after this call returns.
+     *
+     * @throws UnsupportedOperationException the {@code clear} method
+     *         is not supported by this set
+     */
     @Override
     public void clear() {
         if(m_Elements.length > 0) {
@@ -73,6 +118,16 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
         }
     }
 
+    /**
+     * Returns {@code true} if this set contains the specified element.
+     * More formally, returns {@code true} if and only if this set
+     * contains an element {@code e} such that
+     * {@code (o==null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;o.equals(e))}.
+     *
+     * @param element the element whose presence in this set is to be tested
+     * @return {@code true} if this set contains the specified element,
+     * otherwise {@code false}
+     */
     @Override
     public boolean contains(Object element) {
         return indexOf(element) >= 0;
@@ -133,21 +188,56 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
         return new ArrayBackedCollectionIterator<>(this);
     }
 
+    /**
+     * Returns an iterator over the elements in this set.  The elements are
+     * returned in the order in which they were added.
+     *
+     * @return an iterator over the elements in this set
+     */
     @Override
     public boolean isEmpty() {
         return m_Elements.length == 0;
     }
 
+    /**
+     * Returns the number of elements in this set (its cardinality).
+     *
+     * @return the number of elements in this set (its cardinality)
+     */
     @Override
     public int size() {
         return m_Elements.length;
     }
 
+    /**
+     * Returns an array containing all of the elements in this set.
+     * If this set makes any guarantees as to what order its elements
+     * are returned by its iterator, this method must return the
+     * elements in the same order.
+     *
+     * <p>The returned array will be "safe" in that no references to it
+     * are maintained by this set.  (In other words, this method must
+     * allocate a new array even if this set is backed by an array).
+     * The caller is thus free to modify the returned array.
+     *
+     * <p>This method acts as bridge between array-based and collection-based
+     * APIs.
+     *
+     * @return an array containing all the elements in this set
+     */
     @Override
     public Object[] toArray() {
         return Arrays.copyOf(m_Elements, m_Elements.length);
     }
 
+    /**
+     * Creates a {@code Spliterator} over the elements in this set.
+     *
+     * <p>The {@code Spliterator} reports {@code Spliterator.DISTINCT},
+     * {@code Spliterator.IMMUTABLE}, and {@code Spliterator.CONCURRENT}.
+     *
+     * @return a {@code Spliterator} over the elements in this set
+     */
     @Override
     public Spliterator<E> spliterator() {
         return Spliterators.spliterator(this, Spliterator.DISTINCT | Spliterator.IMMUTABLE | Spliterator.CONCURRENT);

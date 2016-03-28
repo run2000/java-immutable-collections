@@ -21,24 +21,43 @@ import java.util.*;
 public abstract class AbstractRandomAccessList<E> extends AbstractList<E> implements RandomAccess {
 
     /**
-     * Sole constructor.  (For invocation by subclass constructors, typically
-     * implicit.)
+     * Sole constructor.  For invocation by subclass constructors, typically
+     * implicit.
      */
     protected AbstractRandomAccessList() {
     }
 
+    /**
+     * Returns {@code true} if this collection contains the specified element.
+     * More formally, returns {@code true} if and only if this collection
+     * contains at least one element {@code e} such that
+     * {@code (o==null ? e==null : o.equals(e))}.
+     *
+     * @param o element whose presence in this list is to be tested
+     * @return <tt>true</tt> if this list contains the specified element
+     */
     @Override
     public boolean contains(Object o) {
         return indexOf(o) >= 0;
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the index of the first occurrence of the specified element
+     * in this list, or -1 if this list does not contain the element.
+     * More formally, returns the lowest index <tt>i</tt> such that
+     * <tt>(o==null&nbsp;?&nbsp;get(i)==null&nbsp;:&nbsp;o.equals(get(i)))</tt>,
+     * or -1 if there is no such index.
+     *
      * <p>This implementation performs a linear search, and indexes directly
      * using the getter method.</p>
      *
-     * @throws ClassCastException   {@inheritDoc}
-     * @throws NullPointerException {@inheritDoc}
+     * @param o element to search for
+     * @return the index of the first occurrence of the specified element in
+     *         this list, or -1 if this list does not contain the element
+     * @throws ClassCastException if the type of the specified element
+     *         is incompatible with this list
+     * @throws NullPointerException if the specified element is null and this
+     *         list does not permit null elements
      */
     @Override
     public int indexOf(Object o) {
@@ -59,11 +78,28 @@ public abstract class AbstractRandomAccessList<E> extends AbstractList<E> implem
         return -1;
     }
 
+    /**
+     * Returns an iterator over the elements in this list in proper sequence.
+     *
+     * <p>This implementation returns a straightforward implementation of the
+     * iterator interface, relying on the backing list's {@code size()},
+     * {@code get(int)}, and {@code remove(int)} methods.
+     *
+     * @return an iterator over the elements in this list in proper sequence
+     */
     @Override
     public Iterator<E> iterator() {
         return new RandomAccessIterator<E>(this);
     }
 
+    /**
+     * Removes a single instance of the specified element from this
+     * collection, if it is present.
+     *
+     * @param o element to search for
+     * @return the index of the first occurrence of the specified element in
+     *         this list, or -1 if this list does not contain the element
+     */
     @Override
     public boolean remove(Object o) {
         int idx = indexOf(o);
@@ -74,6 +110,13 @@ public abstract class AbstractRandomAccessList<E> extends AbstractList<E> implem
         return false;
     }
 
+    /**
+     * Removes from this list all of its elements that are contained in the
+     * specified collection.
+     *
+     * @param c collection containing elements to be removed from this list
+     * @return {@code true} if this list changed as a result of the call
+     */
     @Override
     public boolean removeAll(Collection<?> c) {
         boolean modified = false;
@@ -85,6 +128,15 @@ public abstract class AbstractRandomAccessList<E> extends AbstractList<E> implem
         return modified;
     }
 
+    /**
+     * Retains only the elements in this list that are contained in the
+     * specified collection (optional operation).  In other words, removes
+     * from this list all of its elements that are not contained in the
+     * specified collection.
+     *
+     * @param c collection containing elements to be retained in this list
+     * @return {@code true} if this list changed as a result of the call
+     */
     @Override
     public boolean retainAll(Collection<?> c) {
         Objects.requireNonNull(c);
