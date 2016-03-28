@@ -130,6 +130,7 @@ public final class ImmutableSortedArraySet<E> extends AbstractSet<E> implements 
         return idx >= 0 ? idx : -1;
     }
 
+    @SuppressWarnings("unchecked")
     private int indexOfInternal(E element, int fromIndex, int toIndex) {
         int idx = BinarySearchUtils.indexedSearch(this::getAtIndex, fromIndex, toIndex, element, m_NullsComparator);
         return idx;
