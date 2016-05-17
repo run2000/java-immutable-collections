@@ -16,6 +16,15 @@ import java.util.Map;
 public final class TestImmutableSortedArrayMap {
 
     @Test
+    public void testEmptyMap() throws Exception {
+        Map<String, String> test = ImmutableSortedArrayMap.<String, String>builder().build();
+        Assert.assertFalse(test.containsKey("3"));
+        Assert.assertSame(test, ImmutableSortedArrayMap.emptyMap());
+        Assert.assertTrue(test.isEmpty());
+        Assert.assertEquals(0, test.size());
+    }
+
+    @Test
     public void testCollector() throws Exception {
         HashMap<String, String> map1 = new HashMap<>();
         map1.put("a", "ac");
@@ -63,6 +72,17 @@ public final class TestImmutableSortedArrayMap {
         Assert.assertTrue(result.containsKey("p"));
         Assert.assertFalse(result.containsKey("0"));
 
+        Assert.assertEquals("a", result.keyAt(0));
+        Assert.assertEquals("b", result.keyAt(1));
+        Assert.assertEquals("c", result.keyAt(2));
+        Assert.assertEquals("e", result.keyAt(3));
+        Assert.assertEquals("f", result.keyAt(4));
+        Assert.assertEquals("g", result.keyAt(5));
+        Assert.assertEquals("m", result.keyAt(6));
+        Assert.assertEquals("n", result.keyAt(7));
+        Assert.assertEquals("o", result.keyAt(8));
+        Assert.assertEquals("p", result.keyAt(9));
+
         Assert.assertTrue(result.containsValue("ac"));
         Assert.assertTrue(result.containsValue("bc"));
         Assert.assertTrue(result.containsValue("cc"));
@@ -88,6 +108,17 @@ public final class TestImmutableSortedArrayMap {
         Assert.assertEquals(9, result.indexOfValue("Zpa"));
         Assert.assertEquals(-1, result.indexOfValue("0"));
 
+        Assert.assertEquals("ac", result.valueAt(0));
+        Assert.assertEquals("bc", result.valueAt(1));
+        Assert.assertEquals("cc", result.valueAt(2));
+        Assert.assertEquals("ec", result.valueAt(3));
+        Assert.assertEquals("fc", result.valueAt(4));
+        Assert.assertEquals("gc", result.valueAt(5));
+        Assert.assertEquals("0ma", result.valueAt(6));
+        Assert.assertEquals("0na", result.valueAt(7));
+        Assert.assertEquals("Zoa", result.valueAt(8));
+        Assert.assertEquals("Zpa", result.valueAt(9));
+
         Assert.assertEquals(0, result.indexOfValueSorted("0ma"));
         Assert.assertEquals(1, result.indexOfValueSorted("0na"));
         Assert.assertEquals(2, result.indexOfValueSorted("Zoa"));
@@ -99,6 +130,17 @@ public final class TestImmutableSortedArrayMap {
         Assert.assertEquals(8, result.indexOfValueSorted("fc"));
         Assert.assertEquals(9, result.indexOfValueSorted("gc"));
         Assert.assertEquals(-1, result.indexOfValueSorted("0"));
+
+        Assert.assertEquals("0ma", result.sortedValueAt(0));
+        Assert.assertEquals("0na", result.sortedValueAt(1));
+        Assert.assertEquals("Zoa", result.sortedValueAt(2));
+        Assert.assertEquals("Zpa", result.sortedValueAt(3));
+        Assert.assertEquals("ac", result.sortedValueAt(4));
+        Assert.assertEquals("bc", result.sortedValueAt(5));
+        Assert.assertEquals("cc", result.sortedValueAt(6));
+        Assert.assertEquals("ec", result.sortedValueAt(7));
+        Assert.assertEquals("fc", result.sortedValueAt(8));
+        Assert.assertEquals("gc", result.sortedValueAt(9));
 
         Map.Entry<String, String> entry = result.entryAt(0);
 
@@ -327,17 +369,17 @@ public final class TestImmutableSortedArrayMap {
 
         Assert.assertEquals(7, map.size());
 
-        System.out.println(map.get("0"));
-        System.out.println(map.get("a"));
-        System.out.println(map.get("ab"));
-        System.out.println(map.get("da"));
-        System.out.println(map.get("g"));
-        System.out.println(map.get("zz"));
+        Assert.assertFalse(map.containsKey("0"));
+        Assert.assertEquals("7", map.get("a"));
+        Assert.assertFalse(map.containsKey("ab"));
+        Assert.assertFalse(map.containsKey("da"));
+        Assert.assertEquals("1", map.get("g"));
+        Assert.assertFalse(map.containsKey("zz"));
 
-        System.out.println(map.entrySet());
-        System.out.println(map.values());
-        System.out.println(map.entrySetByValue());
+        Assert.assertEquals("[a=7, b=96, c=5, d=4, e=3, f=2, g=1]", map.entrySet().toString());
+        Assert.assertEquals("[1, 2, 3, 4, 5, 7, 96]", map.values().toString());
+        Assert.assertEquals("[g=1, f=2, e=3, d=4, c=5, a=7, b=96]", map.entrySetByValue().toString());
 
-        System.out.println(map.indexOfValue("96"));
+        Assert.assertEquals(1, map.indexOfValue("96"));
     }
 }
