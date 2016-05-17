@@ -376,9 +376,22 @@ public final class TestImmutableSortedArrayMap {
         Assert.assertEquals("1", map.get("g"));
         Assert.assertFalse(map.containsKey("zz"));
 
-        Assert.assertEquals("[a=7, b=96, c=5, d=4, e=3, f=2, g=1]", map.entrySet().toString());
-        Assert.assertEquals("[1, 2, 3, 4, 5, 7, 96]", map.values().toString());
-        Assert.assertEquals("[g=1, f=2, e=3, d=4, c=5, a=7, b=96]", map.entrySetByValue().toString());
+        ArrayBackedSet<String> keySet = map.keySet();
+        Assert.assertFalse(keySet.isEmpty());
+        Assert.assertEquals(7, keySet.size());
+        Assert.assertEquals("[a, b, c, d, e, f, g]", keySet.toString());
+        ArrayBackedSet<Map.Entry<String, String>> entrySet = map.entrySet();
+        Assert.assertFalse(entrySet.isEmpty());
+        Assert.assertEquals(7, entrySet.size());
+        Assert.assertEquals("[a=7, b=96, c=5, d=4, e=3, f=2, g=1]", entrySet.toString());
+        ArrayBackedCollection<String> values = map.values();
+        Assert.assertFalse(values.isEmpty());
+        Assert.assertEquals(7, values.size());
+        Assert.assertEquals("[1, 2, 3, 4, 5, 7, 96]", values.toString());
+        ArrayBackedSet<Map.Entry<String, String>> entrySetByValue = map.entrySetByValue();
+        Assert.assertFalse(entrySetByValue.isEmpty());
+        Assert.assertEquals(7, entrySetByValue.size());
+        Assert.assertEquals("[g=1, f=2, e=3, d=4, c=5, a=7, b=96]", entrySetByValue.toString());
 
         Assert.assertEquals(1, map.indexOfValue("96"));
     }
