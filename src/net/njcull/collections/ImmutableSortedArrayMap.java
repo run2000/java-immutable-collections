@@ -257,7 +257,7 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> impleme
         int valIndex = 0;
         for(int i = 0; i < size; i++) {
             int idx = m_SortedValues[i];
-            if(idx >= fromIndex && idx < toIndex) {
+            if((idx >= fromIndex) && (idx < toIndex)) {
                 subSortedValues[valIndex++] = (idx - fromIndex);
             }
         }

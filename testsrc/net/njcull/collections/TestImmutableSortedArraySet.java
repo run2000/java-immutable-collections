@@ -172,12 +172,26 @@ public final class TestImmutableSortedArraySet {
         Assert.assertEquals("c", it.next());
         Assert.assertFalse(it.hasNext());
 
+        subSet = set.headSet("a");
+        Assert.assertTrue(subSet.isEmpty());
+        Assert.assertSame(ImmutableSortedArraySet.emptySet(), subSet);
+
+        subSet = set.headSet("g");
+        Assert.assertEquals(5, subSet.size());
+        Assert.assertSame(set, subSet);
+
         subSet = set.tailSet("ca");
         Assert.assertEquals("[d, e]", subSet.toString());
         it = subSet.iterator();
         Assert.assertEquals("d", it.next());
         Assert.assertEquals("e", it.next());
         Assert.assertFalse(it.hasNext());
+
+        subSet = set.tailSet("a");
+        Assert.assertEquals(5, subSet.size());
+
+        subSet = set.tailSet("g");
+        Assert.assertTrue(subSet.isEmpty());
 
         subSet = set.subSet("bc", "e");
         Assert.assertEquals("[c, d]", subSet.toString());
@@ -191,6 +205,10 @@ public final class TestImmutableSortedArraySet {
         Assert.assertSame(subSet, ImmutableSortedArraySet.emptySet());
         it = subSet.iterator();
         Assert.assertFalse(it.hasNext());
+
+        subSet = set.subSet("a", "g");
+        Assert.assertEquals(5, subSet.size());
+        Assert.assertSame(subSet, set);
     }
 
     @Test

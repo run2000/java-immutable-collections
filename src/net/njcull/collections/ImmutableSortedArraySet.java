@@ -178,6 +178,9 @@ public final class ImmutableSortedArraySet<E> extends AbstractSet<E> implements 
         if(lastIndex == 0) {
             return emptySet();
         }
+        if(lastIndex == m_Elements.length) {
+            return this;
+        }
         return new ImmutableSortedArraySet<E>(m_Elements, 0, lastIndex, m_Comparator);
     }
 
@@ -189,6 +192,9 @@ public final class ImmutableSortedArraySet<E> extends AbstractSet<E> implements 
         }
         if(firstIndex == m_Elements.length) {
             return emptySet();
+        }
+        if(firstIndex == 0) {
+            return this;
         }
         return new ImmutableSortedArraySet<E>(m_Elements, firstIndex, m_Elements.length, m_Comparator);
     }
@@ -205,6 +211,9 @@ public final class ImmutableSortedArraySet<E> extends AbstractSet<E> implements 
         }
         if(firstIndex >= lastIndex) {
             return emptySet();
+        }
+        if((firstIndex == 0) && (lastIndex == m_Elements.length)) {
+            return this;
         }
         return new ImmutableSortedArraySet<E>(m_Elements, firstIndex, lastIndex, m_Comparator);
     }

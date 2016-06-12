@@ -13,11 +13,11 @@ import java.util.Map;
  * @author run2000
  * @version 8/01/2016.
  */
-public final class TestImmutableSortedArrayMap {
+public final class TestImmutableSortedArrayBiMap {
 
     @Test
     public void testEmptyMap() throws Exception {
-        Map<String, String> test = ImmutableSortedArrayMap.<String, String>builder().build();
+        Map<String, String> test = ImmutableSortedArrayMap.<String, String>builder().asBiMap().build();
         Assert.assertFalse(test.containsKey("3"));
         Assert.assertSame(test, ImmutableSortedArrayMap.emptyMap());
         Assert.assertTrue(test.isEmpty());
@@ -42,7 +42,7 @@ public final class TestImmutableSortedArrayMap {
         ImmutableSortedArrayMap<String, String> result =
                 map1.entrySet().stream()
                 .filter(p -> p.getValue().charAt(1) != 'x')
-                .collect(Collectors.toImmutableSortedArrayMap());
+                .collect(Collectors.toImmutableSortedArrayBiMap());
 
         Assert.assertEquals(10, result.size());
         Assert.assertEquals("{a=ac, b=bc, c=cc, e=ec, f=fc, g=gc, m=0ma, n=0na, o=Zoa, p=Zpa}", result.toString());
@@ -355,7 +355,7 @@ public final class TestImmutableSortedArrayMap {
 
         builder1.merge(builder2);
 
-        ArrayBackedMap<String, String> result = builder1.build();
+        ArrayBackedMap<String, String> result = builder1.asBiMap().build();
         Assert.assertEquals(11, result.size());
     }
 
@@ -365,7 +365,7 @@ public final class TestImmutableSortedArrayMap {
               ImmutableSortedArrayMap.<String, String>builder()
               .with("c", "5", "d", "4", "e", "3")
               .with("a", "7", "b", "96")
-              .with("f", "2", "g", "1").build();
+              .with("f", "2", "g", "1").asBiMap().build();
 
         Assert.assertEquals(7, map.size());
 
@@ -408,7 +408,7 @@ public final class TestImmutableSortedArrayMap {
         builder.with("f", "fc");
         builder.with("g", "gc");
 
-        ImmutableSortedArrayMap<String, String> map = builder.build();
+        ImmutableSortedArrayMap<String, String> map = builder.asBiMap().build();
         ImmutableSortedArrayMap<String, String> headMap = map.headMap("d");
         ImmutableSortedArrayMap<String, String> tailMap = map.tailMap("e");
         ImmutableSortedArrayMap<String, String> subMap = map.subMap("d", "e");
@@ -420,7 +420,6 @@ public final class TestImmutableSortedArrayMap {
         Assert.assertEquals(1, subMap.size());
         Assert.assertTrue(emptySubMap.isEmpty());
         Assert.assertEquals(7, fullSubMap.size());
-
 
         Assert.assertEquals("a", map.firstKey());
         Assert.assertEquals("g", map.lastKey());
