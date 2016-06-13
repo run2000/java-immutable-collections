@@ -39,14 +39,14 @@ public final class ImmutableArrayMapBuilder<K,V> {
         return this;
     }
 
-    public ImmutableArrayMapBuilder<K,V> with(Iterable<Map.Entry<? extends K,? extends V>> it) {
+    public ImmutableArrayMapBuilder<K,V> with(Iterable<Map.Entry<K,V>> it) {
         int count = 0;
 
-        for(Iterator<Map.Entry<? extends K,? extends V>> iIt = it.iterator(); iIt.hasNext(); count++) {
+        for(Iterator<Map.Entry<K, V>> iIt = it.iterator(); iIt.hasNext(); count++) {
             if((count % 8) == 0) {
                 ensureCapacity(8);
             }
-            Map.Entry<? extends K, ? extends V> entry = iIt.next();
+            Map.Entry<K, V> entry = iIt.next();
             m_Keys[m_Size] = entry.getKey();
             m_Values[m_Size++] = entry.getValue();
         }
@@ -55,12 +55,12 @@ public final class ImmutableArrayMapBuilder<K,V> {
     }
 
     @SuppressWarnings("unchecked")
-    public ImmutableArrayMapBuilder<K,V> with(Map<K, V> map) {
-        Set<? extends Map.Entry<K, V>> entries = map.entrySet();
+    public ImmutableArrayMapBuilder<K,V> with(Map<? extends K, ? extends V> map) {
+        Set<? extends Map.Entry<? extends K, ? extends V>> entries = map.entrySet();
         int size = entries.size();
         ensureCapacity(size);
 
-        for(Map.Entry<K, V> entry : entries) {
+        for(Map.Entry<? extends K, ? extends V> entry : entries) {
             m_Keys[m_Size] = entry.getKey();
             m_Values[m_Size++] = entry.getValue();
         }
