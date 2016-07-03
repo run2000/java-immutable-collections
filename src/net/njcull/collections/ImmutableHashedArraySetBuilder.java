@@ -1,23 +1,30 @@
 package net.njcull.collections;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.RandomAccess;
+import java.util.Set;
 
 /**
- * Builder for the {@link ImmutableArraySet} class.
+ * Builder for the {@link ImmutableHashedArraySet} class.
  *
  * @author run2000
- * @version 4/01/2016.
+ * @version 3/07/2016.
  */
-public final class ImmutableArraySetBuilder<E> {
+public final class ImmutableHashedArraySetBuilder<E> {
     private Object[] m_Elements = EMPTY_ELEMENTS;
     private int m_Size = 0;
 
     private static final Object[] EMPTY_ELEMENTS = new Object[0];
 
-    public ImmutableArraySetBuilder() {
+    public ImmutableHashedArraySetBuilder() {
     }
 
-    public ImmutableArraySetBuilder<E> with(Iterable<? extends E> it) {
+    public ImmutableHashedArraySetBuilder<E> with(Iterable<? extends E> it) {
         int count = 0;
 
         for(Iterator<? extends E> iIt = it.iterator(); iIt.hasNext(); count++) {
@@ -31,7 +38,7 @@ public final class ImmutableArraySetBuilder<E> {
     }
 
     @SuppressWarnings("unchecked")
-    public ImmutableArraySetBuilder<E> with(Collection<? extends E> coll) {
+    public ImmutableHashedArraySetBuilder<E> with(Collection<? extends E> coll) {
         int size = coll.size();
         ensureCapacity(size);
         if((coll instanceof List) && (coll instanceof RandomAccess) && (size < Integer.MAX_VALUE)) {
@@ -48,20 +55,20 @@ public final class ImmutableArraySetBuilder<E> {
         return this;
     }
 
-    public ImmutableArraySetBuilder<E> with(E elem) {
+    public ImmutableHashedArraySetBuilder<E> with(E elem) {
         ensureCapacity(1);
         m_Elements[m_Size++] = elem;
         return this;
     }
 
-    public ImmutableArraySetBuilder<E> with(E e1, E e2) {
+    public ImmutableHashedArraySetBuilder<E> with(E e1, E e2) {
         ensureCapacity(2);
         m_Elements[m_Size++] = e1;
         m_Elements[m_Size++] = e2;
         return this;
     }
 
-    public ImmutableArraySetBuilder<E> with(E e1, E e2, E e3) {
+    public ImmutableHashedArraySetBuilder<E> with(E e1, E e2, E e3) {
         ensureCapacity(3);
         m_Elements[m_Size++] = e1;
         m_Elements[m_Size++] = e2;
@@ -69,7 +76,7 @@ public final class ImmutableArraySetBuilder<E> {
         return this;
     }
 
-    public ImmutableArraySetBuilder<E> with(E e1, E e2, E e3, E e4) {
+    public ImmutableHashedArraySetBuilder<E> with(E e1, E e2, E e3, E e4) {
         ensureCapacity(4);
         m_Elements[m_Size++] = e1;
         m_Elements[m_Size++] = e2;
@@ -79,7 +86,7 @@ public final class ImmutableArraySetBuilder<E> {
     }
 
     @SafeVarargs
-    public final ImmutableArraySetBuilder<E> with(E... elements) {
+    public final ImmutableHashedArraySetBuilder<E> with(E... elements) {
         int len = elements.length;
         ensureCapacity(len);
         System.arraycopy(elements, 0, m_Elements, m_Size, len);
@@ -87,7 +94,7 @@ public final class ImmutableArraySetBuilder<E> {
         return this;
     }
 
-    public ImmutableArraySetBuilder<E> merge(ImmutableArraySetBuilder<E> elements) {
+    public ImmutableHashedArraySetBuilder<E> merge(ImmutableHashedArraySetBuilder<E> elements) {
         int len = elements.m_Size;
         ensureCapacity(len);
         System.arraycopy(elements.m_Elements, 0, m_Elements, m_Size, len);
@@ -109,15 +116,19 @@ public final class ImmutableArraySetBuilder<E> {
     }
 
     @SuppressWarnings("unchecked")
-    public ImmutableArraySet<E> build() {
+    public ImmutableHashedArraySet<E> build() {
         if(m_Size == 0) {
-            return ImmutableArraySet.<E>emptySet();
+            return ImmutableHashedArraySet.<E>emptySet();
         }
 
         Object[] elements = Arrays.copyOf(m_Elements, m_Size);
+        int[] hashCodes = new int[elements.length];
+        for(int i = 0; i < elements.length; i++) {
+            hashCodes[i] = Objects.hashCode(elements[i]);
+        }
 
         if (elements.length == 1) {
-            return new ImmutableArraySet<E>(elements);
+            return new ImmutableHashedArraySet<E>(elements, hashCodes);
         }
 
         Set<Object> dups = new HashSet<Object>(m_Size);
@@ -129,6 +140,7 @@ public final class ImmutableArraySetBuilder<E> {
             Object currElem = elements[i];
             if (prev + 1 < i) {
                 elements[prev + 1] = currElem;
+                hashCodes[prev + 1] = hashCodes[i];
             }
             if (!dups.contains(currElem)) {
                 dups.add(currElem);
@@ -139,11 +151,12 @@ public final class ImmutableArraySetBuilder<E> {
         // Note: not strictly necessary, defensive copy made on construction
         if(prev + 1 < elements.length) {
             Arrays.fill(elements, prev + 1, elements.length, null);
+            Arrays.fill(hashCodes, prev + 1, elements.length, 0);
         }
-        return new ImmutableArraySet<E>(elements, 0, prev + 1);
+        return new ImmutableHashedArraySet<E>(elements, hashCodes, 0, prev + 1);
     }
 
-    public ImmutableArraySetBuilder<E> clear() {
+    public ImmutableHashedArraySetBuilder<E> clear() {
         m_Elements = EMPTY_ELEMENTS;
         m_Size = 0;
         return this;
