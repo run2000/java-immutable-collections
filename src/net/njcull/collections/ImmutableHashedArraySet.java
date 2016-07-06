@@ -173,14 +173,10 @@ public final class ImmutableHashedArraySet<E> extends AbstractSet<E> implements 
 
         for(int i = 0; i < size; i++) {
             if(hc == m_HashCodes[i]) {
-                if (element == null) {
-                    if (element == m_Elements[i]) {
-                        return i;
-                    }
-                } else {
-                    if (element.equals(m_Elements[i])) {
-                        return i;
-                    }
+                if (element == m_Elements[i]) {
+                    return i;
+                } else if ((element != null) && (element.equals(m_Elements[i]))) {
+                    return i;
                 }
             }
         }
@@ -199,14 +195,10 @@ public final class ImmutableHashedArraySet<E> extends AbstractSet<E> implements 
         final int hc = Objects.hashCode(element);
         for (int i = fromIndex; i < toIndex; i++) {
             if(hc == m_HashCodes[i]) {
-                if (element == null) {
-                    if (element == m_Elements[i]) {
-                        return i;
-                    }
-                } else {
-                    if (element.equals(m_Elements[i])) {
-                        return i;
-                    }
+                if (element == m_Elements[i]) {
+                    return i;
+                } else if ((element != null) && (element.equals(m_Elements[i]))) {
+                    return i;
                 }
             }
         }

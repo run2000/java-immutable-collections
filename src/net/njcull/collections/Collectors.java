@@ -33,6 +33,22 @@ public final class Collectors {
 
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
+     * new {@code ImmutableHashedArraySet}, in encounter order.
+     *
+     * @param <E> the type of elements maintained by the resulting set
+     * @return a {@code Collector} which collects all the input elements into a
+     * {@code ImmutableHashedArraySet}, in encounter order
+     */
+    public static <E> Collector<E, ?, ImmutableHashedArraySet<E>> toImmutableHashedArraySet() {
+        return Collector.<E, ImmutableHashedArraySetBuilder<E>, ImmutableHashedArraySet<E>>of(
+                ImmutableHashedArraySetBuilder<E>::new,
+                ImmutableHashedArraySetBuilder::with,
+                ImmutableHashedArraySetBuilder::merge,
+                ImmutableHashedArraySetBuilder::build);
+    }
+
+    /**
+     * Returns a {@code Collector} that accumulates the input elements into a
      * new {@code ImmutableSortedArraySet}, in natural sort order.
      *
      * @param <E> the type of elements maintained by the resulting set
@@ -82,6 +98,22 @@ public final class Collectors {
                 ImmutableArrayMapBuilder::with,
                 ImmutableArrayMapBuilder::merge,
                 ImmutableArrayMapBuilder::build);
+    }
+
+    public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableHashedArrayMap<K,V>> toImmutableHashedArrayMap() {
+        return Collector.<Map.Entry<? extends K,? extends V>, ImmutableHashedArrayMapBuilder<K,V>, ImmutableHashedArrayMap<K,V>>of(
+                ImmutableHashedArrayMapBuilder::<K,V>newMap,
+                ImmutableHashedArrayMapBuilder::with,
+                ImmutableHashedArrayMapBuilder::merge,
+                ImmutableHashedArrayMapBuilder::build);
+    }
+
+    public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableHashedArrayMap<K,V>> toImmutableHashedArrayBiMap() {
+        return Collector.<Map.Entry<? extends K,? extends V>, ImmutableHashedArrayMapBuilder<K,V>, ImmutableHashedArrayMap<K,V>>of(
+                ImmutableHashedArrayMapBuilder::<K,V>newBiMap,
+                ImmutableHashedArrayMapBuilder::with,
+                ImmutableHashedArrayMapBuilder::merge,
+                ImmutableHashedArrayMapBuilder::build);
     }
 
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableSortedArrayMap<K,V>> toImmutableSortedArrayMap() {

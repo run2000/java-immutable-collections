@@ -9,18 +9,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Tests for ImmutableArrayMap.
+ * Tests for ImmutableHashedArrayBiMap.
  *
  * @author run2000
  * @version 8/01/2016.
  */
-public final class TestImmutableArrayMap {
+public final class TestImmutableHashedArrayBiMap {
 
     @Test
     public void testEmptyMap() throws Exception {
-        Map<String, String> test = ImmutableArrayMap.<String, String>builder().build();
+        Map<String, String> test = ImmutableHashedArrayMap.<String, String>builder().asBiMap().build();
         Assert.assertFalse(test.containsKey("3"));
-        Assert.assertSame(test, ImmutableArrayMap.emptyMap());
+        Assert.assertSame(test, ImmutableHashedArrayMap.emptyMap());
         Assert.assertTrue(test.isEmpty());
         Assert.assertEquals(0, test.size());
     }
@@ -40,13 +40,12 @@ public final class TestImmutableArrayMap {
         map1.put("o", "Zoa");
         map1.put("p", "Zpa");
 
-        ImmutableArrayMap<String, String> result =
+        ImmutableHashedArrayMap<String, String> result =
                 map1.entrySet().stream()
                 .filter(p -> p.getValue().charAt(1) != 'x')
-                .collect(Collectors.toImmutableArrayMap());
+                .collect(Collectors.toImmutableHashedArrayBiMap());
 
         Assert.assertEquals(10, result.size());
-//        Assert.assertEquals("{a=ac, b=bc, c=cc, e=ec, f=fc, g=gc, m=0ma, n=0na, o=Zoa, p=Zpa}", result.toString());
 
         Assert.assertTrue(result.indexOfKey("a") >= 0);
         Assert.assertTrue(result.indexOfKey("b") >= 0);
@@ -152,10 +151,10 @@ public final class TestImmutableArrayMap {
         map2.put("o", "oa");
         map2.put("p", "pa");
 
-        ImmutableArrayMapBuilder<String, String> builder1 =
-                new ImmutableArrayMapBuilder<>();
-        ImmutableArrayMapBuilder<String, String> builder2 =
-                new ImmutableArrayMapBuilder<>();
+        ImmutableHashedArrayMapBuilder<String, String> builder1 =
+                new ImmutableHashedArrayMapBuilder<>();
+        ImmutableHashedArrayMapBuilder<String, String> builder2 =
+                new ImmutableHashedArrayMapBuilder<>();
 
         builder1.with(map1.entrySet());
 
@@ -163,17 +162,17 @@ public final class TestImmutableArrayMap {
 
         builder1.merge(builder2);
 
-        ArrayBackedMap<String, String> result = builder1.build();
+        ArrayBackedMap<String, String> result = builder1.asBiMap().build();
         Assert.assertEquals(11, result.size());
     }
 
     @Test
     public void testBuilder() throws Exception {
-      ImmutableArrayMap<String, String> map =
-              ImmutableArrayMap.<String, String>builder()
+        ImmutableHashedArrayMap<String, String> map =
+                ImmutableHashedArrayMap.<String, String>builder()
               .with("c", "5", "d", "4", "e", "3")
               .with("a", "7", "b", "96")
-              .with("f", "2", "g", "1").build();
+              .with("f", "2", "g", "1").asBiMap().build();
 
         Assert.assertEquals(7, map.size());
 
@@ -216,8 +215,8 @@ public final class TestImmutableArrayMap {
 
     @Test
     public void testSubMap() throws Exception {
-        ImmutableArrayMapBuilder<String, String> builder =
-                new ImmutableArrayMapBuilder<>();
+        ImmutableHashedArrayMapBuilder<String, String> builder =
+                new ImmutableHashedArrayMapBuilder<>();
         builder.with("a", "ac");
         builder.with("b", "bc");
         builder.with("c", "cc");
@@ -226,7 +225,7 @@ public final class TestImmutableArrayMap {
         builder.with("f", "fc");
         builder.with("g", "gc");
 
-        ImmutableArrayMap<String, String> map = builder.build();
+        ImmutableHashedArrayMap<String, String> map = builder.asBiMap().build();
 
         List<Map.Entry<String,String>> list = map.entrySet().asList();
         List<Map.Entry<String, String>> subList = list.subList(2, 3);

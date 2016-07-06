@@ -98,14 +98,10 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
         final int hc = Objects.hashCode(key);
         for(int i = 0; i < size; i++) {
             if(hc == m_HashCodes[i]) {
-                if(key == null) {
-                    if(key == m_Map[i]) {
-                        return true;
-                    }
-                } else {
-                    if(key.equals(m_Map[i])) {
-                        return true;
-                    }
+                if(key == m_Map[i]) {
+                    return true;
+                } else if ((key != null) && (key.equals(m_Map[i]))) {
+                    return true;
                 }
             }
         }
@@ -130,14 +126,10 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
 
         for(int i = 0; i < size; i++) {
             if(hc == m_HashCodes[size + i]) {
-                if(value == null) {
-                    if(value == m_Map[size + i]) {
-                        return true;
-                    }
-                } else {
-                    if (value.equals(m_Map[size + i])) {
-                        return true;
-                    }
+                if(value == m_Map[size + i]) {
+                    return true;
+                } else if((value != null) && (value.equals(m_Map[size + i]))) {
+                    return true;
                 }
             }
         }
@@ -165,14 +157,10 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
 
         for(int i = 0; i < size; i++) {
             if(hc == m_HashCodes[i]) {
-                if(key == null) {
-                    if (key == m_Map[i]) {
-                        return (V) m_Map[size + i];
-                    }
-                } else {
-                    if (key.equals(m_Map[i])) {
-                        return (V) m_Map[size + i];
-                    }
+                if (key == m_Map[i]) {
+                    return (V) m_Map[size + i];
+                } else if ((key != null) && (key.equals(m_Map[i]))) {
+                    return (V) m_Map[size + i];
                 }
             }
         }
@@ -219,14 +207,10 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
 
         for(int i = 0; i < size; i++) {
             if(hc == m_HashCodes[i]) {
-                if(key == null) {
-                    if(key == m_Map[i]) {
-                        return i;
-                    }
-                } else {
-                    if (key.equals(m_Map[i])) {
-                        return i;
-                    }
+                if(key == m_Map[i]) {
+                    return i;
+                } else if ((key != null) && (key.equals(m_Map[i]))) {
+                    return i;
                 }
             }
         }
@@ -239,15 +223,11 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
         final int hc = Objects.hashCode(value);
 
         for(int i = 0; i < size; i++) {
-            if(hc == m_HashCodes[size + 1]) {
-                if (value == null) {
-                    if (value == m_Map[size + i]) {
-                        return i;
-                    }
-                } else {
-                    if (value.equals(m_Map[size + i])) {
-                        return i;
-                    }
+            if(hc == m_HashCodes[size + i]) {
+                if (value == m_Map[size + i]) {
+                    return i;
+                } else if ((value != null) && (value.equals(m_Map[size + i]))) {
+                    return i;
                 }
             }
         }
@@ -267,15 +247,11 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
         final int hc = Objects.hashCode(value);
 
         for(int i = size - 1; i >= 0; i--) {
-            if(hc == m_HashCodes[size + 1]) {
-                if (value == null) {
-                    if (value == m_Map[size + i]) {
-                        return i;
-                    }
-                } else {
-                    if (value.equals(m_Map[size + i])) {
-                        return i;
-                    }
+            if(hc == m_HashCodes[size + i]) {
+                if (value == m_Map[size + i]) {
+                    return i;
+                } else if ((value != null) && (value.equals(m_Map[size + i]))) {
+                    return i;
                 }
             }
         }

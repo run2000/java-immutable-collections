@@ -1,31 +1,34 @@
 package net.njcull.collections;
 
-import java.util.*;
-
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 /**
- * Tests for ImmutableSortedArraySet.
+ * Tests for ImmutableHashedArraySet.
  *
  * @author run2000
  * @version 4/01/2016.
  */
-public final class TestImmutableSortedArraySet {
+public final class TestImmutableHashedArraySet {
 
     @Test
     public void testEmptySet() throws Exception {
-        Set<String> test = ImmutableSortedArraySet.<String>builder().build();
+        Set<String> test = ImmutableHashedArraySet.<String>builder().build();
         Assert.assertFalse(test.contains("3"));
-        Assert.assertSame(test, ImmutableSortedArraySet.emptySet());
+        Assert.assertSame(test, ImmutableHashedArraySet.emptySet());
         Assert.assertTrue(test.isEmpty());
         Assert.assertEquals(0, test.size());
     }
 
     @Test
     public void testBuildMerge() throws Exception {
-        ImmutableSortedArraySetBuilder<String> builder = new ImmutableSortedArraySetBuilder<>();
-        ImmutableSortedArraySetBuilder<String> builder2 = new ImmutableSortedArraySetBuilder<>();
+        ImmutableHashedArraySetBuilder<String> builder = new ImmutableHashedArraySetBuilder<>();
+        ImmutableHashedArraySetBuilder<String> builder2 = new ImmutableHashedArraySetBuilder<>();
 
         List<String> abc = Arrays.asList("a", "b", "c");
         List<String> defg = Arrays.asList("d", "e", "f", "g");
@@ -34,7 +37,7 @@ public final class TestImmutableSortedArraySet {
         builder2.with(defg);
         builder.merge(builder2);
 
-        ImmutableSortedArraySet<String> set = builder.build();
+        ImmutableHashedArraySet<String> set = builder.build();
 
         Assert.assertEquals(7, set.size());
         Assert.assertEquals("[a, b, c, d, e, f, g]", set.toString());
@@ -42,12 +45,10 @@ public final class TestImmutableSortedArraySet {
 
     @Test
     public void testSetList() throws Exception {
-        ImmutableSortedArraySetBuilder<String> builder = new ImmutableSortedArraySetBuilder<String>();
-        ImmutableSortedArraySet<String> set = builder
+        ImmutableHashedArraySetBuilder<String> builder = new ImmutableHashedArraySetBuilder<String>();
+        ImmutableHashedArraySet<String> set = builder
                 .with("a", "b", "b", "c", "d", "e")
                 .with("b", "a")
-//                .byComparing(Comparator.reverseOrder())
-                .byNaturalOrder()
                 .build();
 
         Assert.assertFalse(set.contains("0"));
@@ -64,9 +65,6 @@ public final class TestImmutableSortedArraySet {
         Assert.assertEquals(-1, set.indexOf("da"));
         Assert.assertEquals(4, set.indexOf("e"));
         Assert.assertEquals(-1, set.indexOf("g"));
-
-        Assert.assertEquals("a", set.first());
-        Assert.assertEquals("e", set.last());
 
         Assert.assertEquals("e", set.getAtIndex(4));
         Assert.assertEquals("d", set.getAtIndex(3));
@@ -156,59 +154,127 @@ public final class TestImmutableSortedArraySet {
         Assert.assertEquals("[a, b, c, d, e]", set.toString());
         Assert.assertEquals("[a, b, c, d, e]", list.toString());
         Assert.assertEquals("[b, c, d, e]", subList.toString());
+    }
 
-        Set<String> subSet = set.headSet("c");
-        Assert.assertEquals("[a, b]", subSet.toString());
-        it = subSet.iterator();
+    @Test
+    public void testSetListNull() throws Exception {
+        ImmutableHashedArraySetBuilder<String> builder = new ImmutableHashedArraySetBuilder<String>();
+        ImmutableHashedArraySet<String> set = builder
+                .with("a", "b", "b", null, "d", "e")
+                .with("b", "a")
+                .build();
+
+        Assert.assertFalse(set.contains("0"));
+        Assert.assertTrue(set.contains("a"));
+        Assert.assertFalse(set.contains("ab"));
+        Assert.assertTrue(set.contains(null));
+        Assert.assertFalse(set.contains("da"));
+        Assert.assertFalse(set.contains("g"));
+
+        // Binary search indexes
+        Assert.assertEquals(-1, set.indexOf("0"));
+        Assert.assertEquals(0, set.indexOf("a"));
+        Assert.assertEquals(-1, set.indexOf("ab"));
+        Assert.assertEquals(2, set.indexOf(null));
+        Assert.assertEquals(3, set.indexOf("d"));
+        Assert.assertEquals(-1, set.indexOf("da"));
+        Assert.assertEquals(4, set.indexOf("e"));
+        Assert.assertEquals(-1, set.indexOf("g"));
+
+        Assert.assertEquals("e", set.getAtIndex(4));
+        Assert.assertEquals("d", set.getAtIndex(3));
+        Assert.assertEquals(null, set.getAtIndex(2));
+        Assert.assertEquals("b", set.getAtIndex(1));
+        Assert.assertEquals("a", set.getAtIndex(0));
+
+        Iterator<String> it = set.iterator();
         Assert.assertEquals("a", it.next());
         Assert.assertEquals("b", it.next());
-        Assert.assertFalse(it.hasNext());
-
-        subSet = set.headSet("ca");
-        Assert.assertEquals("[a, b, c]", subSet.toString());
-        it = subSet.iterator();
-        Assert.assertEquals("a", it.next());
-        Assert.assertEquals("b", it.next());
-        Assert.assertEquals("c", it.next());
-        Assert.assertFalse(it.hasNext());
-
-        subSet = set.headSet("a");
-        Assert.assertTrue(subSet.isEmpty());
-        Assert.assertSame(ImmutableSortedArraySet.emptySet(), subSet);
-
-        subSet = set.headSet("g");
-        Assert.assertEquals(5, subSet.size());
-        Assert.assertSame(set, subSet);
-
-        subSet = set.tailSet("ca");
-        Assert.assertEquals("[d, e]", subSet.toString());
-        it = subSet.iterator();
+        Assert.assertEquals(null, it.next());
         Assert.assertEquals("d", it.next());
         Assert.assertEquals("e", it.next());
         Assert.assertFalse(it.hasNext());
 
-        subSet = set.tailSet("a");
-        Assert.assertEquals(5, subSet.size());
+        List<String> list = set.asList();
+        List<String> arrayList = Arrays.asList("a", "b", null, "d", "e");
 
-        subSet = set.tailSet("g");
-        Assert.assertTrue(subSet.isEmpty());
+        Assert.assertFalse(list.isEmpty());
+        Assert.assertEquals(5, list.size());
+        Assert.assertFalse(list.contains("0"));
+        Assert.assertTrue(list.contains("a"));
+        Assert.assertFalse(list.contains("ab"));
+        Assert.assertTrue(list.contains(null));
+        Assert.assertFalse(list.contains("da"));
+        Assert.assertFalse(list.contains("g"));
 
-        subSet = set.subSet("bc", "e");
-        Assert.assertEquals("[c, d]", subSet.toString());
-        it = subSet.iterator();
-        Assert.assertEquals("c", it.next());
+        Assert.assertEquals(arrayList, list);
+
+        Assert.assertEquals("e", list.get(4));
+        Assert.assertEquals("d", list.get(3));
+        Assert.assertEquals(null, list.get(2));
+        Assert.assertEquals("b", list.get(1));
+        Assert.assertEquals("a", list.get(0));
+
+        // Search indexes using indexOfRange()
+        Assert.assertEquals(-1, list.indexOf("0"));
+        Assert.assertEquals(0, list.indexOf("a"));
+        Assert.assertEquals(-1, list.indexOf("ab"));
+        Assert.assertEquals(2, list.indexOf(null));
+        Assert.assertEquals(3, list.indexOf("d"));
+        Assert.assertEquals(-1, list.indexOf("da"));
+        Assert.assertEquals(4, list.indexOf("e"));
+        Assert.assertEquals(-1, list.indexOf("g"));
+
+        it = list.iterator();
+        Assert.assertEquals("a", it.next());
+        Assert.assertEquals("b", it.next());
+        Assert.assertEquals(null, it.next());
         Assert.assertEquals("d", it.next());
+        Assert.assertEquals("e", it.next());
         Assert.assertFalse(it.hasNext());
 
-        subSet = set.subSet("bc", "c");
-        Assert.assertEquals("[]", subSet.toString());
-        Assert.assertSame(subSet, ImmutableSortedArraySet.emptySet());
-        it = subSet.iterator();
+        List<String> subList = list.subList(1, 5);
+
+        Assert.assertFalse(subList.contains("0"));
+        Assert.assertFalse(subList.contains("a"));
+        Assert.assertFalse(subList.contains("ab"));
+        Assert.assertTrue(subList.contains(null));
+        Assert.assertTrue(subList.contains("d"));
+        Assert.assertFalse(subList.contains("da"));
+        Assert.assertTrue(subList.contains("e"));
+        Assert.assertFalse(subList.contains("g"));
+
+        // Search indexes using indexOfRange()
+        Assert.assertEquals(-1, subList.indexOf("0"));
+        Assert.assertEquals(-1, subList.indexOf("a"));
+        Assert.assertEquals(-1, subList.indexOf("ab"));
+        Assert.assertEquals(1, subList.indexOf(null));
+        Assert.assertEquals(2, subList.indexOf("d"));
+        Assert.assertEquals(-1, subList.indexOf("da"));
+        Assert.assertEquals(3, subList.indexOf("e"));
+        Assert.assertEquals(-1, subList.indexOf("g"));
+
+        List<String> arrayList2 = arrayList.subList(1, 5);
+        Assert.assertTrue(arrayList2.equals(subList));
+        Assert.assertTrue(subList.equals(arrayList2));
+
+        it = subList.iterator();
+        Assert.assertEquals("b", it.next());
+        Assert.assertEquals(null, it.next());
+        Assert.assertEquals("d", it.next());
+        Assert.assertEquals("e", it.next());
         Assert.assertFalse(it.hasNext());
 
-        subSet = set.subSet("a", "g");
-        Assert.assertEquals(5, subSet.size());
-        Assert.assertSame(subSet, set);
+        it = subList.listIterator();
+        Assert.assertEquals("b", it.next());
+        Assert.assertEquals(null, it.next());
+        Assert.assertEquals("d", it.next());
+        Assert.assertEquals("e", it.next());
+        Assert.assertFalse(it.hasNext());
+
+        Assert.assertEquals("[a, b, null, d, e]", set.toString());
+        Assert.assertEquals("[a, b, null, d, e]", list.toString());
+        Assert.assertEquals("[b, null, d, e]", subList.toString());
     }
 
     @Test
@@ -217,7 +283,7 @@ public final class TestImmutableSortedArraySet {
 
         ArrayBackedSet<String> result = abcdefg.stream()
                 .filter(p -> p.length() == 1)
-                .collect(Collectors.toImmutableSortedArraySet());
+                .collect(Collectors.toImmutableHashedArraySet());
 
         Assert.assertEquals(7, result.size());
     }
