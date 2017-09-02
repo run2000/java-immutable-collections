@@ -2,6 +2,7 @@ package net.njcull.collections;
 
 import java.util.Comparator;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collector;
 
 /**
@@ -183,5 +184,23 @@ public final class Collectors {
                 ImmutableSortedArrayMapBuilder::with,
                 ImmutableSortedArrayMapBuilder::merge,
                 ImmutableSortedArrayMapBuilder::build);
+    }
+
+    public static <K,V> Collector<? extends V, ?, ImmutableSortedArrayPropertyMap<K,V>> toImmutableSortedArrayPropertyMap(
+            final Function<? super V,? extends K> keySupplier) {
+        return Collector.of(
+                () -> ImmutableSortedArrayPropertyMapBuilder.<K,V>newMapWithKeys(keySupplier),
+                ImmutableSortedArrayPropertyMapBuilder::with,
+                ImmutableSortedArrayPropertyMapBuilder::merge,
+                ImmutableSortedArrayPropertyMapBuilder::build);
+    }
+
+    public static <K,V> Collector<? extends V, ?, ImmutableSortedArrayPropertyMap<K,V>> toImmutableSortedArrayPropertyMapComparingKeys(
+            final Function<? super V,? extends K> keySupplier, final Comparator<? super K> keyCmp) {
+        return Collector.of(
+                () -> ImmutableSortedArrayPropertyMapBuilder.<K,V>newMapWithKeysComparing(keySupplier, keyCmp),
+                ImmutableSortedArrayPropertyMapBuilder::with,
+                ImmutableSortedArrayPropertyMapBuilder::merge,
+                ImmutableSortedArrayPropertyMapBuilder::build);
     }
 }

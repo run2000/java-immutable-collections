@@ -235,7 +235,7 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
             sortedValues[i] = iVal;
         }
 
-        // Todo: sort keys by index, insert sorted keys and values into result array
+        // Sort keys by index, insert sorted keys and values into result array
         Arrays.sort(sortedKeys, 0, m_Size, new ArrayComparator(keys, 0, nullsKeyComparator));
 
         Object[] elements = new Object[m_Size * 2];
@@ -254,7 +254,7 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
             prev = o;
         }
 
-        // Todo: sort keys by index, insert sorted keys and values into result array
+        // Sort keys by index, insert sorted keys and values into result array
         Comparator<? super V> valueComparator = m_ValueComparator;
         Comparator nullsValueComparator = (valueComparator == null) ? naturalOrder : Comparator.nullsFirst(valueComparator);
         Arrays.sort(sortedValues, 0, m_Size, new ArrayComparator(elements, m_Size, nullsValueComparator));
@@ -277,6 +277,8 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
     public ImmutableSortedArrayMapBuilder<K,V> clear() {
         m_Keys = EMPTY_ELEMENTS;
         m_Values = EMPTY_ELEMENTS;
+        m_KeyComparator = null;
+        m_ValueComparator = null;
         m_Size = 0;
         m_Bimap = false;
         return this;
