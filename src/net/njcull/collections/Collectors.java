@@ -186,7 +186,7 @@ public final class Collectors {
                 ImmutableSortedArrayMapBuilder::build);
     }
 
-    public static <K,V> Collector<? extends V, ?, ImmutableSortedArrayPropertyMap<K,V>> toImmutableSortedArrayPropertyMap(
+    public static <K,V> Collector<V, ?, ImmutableSortedArrayPropertyMap<K,V>> toImmutableSortedArrayPropertyMap(
             final Function<? super V,? extends K> keySupplier) {
         return Collector.of(
                 () -> ImmutableSortedArrayPropertyMapBuilder.<K,V>newMapWithKeys(keySupplier),
