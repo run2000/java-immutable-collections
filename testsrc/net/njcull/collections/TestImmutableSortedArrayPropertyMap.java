@@ -6,7 +6,9 @@ import org.junit.Test;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Tests for ImmutableSortedArrayPropertyMap.
@@ -30,17 +32,17 @@ public class TestImmutableSortedArrayPropertyMap {
         ImmutableSortedArrayPropertyMapBuilder<String, TestClassWithProperty<String>> builder =
                 ImmutableSortedArrayPropertyMapBuilder.newMapWithKeys(TestClassWithProperty::getName);
 
-        builder.with(new TestClassWithProperty<String>("f", "ac"));
-        builder.with(new TestClassWithProperty<String>("b", "bc"));
-        builder.with(new TestClassWithProperty<String>("c", "cc"));
-        builder.with(new TestClassWithProperty<String>("d", "dx"));
-        builder.with(new TestClassWithProperty<String>("e", "ec"));
-        builder.with(new TestClassWithProperty<String>("a", "fc"));
-        builder.with(new TestClassWithProperty<String>("g", "gc"));
-        builder.with(new TestClassWithProperty<String>("o", "0ma"));
-        builder.with(new TestClassWithProperty<String>("n", "0na"));
-        builder.with(new TestClassWithProperty<String>("m", "Zoa"));
-        builder.with(new TestClassWithProperty<String>("p", "Zpa"));
+        builder.with(new TestClassWithProperty<>("f", "ac"));
+        builder.with(new TestClassWithProperty<>("b", "bc"));
+        builder.with(new TestClassWithProperty<>("c", "cc"));
+        builder.with(new TestClassWithProperty<>("d", "dx"));
+        builder.with(new TestClassWithProperty<>("e", "ec"));
+        builder.with(new TestClassWithProperty<>("a", "fc"));
+        builder.with(new TestClassWithProperty<>("g", "gc"));
+        builder.with(new TestClassWithProperty<>("o", "0ma"));
+        builder.with(new TestClassWithProperty<>("n", "0na"));
+        builder.with(new TestClassWithProperty<>("m", "Zoa"));
+        builder.with(new TestClassWithProperty<>("p", "Zpa"));
 
         ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>> map = builder.build();
         Assert.assertEquals(11, map.size());
@@ -53,17 +55,17 @@ public class TestImmutableSortedArrayPropertyMap {
         ImmutableSortedArrayPropertyMapBuilder<String, TestClassWithProperty<String>> builder =
                 ImmutableSortedArrayPropertyMapBuilder.newMapWithKeys(TestImmutableSortedArrayPropertyMap::extractKey);
 
-        builder.with(new TestClassWithProperty<String>("f", "ac"));
-        builder.with(new TestClassWithProperty<String>("b", "bc"));
-        builder.with(new TestClassWithProperty<String>("c", "cc"));
-        builder.with(new TestClassWithProperty<String>(null, "dx"));
-        builder.with(new TestClassWithProperty<String>("e", "ec"));
-        builder.with(new TestClassWithProperty<String>("a", null));
-        builder.with(new TestClassWithProperty<String>("g", "gc"));
-        builder.with(new TestClassWithProperty<String>("o", "0ma"));
-        builder.with(new TestClassWithProperty<String>("n", "0na"));
-        builder.with(new TestClassWithProperty<String>("m", "Zoa"));
-        builder.with(new TestClassWithProperty<String>("p", "Zpa"));
+        builder.with(new TestClassWithProperty<>("f", "ac"));
+        builder.with(new TestClassWithProperty<>("b", "bc"));
+        builder.with(new TestClassWithProperty<>("c", "cc"));
+        builder.with(new TestClassWithProperty<>(null, "dx"));
+        builder.with(new TestClassWithProperty<>("e", "ec"));
+        builder.with(new TestClassWithProperty<>("a", null));
+        builder.with(new TestClassWithProperty<>("g", "gc"));
+        builder.with(new TestClassWithProperty<>("o", "0ma"));
+        builder.with(new TestClassWithProperty<>("n", "0na"));
+        builder.with(new TestClassWithProperty<>("m", "Zoa"));
+        builder.with(new TestClassWithProperty<>("p", "Zpa"));
 
         ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>> map = builder.build();
         Assert.assertEquals(11, map.size());
@@ -130,34 +132,30 @@ public class TestImmutableSortedArrayPropertyMap {
         Assert.assertEquals("o", result.keyAt(8));
         Assert.assertEquals("p", result.keyAt(9));
 
-/*
-        // Values don't implement equals
-        Assert.assertTrue(result.containsValue("ac"));
-        Assert.assertTrue(result.containsValue("bc"));
-        Assert.assertTrue(result.containsValue("cc"));
-        Assert.assertFalse(result.containsValue("dx"));
-        Assert.assertTrue(result.containsValue("ec"));
-        Assert.assertTrue(result.containsValue("fc"));
-        Assert.assertTrue(result.containsValue("gc"));
-        Assert.assertTrue(result.containsValue("0ma"));
-        Assert.assertTrue(result.containsValue("0na"));
-        Assert.assertTrue(result.containsValue("Zoa"));
-        Assert.assertTrue(result.containsValue("Zpa"));
-        Assert.assertFalse(result.containsValue("0"));
+        Assert.assertTrue(result.containsValue(new TestClassWithProperty<>("a", "ac")));
+        Assert.assertTrue(result.containsValue(new TestClassWithProperty<>("b", "bc")));
+        Assert.assertTrue(result.containsValue(new TestClassWithProperty<>("c", "cc")));
+        Assert.assertFalse(result.containsValue(new TestClassWithProperty<>("d", "dx")));
+        Assert.assertTrue(result.containsValue(new TestClassWithProperty<>("e", "ec")));
+        Assert.assertTrue(result.containsValue(new TestClassWithProperty<>("f", "fc")));
+        Assert.assertTrue(result.containsValue(new TestClassWithProperty<>("g", "gc")));
+        Assert.assertTrue(result.containsValue(new TestClassWithProperty<>("m", "0ma")));
+        Assert.assertTrue(result.containsValue(new TestClassWithProperty<>("n", "0na")));
+        Assert.assertTrue(result.containsValue(new TestClassWithProperty<>("o", "Zoa")));
+        Assert.assertTrue(result.containsValue(new TestClassWithProperty<>("p", "Zpa")));
+        Assert.assertFalse(result.containsValue(new TestClassWithProperty<String>("0", null)));
 
-        // Values don't implement equals
-        Assert.assertEquals(0, result.indexOfValue("ac"));
-        Assert.assertEquals(1, result.indexOfValue("bc"));
-        Assert.assertEquals(2, result.indexOfValue("cc"));
-        Assert.assertEquals(3, result.indexOfValue("ec"));
-        Assert.assertEquals(4, result.indexOfValue("fc"));
-        Assert.assertEquals(5, result.indexOfValue("gc"));
-        Assert.assertEquals(6, result.indexOfValue("0ma"));
-        Assert.assertEquals(7, result.indexOfValue("0na"));
-        Assert.assertEquals(8, result.indexOfValue("Zoa"));
-        Assert.assertEquals(9, result.indexOfValue("Zpa"));
-        Assert.assertEquals(-1, result.indexOfValue("0"));
-*/
+        Assert.assertEquals(0, result.indexOfValue(new TestClassWithProperty<>("a", "ac")));
+        Assert.assertEquals(1, result.indexOfValue(new TestClassWithProperty<>("b", "bc")));
+        Assert.assertEquals(2, result.indexOfValue(new TestClassWithProperty<>("c", "cc")));
+        Assert.assertEquals(3, result.indexOfValue(new TestClassWithProperty<>("e", "ec")));
+        Assert.assertEquals(4, result.indexOfValue(new TestClassWithProperty<>("f", "fc")));
+        Assert.assertEquals(5, result.indexOfValue(new TestClassWithProperty<>("g", "gc")));
+        Assert.assertEquals(6, result.indexOfValue(new TestClassWithProperty<>("m", "0ma")));
+        Assert.assertEquals(7, result.indexOfValue(new TestClassWithProperty<>("n", "0na")));
+        Assert.assertEquals(8, result.indexOfValue(new TestClassWithProperty<>("o", "Zoa")));
+        Assert.assertEquals(9, result.indexOfValue(new TestClassWithProperty<>("p", "Zpa")));
+        Assert.assertEquals(-1, result.indexOfValue(new TestClassWithProperty<String>("0", null)));
 
         Assert.assertEquals("ac", result.valueAt(0).getValue());
         Assert.assertEquals("bc", result.valueAt(1).getValue());
@@ -290,6 +288,117 @@ public class TestImmutableSortedArrayPropertyMap {
 
     }
 
+    @Test
+    public void testMerge() throws Exception {
+        Collection<TestClassWithProperty<String>> list1 = new HashSet<>();
+        list1.add(new TestClassWithProperty<>("a", "ac"));
+        list1.add(new TestClassWithProperty<>("b", "bc"));
+        list1.add(new TestClassWithProperty<>("c", "cc"));
+        list1.add(new TestClassWithProperty<>("d", "dx"));
+        list1.add(new TestClassWithProperty<>("e", "ec"));
+        list1.add(new TestClassWithProperty<>("f", "fc"));
+        list1.add(new TestClassWithProperty<>("g", "gc"));
+
+        Collection<TestClassWithProperty<String>> list2 = new HashSet<>();
+        list2.add(new TestClassWithProperty<>("m", "ma"));
+        list2.add(new TestClassWithProperty<>("n", "na"));
+        list2.add(new TestClassWithProperty<>("o", "oa"));
+        list2.add(new TestClassWithProperty<>("p", "pa"));
+
+        ImmutableSortedArrayPropertyMapBuilder<String, TestClassWithProperty<String>> builder1 =
+                new ImmutableSortedArrayPropertyMapBuilder<>();
+        ImmutableSortedArrayPropertyMapBuilder<String, TestClassWithProperty<String>> builder2 =
+                ImmutableSortedArrayPropertyMapBuilder.newMap();
+
+        builder1.byKeyMethod(TestClassWithProperty::getName);
+        builder2.byKeyMethod(TestClassWithProperty::getName);
+        builder1.with(list1);
+        list2.forEach(builder2::with);
+        builder1.merge(builder2);
+
+        ArrayBackedMap<String, TestClassWithProperty<String>> result = builder1.build();
+        Assert.assertEquals(11, result.size());
+    }
+
+    @Test
+    public void testBuilder() throws Exception {
+        ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>> map =
+                ImmutableSortedArrayPropertyMap.<String, TestClassWithProperty<String>>builder()
+                        .byKeyMethod(TestClassWithProperty::getName)
+                        .with(new TestClassWithProperty<>("c", "5"), new TestClassWithProperty<>("d", "4"), new TestClassWithProperty<>("e", "3"))
+                        .with(new TestClassWithProperty<>("a", "7"), new TestClassWithProperty<>("b", "96"))
+                        .with(new TestClassWithProperty<>("f", "2"), new TestClassWithProperty<>("g", "1")).build();
+
+        Assert.assertEquals(7, map.size());
+
+        Assert.assertFalse(map.containsKey("0"));
+        Assert.assertEquals(new TestClassWithProperty<>("a","7"), map.get("a"));
+        Assert.assertFalse(map.containsKey("ab"));
+        Assert.assertFalse(map.containsKey("da"));
+        Assert.assertEquals(new TestClassWithProperty<>("g","1"), map.get("g"));
+        Assert.assertFalse(map.containsKey("zz"));
+
+        ArrayBackedSet<String> keySet = map.keySet();
+        Assert.assertFalse(keySet.isEmpty());
+        Assert.assertEquals(7, keySet.size());
+        Assert.assertEquals("[a, b, c, d, e, f, g]", keySet.toString());
+        List<String> keyList = keySet.asList();
+        Assert.assertFalse(keyList.isEmpty());
+        Assert.assertEquals(7, keyList.size());
+        Assert.assertEquals("[a, b, c, d, e, f, g]", keyList.toString());
+
+        ArrayBackedSet<Map.Entry<String, TestClassWithProperty<String>>> entrySet = map.entrySet();
+        Assert.assertFalse(entrySet.isEmpty());
+        Assert.assertEquals(7, entrySet.size());
+        Assert.assertEquals("[a=7, b=96, c=5, d=4, e=3, f=2, g=1]", entrySet.toString());
+        List<Map.Entry<String, TestClassWithProperty<String>>> entryList = entrySet.asList();
+        Assert.assertFalse(entryList.isEmpty());
+        Assert.assertEquals(7, entryList.size());
+        Assert.assertEquals("[a=7, b=96, c=5, d=4, e=3, f=2, g=1]", entryList.toString());
+
+        ArrayBackedCollection<TestClassWithProperty<String>> values = map.values();
+        Assert.assertFalse(values.isEmpty());
+        Assert.assertEquals(7, values.size());
+        Assert.assertEquals("[7, 96, 5, 4, 3, 2, 1]", values.toString());
+        List<TestClassWithProperty<String>> valueList = values.asList();
+        Assert.assertFalse(valueList.isEmpty());
+        Assert.assertEquals(7, valueList.size());
+        Assert.assertEquals("[7, 96, 5, 4, 3, 2, 1]", valueList.toString());
+
+        Assert.assertEquals(1, map.indexOfValue(new TestClassWithProperty<>("b","96")));
+    }
+
+    @Test
+    public void testSubMap() throws Exception {
+        ImmutableSortedArrayPropertyMapBuilder<String, TestClassWithProperty<String>> builder =
+                new ImmutableSortedArrayPropertyMapBuilder<>();
+        builder.with(new TestClassWithProperty<>("a", "ac"));
+        builder.with(new TestClassWithProperty<>("b", "bc"));
+        builder.with(new TestClassWithProperty<>("c", "cc"));
+        builder.with(new TestClassWithProperty<>("d", "dx"));
+        builder.with(new TestClassWithProperty<>("e", "ec"));
+        builder.with(new TestClassWithProperty<>("f", "fc"));
+        builder.with(new TestClassWithProperty<>("g", "gc"));
+        builder.byKeyMethod(TestClassWithProperty::getName);
+
+        ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>> map = builder.build();
+        ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>> headMap = map.headMap("d");
+        ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>> tailMap = map.tailMap("e");
+        ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>> subMap = map.subMap("d", "e");
+        ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>> emptySubMap = map.subMap("ab", "ac");
+        ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>> fullSubMap = map.subMap("a", "h");
+
+        Assert.assertEquals(3, headMap.size());
+        Assert.assertEquals(3, tailMap.size());
+        Assert.assertEquals(1, subMap.size());
+        Assert.assertTrue(emptySubMap.isEmpty());
+        Assert.assertEquals(7, fullSubMap.size());
+
+
+        Assert.assertEquals("a", map.firstKey());
+        Assert.assertEquals("g", map.lastKey());
+    }
+
     /**
      * A static method that fits the Function definition for extracting a
      * key from the given test class.
@@ -327,6 +436,26 @@ public class TestImmutableSortedArrayPropertyMap {
         @Override
         public String toString() {
             return String.valueOf(value);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof TestClassWithProperty)) {
+                return false;
+            }
+            TestClassWithProperty<?> that = (TestClassWithProperty<?>) o;
+            return Objects.equals(name, that.name) &&
+                    Objects.equals(value, that.value);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = Objects.hashCode(name);
+            result = 31 * result + Objects.hashCode(value);
+            return result;
         }
     }
 }
