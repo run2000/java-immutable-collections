@@ -115,19 +115,21 @@ public final class ImmutableSortedArrayPropertyMapBuilder<K,V> {
     public final ImmutableSortedArrayPropertyMapBuilder<K,V> with(V... values) {
         int len = values.length;
         ensureCapacity(len);
-        for(int i = 0; i < len; i++) {
-            m_Values[m_Size++] = values[i];
-        }
+        System.arraycopy(values, 0, m_Values, m_Size, len);
+        m_Size += len;
         return this;
     }
 
     /**
      * For combiner.
+     * <p>
+     * Note that we make no assumptions about the key, the key extractor,
+     * or the comparator, on the incoming builder.
      *
      * @param entries the entries to be merged into this builder
      * @return this builder containing the merged items
      */
-    public ImmutableSortedArrayPropertyMapBuilder<K,V> merge(ImmutableSortedArrayPropertyMapBuilder<? extends K, ? extends V> entries) {
+    public ImmutableSortedArrayPropertyMapBuilder<K,V> merge(ImmutableSortedArrayPropertyMapBuilder<?, ? extends V> entries) {
         int len = entries.m_Size;
         ensureCapacity(len);
         System.arraycopy(entries.m_Values, 0, m_Values, m_Size, len);
@@ -208,7 +210,7 @@ public final class ImmutableSortedArrayPropertyMapBuilder<K,V> {
 
         public ArrayComparator(Object[] values, Function<V, K> supplier, Comparator<K> delegate) {
             this.m_Values = Objects.requireNonNull(values, "values cannot be null");
-            this.m_Supplier = Objects.requireNonNull(supplier);
+            this.m_Supplier = Objects.requireNonNull(supplier, "key supplier cannot be null");
             this.m_Delegate = Objects.requireNonNull(delegate, "delegate cannot be null");
         }
 

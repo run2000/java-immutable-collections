@@ -43,6 +43,8 @@ public final class BinarySearchUtils {
      *         elements in the list are less than the specified key. Note
      *         that this guarantees that the return value will be &gt;= 0 if
      *         and only if the key is found.
+     * @throws NullPointerException the {@code indexer} is null
+     * @throws IndexOutOfBoundsException {@code size} is less than 0
      */
     public static <T> int indexedSearch(IntFunction<? extends Comparable<? super T>> indexer, int size, T key) {
         return indexedSearch(indexer, 0, size, key);
@@ -77,6 +79,9 @@ public final class BinarySearchUtils {
      *         elements in the range are less than the specified key. Note
      *         that this guarantees that the return value will be &gt;= 0 if
      *         and only if the key is found.
+     * @throws NullPointerException the {@code indexer} is null
+     * @throws IndexOutOfBoundsException {@code fromIndex} is less than 0,
+     *         or {@code toIndex} is less than {@code fromIndex}
      */
     public static <T> int indexedSearch(IntFunction<? extends Comparable<? super T>> indexer,
                                         int fromIndex, int toIndex, T key) {
@@ -136,6 +141,10 @@ public final class BinarySearchUtils {
      *         elements in the list are less than the specified key. Note
      *         that this guarantees that the return value will be &gt;= 0 if
      *         and only if the key is found.
+     * @throws NullPointerException the {@code indexer} is null, or
+     *         {@code comparator} is null
+     * @throws IndexOutOfBoundsException {@code fromIndex} is less than 0,
+     *         or {@code toIndex} is less than {@code fromIndex}
      */
     public static <T> int indexedSearch(IntFunction<? extends T> indexer, int size, T key, Comparator<? super T> comparator) {
         return indexedSearch(indexer, 0, size, key, comparator);
@@ -174,6 +183,10 @@ public final class BinarySearchUtils {
      *         elements in the range are less than the specified key. Note
      *         that this guarantees that the return value will be &gt;= 0 if
      *         and only if the key is found.
+     * @throws NullPointerException the {@code indexer} is null, or
+     *         {@code comparator} is null
+     * @throws IndexOutOfBoundsException {@code fromIndex} is less than 0,
+     *         or {@code toIndex} is less than {@code fromIndex}
      */
     public static <T> int indexedSearch(IntFunction<? extends T> indexer,
                                         int fromIndex, int toIndex, T key,

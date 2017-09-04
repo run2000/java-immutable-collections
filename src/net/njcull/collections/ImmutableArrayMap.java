@@ -8,7 +8,7 @@ import java.util.*;
  * stored together in key order.
  * <p>
  * Keys and values are tested using a linear search implementation.
- * The map's keyset and entryset views may also be view as a {@link List}.
+ * The map's keyset and entryset views may also be viewed as a {@link List}.
  * </p>
  *
  * @param <K> the type of keys maintained by this map
@@ -256,7 +256,7 @@ public final class ImmutableArrayMap<K,V> extends AbstractMap<K,V> implements Ar
 
     @Override
     public ArrayBackedSet<Entry<K, V>> entrySet() {
-        return Views.setView(new ImmutableEntryList<>(this));
+        return Views.setView(new ArrayBackedMapEntryList<>(this));
     }
 
     @Override
@@ -283,33 +283,4 @@ public final class ImmutableArrayMap<K,V> extends AbstractMap<K,V> implements Ar
     public static <K,V> ImmutableArrayMapBuilder<K,V> builder() {
         return new ImmutableArrayMapBuilder<K,V>();
     }
-
-    private static final class ImmutableEntryList<K,V> extends AbstractRandomAccessList<Entry<K,V>> {
-        private final ArrayBackedMap<K,V> m_Map;
-
-        ImmutableEntryList(ArrayBackedMap<K, V> map) {
-            this.m_Map = Objects.requireNonNull(map, "map must be non-null");
-        }
-
-        @Override
-        public Entry<K, V> get(int index) {
-            return m_Map.entryAt(index);
-        }
-
-        @Override
-        public int size() {
-            return m_Map.size();
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return m_Map.isEmpty();
-        }
-
-        @Override
-        public Spliterator<Entry<K, V>> spliterator() {
-            return Spliterators.spliterator(this, Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.IMMUTABLE | Spliterator.CONCURRENT);
-        }
-    }
-
 }

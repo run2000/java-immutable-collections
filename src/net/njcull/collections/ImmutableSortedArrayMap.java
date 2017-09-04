@@ -9,7 +9,7 @@ import java.util.*;
  * referring to the elements in sorted value order.
  * <p>
  * Keys and values are tested using a binary search implementation.
- * The map's keyset and entryset views may also be view as a {@link List}.
+ * The map's keyset and entryset views may also be viewed as a {@link List}.
  * </p>
  *
  * @param <K> the type of keys maintained by this map

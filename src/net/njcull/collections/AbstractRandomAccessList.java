@@ -121,8 +121,15 @@ public abstract class AbstractRandomAccessList<E> extends AbstractList<E> implem
     public boolean removeAll(Collection<?> c) {
         boolean modified = false;
 
-        for (Object o : c) {
-            modified |= remove(o);
+        if((c instanceof RandomAccess) && (c instanceof List)) {
+            List<?> list = (List) c;
+            for(int i = 0; i < list.size(); i++) {
+                modified |= remove(list.get(i));
+            }
+        } else {
+            for (Object o : c) {
+                modified |= remove(o);
+            }
         }
 
         return modified;
@@ -231,22 +238,46 @@ public abstract class AbstractRandomAccessList<E> extends AbstractList<E> implem
         return hashCode;
     }
 
+    /**
+     * An iterator that takes a List, assumed to be a random access list,
+     * and iterates over it by index. The size of the list is assumed to be
+     * less than {@code Integer.MAX_VALUE}.
+     *
+     * @param <E> the type of elements in the list
+     */
     private static final class RandomAccessIterator<E> implements Iterator<E> {
         private final List<E> m_List;
-        private final int m_EndIndex;
+        private int m_EndIndex;
         private int m_Index;
 
-        RandomAccessIterator(AbstractRandomAccessList<E> list) {
+        /**
+         * Create a new {@code Iterator} for the supplied random access list.
+         *
+         * @param list the list on which the iterator indexes
+         */
+        RandomAccessIterator(List<E> list) {
             m_List = Objects.requireNonNull(list);
             m_EndIndex = list.size();
             m_Index = 0;
         }
 
+        /**
+         * Returns {@code true} if the iteration has more elements.
+         *
+         * @return {@code true} if the iteration has more elements, otherwise
+         * {@code false}
+         */
         @Override
         public boolean hasNext() {
             return m_Index < m_EndIndex;
         }
 
+        /**
+         * Returns the next element in the iteration.
+         *
+         * @return the next element in the iteration
+         * @throws NoSuchElementException if the iteration has no more elements
+         */
         @Override
         public E next() {
             if((m_Index < 0) || (m_Index >= m_EndIndex)) {
@@ -255,12 +286,24 @@ public abstract class AbstractRandomAccessList<E> extends AbstractList<E> implem
             return m_List.get(m_Index++);
         }
 
+        /**
+         * Removes from the underlying collection the last element returned
+         * by this iterator (optional operation).
+         *
+         * @throws UnsupportedOperationException if the {@code remove}
+         *         operation is not supported by the backing list
+         * @throws IllegalStateException if the {@code next} method has not
+         *         yet been called, or the {@code remove} method has already
+         *         been called after the last call to the {@code next}
+         *         method
+         */
         @Override
         public void remove() {
             if((m_Index <= 0) || (m_Index > m_EndIndex)) {
-                throw new NoSuchElementException("end of iterator");
+                throw new IllegalStateException("end of iterator");
             }
             m_List.remove(--m_Index);
+            m_EndIndex--;
         }
     }
 }

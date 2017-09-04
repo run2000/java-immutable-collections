@@ -11,12 +11,12 @@ import java.util.function.Function;
 /**
  * A {@link SortedMap} backed by an array of elements. The array is the
  * exact length required to contain the values. Values are stored together
- * sorted key order.
+ * in sorted key order.
  * <p>
- * Keys are calculated by the given key supplier function.
+ * Keys are calculated on demand by the given key supplier function.
  * <p>
  * Keys are tested using a binary search implementation. The map's keyset
- * and entryset views may also be view as a {@link List}.
+ * and entryset views may also be viewed as a {@link List}.
  * </p>
  *
  * @param <K> the type of keys maintained by this map
