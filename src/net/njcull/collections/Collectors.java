@@ -195,7 +195,7 @@ public final class Collectors {
                 ImmutableSortedArrayPropertyMapBuilder::build);
     }
 
-    public static <K,V> Collector<? extends V, ?, ImmutableSortedArrayPropertyMap<K,V>> toImmutableSortedArrayPropertyMapComparingKeys(
+    public static <K,V> Collector<V, ?, ImmutableSortedArrayPropertyMap<K,V>> toImmutableSortedArrayPropertyMapComparingKeys(
             final Function<? super V,? extends K> keySupplier, final Comparator<? super K> keyCmp) {
         return Collector.of(
                 () -> ImmutableSortedArrayPropertyMapBuilder.<K,V>newMapWithKeysComparing(keySupplier, keyCmp),
