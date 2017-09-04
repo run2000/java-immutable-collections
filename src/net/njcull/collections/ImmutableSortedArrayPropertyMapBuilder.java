@@ -123,11 +123,14 @@ public final class ImmutableSortedArrayPropertyMapBuilder<K,V> {
 
     /**
      * For combiner.
+     * <p>
+     * Note that we make no assumptions about the key, the key extractor,
+     * or the comparator, on the incoming builder.
      *
      * @param entries the entries to be merged into this builder
      * @return this builder containing the merged items
      */
-    public ImmutableSortedArrayPropertyMapBuilder<K,V> merge(ImmutableSortedArrayPropertyMapBuilder<? extends K, ? extends V> entries) {
+    public ImmutableSortedArrayPropertyMapBuilder<K,V> merge(ImmutableSortedArrayPropertyMapBuilder<?, ? extends V> entries) {
         int len = entries.m_Size;
         ensureCapacity(len);
         System.arraycopy(entries.m_Values, 0, m_Values, m_Size, len);
