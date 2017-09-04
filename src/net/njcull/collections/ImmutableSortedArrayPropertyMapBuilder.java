@@ -208,7 +208,7 @@ public final class ImmutableSortedArrayPropertyMapBuilder<K,V> {
 
         public ArrayComparator(Object[] values, Function<V, K> supplier, Comparator<K> delegate) {
             this.m_Values = Objects.requireNonNull(values, "values cannot be null");
-            this.m_Supplier = Objects.requireNonNull(supplier);
+            this.m_Supplier = Objects.requireNonNull(supplier, "key supplier cannot be null");
             this.m_Delegate = Objects.requireNonNull(delegate, "delegate cannot be null");
         }
 
