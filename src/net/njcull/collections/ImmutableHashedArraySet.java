@@ -262,6 +262,21 @@ public final class ImmutableHashedArraySet<E> extends AbstractSet<E> implements 
         return new ImmutableIndexerSpliterator<E>(this::getAtIndex, size(), Spliterator.DISTINCT);
     }
 
+    /**
+     * Returns a string representation of this set.  The string
+     * representation consists of a list of the set's elements in the
+     * order they are returned by its indexer, enclosed in square brackets
+     * (<tt>"[]"</tt>).  Adjacent elements are separated by the characters
+     * <tt>", "</tt> (comma and space).  Elements are converted to strings as
+     * by {@link String#valueOf(Object)}.
+     *
+     * @return a string representation of this set
+     */
+    @Override
+    public String toString() {
+        return ArrayBackedCollection.toString(this);
+    }
+
     @Override
     public List<E> asList() {
         return Views.listView(this);

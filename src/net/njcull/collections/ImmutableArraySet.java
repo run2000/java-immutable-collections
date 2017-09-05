@@ -232,6 +232,21 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
     }
 
     /**
+     * Returns a string representation of this set.  The string
+     * representation consists of a list of the set's elements in the
+     * order they are returned by its indexer, enclosed in square brackets
+     * (<tt>"[]"</tt>).  Adjacent elements are separated by the characters
+     * <tt>", "</tt> (comma and space).  Elements are converted to strings as
+     * by {@link String#valueOf(Object)}.
+     *
+     * @return a string representation of this set
+     */
+    @Override
+    public String toString() {
+        return ArrayBackedCollection.toString(this);
+    }
+
+    /**
      * Creates a {@code Spliterator} over the elements in this set.
      *
      * <p>The {@code Spliterator} reports {@code Spliterator.DISTINCT},
