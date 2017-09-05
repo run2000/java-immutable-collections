@@ -246,6 +246,11 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
         return ArrayBackedCollection.toString(this);
     }
 
+    @Override
+    public int hashCode() {
+        return ArrayBackedSet.hashCode(this);
+    }
+
     /**
      * Creates a {@code Spliterator} over the elements in this set.
      *

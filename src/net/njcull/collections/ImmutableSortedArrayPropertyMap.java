@@ -239,6 +239,16 @@ public final class ImmutableSortedArrayPropertyMap<K,V> extends AbstractMap<K,V>
         return m_KeySupplier.apply((V) m_Map[size - 1]);
     }
 
+    @Override
+    public String toString() {
+        return ArrayBackedMap.toString(this);
+    }
+
+    @Override
+    public int hashCode() {
+        return ArrayBackedMap.hashCode(this);
+    }
+
     /**
      * Create a builder object for this immutable sorted array map.
      *

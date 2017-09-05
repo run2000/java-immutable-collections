@@ -140,6 +140,11 @@ public final class Views {
             return m_List.toString();
         }
 
+        @Override
+        public int hashCode() {
+            return ArrayBackedSet.hashCode(this);
+        }
+
         public List<E> asList() {
             return m_List;
         }

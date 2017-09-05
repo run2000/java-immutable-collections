@@ -119,4 +119,67 @@ public interface ArrayBackedMap<K, V> extends Map<K, V> {
         }
         return -1;
     }
+
+    /**
+     * Returns the hash code value for this map.  The hash code of a map is
+     * defined to be the sum of the hash codes of each entry in the map's
+     * <tt>entrySet()</tt> view.  This ensures that <tt>m1.equals(m2)</tt>
+     * implies that <tt>m1.hashCode()==m2.hashCode()</tt> for any two maps
+     * <tt>m1</tt> and <tt>m2</tt>, as required by the general contract of
+     * {@link Object#hashCode}.
+     * <p>
+     * This implementation is handled as a static method rather than a
+     * default method because a default method cannot override any methods
+     * of {@code Object}.
+     *
+     * @return the hash code value for this map
+     * @see Map.Entry#hashCode()
+     * @see Object#equals(Object)
+     */
+    static <K,V> int hashCode(ArrayBackedMap<K,V> m) {
+        final int sz = m.size();
+        int h = 0;
+        for (int i = 0; i < sz; i++) {
+            h += m.entryAt(i).hashCode();
+        }
+        return h;
+    }
+
+    /**
+     * Returns a string representation of this map.  The string representation
+     * consists of a list of key-value mappings in the order returned by the
+     * map's {@code entryAt} indexer, enclosed in braces ({@code "{}"}).
+     * Adjacent mappings are separated by the characters
+     * {@code ", "} (comma and space).  Each key-value mapping is rendered as
+     * the key followed by an equals sign ({@code "="}) followed by the
+     * associated value.  Keys and values are converted to strings as by
+     * {@link String#valueOf(Object)}.
+     * <p>
+     * This implementation is handled as a static method rather than a
+     * default method because a default method cannot override any methods
+     * of {@code Object}.
+     *
+     * @return a string representation of this map
+     */
+    static <K,V> String toString(ArrayBackedMap<K,V> m) {
+        final int sz = m.size();
+        if (sz == 0) {
+            return "{}";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append('{');
+        for (int i = 0; i < sz; ) {
+            Entry<K,V> e = m.entryAt(i++);
+            K key = e.getKey();
+            V value = e.getValue();
+            sb.append(key == m ? "(this Map)" : key);
+            sb.append('=');
+            sb.append(value == m ? "(this Map)" : value);
+            if (i < sz) {
+                sb.append(',').append(' ');
+            }
+        }
+        return sb.append('}').toString();
+    }
 }

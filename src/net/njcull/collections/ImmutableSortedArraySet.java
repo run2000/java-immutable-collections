@@ -240,6 +240,11 @@ public final class ImmutableSortedArraySet<E> extends AbstractSet<E> implements 
         return ArrayBackedCollection.toString(this);
     }
 
+    @Override
+    public int hashCode() {
+        return ArrayBackedSet.hashCode(this);
+    }
+
     public List<E> asList() {
         return Views.listView(this);
     }

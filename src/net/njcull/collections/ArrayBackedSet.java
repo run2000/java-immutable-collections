@@ -14,4 +14,33 @@ import java.util.Set;
  */
 public interface ArrayBackedSet<E> extends ArrayBackedCollection<E>, Set<E> {
 
+    /**
+     * Returns the hash code value for the given set. The hash code of a set is
+     * defined to be the sum of the hash codes of the elements in the set,
+     * where the hash code of a {@code null} element is defined to be zero.
+     * This ensures that {@code s1.equals(s2)} implies that
+     * {@code s1.hashCode()==s2.hashCode()} for any two sets {@code s1}
+     * and {@code s2}, as required by the general contract of
+     * {@link Object#hashCode}.
+     * <p>
+     * This implementation is handled as a static method rather than a
+     * default method because a default method cannot override any methods
+     * of {@code Object}.
+     *
+     * @param <E> the type of elements in the set
+     * @param s the set for which the hashcode will be generated
+     * @return the hash code value for the given set
+     * @see Object#equals(Object)
+     * @see Set#equals(Object)
+     */
+    static <E> int hashCode(ArrayBackedSet<E> s) {
+        final int sz = s.size();
+        int h = 0;
+        for (int i = 0; i < sz; i++) {
+            E obj = s.getAtIndex(i);
+            if (obj != null)
+                h += obj.hashCode();
+        }
+        return h;
+    }
 }

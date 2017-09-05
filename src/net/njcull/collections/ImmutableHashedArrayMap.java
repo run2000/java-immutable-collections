@@ -271,6 +271,16 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
         }
     }
 
+    @Override
+    public String toString() {
+        return ArrayBackedMap.toString(this);
+    }
+
+    @Override
+    public int hashCode() {
+        return ArrayBackedMap.hashCode(this);
+    }
+
     /**
      * Create a builder object for this immutable hashed array map.
      *

@@ -278,6 +278,11 @@ public final class ImmutableHashedArraySet<E> extends AbstractSet<E> implements 
     }
 
     @Override
+    public int hashCode() {
+        return ArrayBackedSet.hashCode(this);
+    }
+
+    @Override
     public List<E> asList() {
         return Views.listView(this);
     }
