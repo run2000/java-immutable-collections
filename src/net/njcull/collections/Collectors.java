@@ -186,6 +186,40 @@ public final class Collectors {
                 ImmutableSortedArrayMapBuilder::build);
     }
 
+    public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableUniSortedArrayMap<K,V>> toImmutableUniSortedArrayMap() {
+        return Collector.<Map.Entry<? extends K,? extends V>, ImmutableUniSortedArrayMapBuilder<K,V>, ImmutableUniSortedArrayMap<K,V>>of(
+                ImmutableUniSortedArrayMapBuilder::newMap,
+                ImmutableUniSortedArrayMapBuilder::with,
+                ImmutableUniSortedArrayMapBuilder::merge,
+                ImmutableUniSortedArrayMapBuilder::build);
+    }
+
+    public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableUniSortedArrayMap<K,V>> toImmutableUniSortedArrayMapComparing(
+            final Comparator<? super K> keyCmp) {
+        return Collector.<Map.Entry<? extends K,? extends V>, ImmutableUniSortedArrayMapBuilder<K,V>, ImmutableUniSortedArrayMap<K,V>>of(
+                () -> ImmutableUniSortedArrayMapBuilder.newMapComparing(keyCmp),
+                ImmutableUniSortedArrayMapBuilder::with,
+                ImmutableUniSortedArrayMapBuilder::merge,
+                ImmutableUniSortedArrayMapBuilder::build);
+    }
+
+    public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableUniSortedArrayMap<K,V>> toImmutableUniSortedArrayBiMap() {
+        return Collector.<Map.Entry<? extends K,? extends V>, ImmutableUniSortedArrayMapBuilder<K,V>, ImmutableUniSortedArrayMap<K,V>>of(
+                ImmutableUniSortedArrayMapBuilder::<K,V>newBiMap,
+                ImmutableUniSortedArrayMapBuilder::with,
+                ImmutableUniSortedArrayMapBuilder::merge,
+                ImmutableUniSortedArrayMapBuilder::build);
+    }
+
+    public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableUniSortedArrayMap<K,V>> toImmutableUniSortedArrayBiMapComparing(
+            final Comparator<? super K> keyCmp) {
+        return Collector.<Map.Entry<? extends K,? extends V>, ImmutableUniSortedArrayMapBuilder<K,V>, ImmutableUniSortedArrayMap<K,V>>of(
+                () -> ImmutableUniSortedArrayMapBuilder.<K,V>newBiMapComparing(keyCmp),
+                ImmutableUniSortedArrayMapBuilder::with,
+                ImmutableUniSortedArrayMapBuilder::merge,
+                ImmutableUniSortedArrayMapBuilder::build);
+    }
+
     public static <K,V> Collector<V, ?, ImmutableSortedArrayPropertyMap<K,V>> toImmutableSortedArrayPropertyMap(
             final Function<? super V,? extends K> keySupplier) {
         return Collector.of(

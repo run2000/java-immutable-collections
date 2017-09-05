@@ -4,9 +4,11 @@ import java.util.*;
 
 /**
  * A {@link SortedMap} backed by an array of elements. The array is the
- * exact length required to contain the keys and values. Keys and values are
- * stored together in sorted key order. In addition, there is an index
- * referring to the elements in sorted value order.
+ * exact length required to contain the keys and values. Both keys and values
+ * are sorted.
+ * <p>
+ * Keys and values are stored together in sorted key order. In addition,
+ * there is an index referring to the elements in sorted value order.
  * <p>
  * Keys and values are tested using a binary search implementation.
  * The map's keyset and entryset views may also be viewed as a {@link List}.
@@ -215,7 +217,8 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> impleme
                             m_NullsValueComparator));
         } else {
             return Views.collectionView(
-                    new ArrayBackedImmutableList<>(this::sortedValueAt, size()));
+                    new ArrayBackedImmutableList<V>(this::sortedValueAt, size(),
+                            Spliterator.SORTED, m_NullsValueComparator));
         }
     }
 

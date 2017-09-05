@@ -227,7 +227,6 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
 
         Integer[] sortedKeys = new Integer[m_Size];
         Integer[] sortedValues = new Integer[m_Size];
-        Object[] keys = Arrays.copyOf(m_Keys, m_Size);
 
         for(int i = 0; i < m_Size; i++) {
             Integer iVal = i;
@@ -236,11 +235,11 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
         }
 
         // Sort keys by index, insert sorted keys and values into result array
-        Arrays.sort(sortedKeys, 0, m_Size, new ArrayComparator(keys, 0, nullsKeyComparator));
+        Arrays.sort(sortedKeys, 0, m_Size, new ArrayComparator(m_Keys, 0, nullsKeyComparator));
 
         Object[] elements = new Object[m_Size * 2];
         for(int i = 0; i < sortedKeys.length; i++) {
-            elements[i] = keys[sortedKeys[i]];
+            elements[i] = m_Keys[sortedKeys[i]];
             elements[m_Size + i] = m_Values[sortedKeys[i]];
         }
 
