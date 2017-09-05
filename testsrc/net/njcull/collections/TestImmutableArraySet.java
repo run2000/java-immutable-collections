@@ -286,5 +286,39 @@ public final class TestImmutableArraySet {
                 .collect(Collectors.toImmutableArraySet());
 
         Assert.assertEquals(7, result.size());
+
+        Assert.assertTrue(result.contains("d"));
+        Assert.assertTrue(result.contains("e"));
+        Assert.assertFalse(result.contains("Qrst"));
+        Assert.assertTrue(result.contains("f"));
+        Assert.assertTrue(result.contains("a"));
+        Assert.assertFalse(result.contains("abc"));
+        Assert.assertTrue(result.contains("b"));
+        Assert.assertTrue(result.contains("c"));
+        Assert.assertTrue(result.contains("g"));
+    }
+
+    @Test
+    public void testSplitter() throws Exception {
+        List<String> abcdefg = Arrays.asList("d", "e", "Qrst", "f", "a", "abc", "b", "c", "g");
+
+        ArrayBackedSet<String> result1 = abcdefg.stream()
+                .filter(p -> p.length() == 1)
+                .collect(Collectors.toImmutableArraySet());
+
+        ArrayBackedSet<String> result2 = result1.parallelStream()
+                .collect(Collectors.toImmutableArraySet());
+
+        Assert.assertEquals(7, result2.size());
+
+        Assert.assertTrue(result2.contains("d"));
+        Assert.assertTrue(result2.contains("e"));
+        Assert.assertFalse(result2.contains("Qrst"));
+        Assert.assertTrue(result2.contains("f"));
+        Assert.assertTrue(result2.contains("a"));
+        Assert.assertFalse(result2.contains("abc"));
+        Assert.assertTrue(result2.contains("b"));
+        Assert.assertTrue(result2.contains("c"));
+        Assert.assertTrue(result2.contains("g"));
     }
 }

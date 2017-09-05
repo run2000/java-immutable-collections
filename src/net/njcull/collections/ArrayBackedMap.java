@@ -76,7 +76,23 @@ public interface ArrayBackedMap<K, V> extends Map<K, V> {
      * @return a zero or positive integer if the key is in the
      * backing array, otherwise less than zero to indicate its absence
      */
-    int indexOfKey(Object key);
+    default int indexOfKey(Object key) {
+        final int size = size();
+        if(key == null) {
+            for(int i = 0; i < size; i++) {
+                if(key == keyAt(i)) {
+                    return i;
+                }
+            }
+        } else {
+            for (int i = 0; i < size; i++) {
+                if (key.equals(keyAt(i))) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
 
     /**
      * Returns the array index of the given value in the array-backed map.
@@ -86,6 +102,21 @@ public interface ArrayBackedMap<K, V> extends Map<K, V> {
      * @return a zero or positive integer if the value is in the
      * backing array, otherwise less than zero to indicate its absence
      */
-    int indexOfValue(Object value);
-
+    default int indexOfValue(Object value) {
+        final int size = size();
+        if(value == null) {
+            for(int i = 0; i < size; i++) {
+                if(value == valueAt(i)) {
+                    return i;
+                }
+            }
+        } else {
+            for (int i = 0; i < size; i++) {
+                if (value.equals(valueAt(i))) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
 }

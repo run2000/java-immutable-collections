@@ -8,8 +8,10 @@ import java.util.Spliterators;
 /**
  * An immutable entry list for an ArrayBackedMap, appearing in key order.
  *
+ * Todo: can remove now?
  * @author run2000
  * @version 11/01/2016
+ * @deprecated for removal
  */
 final class ArrayBackedMapEntryList<K,V> extends AbstractRandomAccessList<Map.Entry<K,V>> {
     private final ArrayBackedMap<K,V> m_Map;
@@ -66,6 +68,6 @@ final class ArrayBackedMapEntryList<K,V> extends AbstractRandomAccessList<Map.En
      */
     @Override
     public Spliterator<Map.Entry<K, V>> spliterator() {
-        return Spliterators.spliterator(this, Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.IMMUTABLE | Spliterator.CONCURRENT);
+        return Spliterators.spliterator(this, Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.IMMUTABLE);
     }
 }

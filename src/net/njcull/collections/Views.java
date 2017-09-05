@@ -17,7 +17,7 @@ public final class Views {
         return new SetView<>(list);
     }
 
-    public static <E> List<E> listView(ArrayBackedCollection<E> coll) {
+    public static <E> List<E> listView(ArrayBackedSet<E> coll) {
         return new ListView<E>(coll);
     }
 
@@ -135,23 +135,29 @@ public final class Views {
             return m_List.spliterator();
         }
 
+        @Override
+        public String toString() {
+            return m_List.toString();
+        }
+
         public List<E> asList() {
             return m_List;
         }
     }
 
-    private static final class ListView<E> extends AbstractRandomAccessList<E> {
-        private final ArrayBackedCollection<E> m_Coll;
+    private static final class ListView<E> extends AbstractRandomAccessList<E>
+            implements ArrayBackedCollection<E> {
+        private final ArrayBackedSet<E> m_Coll;
         private final int m_StartIndex;
         private final int m_EndIndex;
 
-        ListView(ArrayBackedCollection<E> coll) {
+        ListView(ArrayBackedSet<E> coll) {
             this.m_Coll = Objects.requireNonNull(coll);
             this.m_StartIndex = 0;
             this.m_EndIndex = coll.size();
         }
 
-        ListView(ArrayBackedCollection<E> coll, int startIndex, int endIndex) {
+        ListView(ArrayBackedSet<E> coll, int startIndex, int endIndex) {
             this.m_Coll = Objects.requireNonNull(coll);
             this.m_StartIndex = startIndex;
             this.m_EndIndex = endIndex;
@@ -209,7 +215,45 @@ public final class Views {
 
         @Override
         public Spliterator<E> spliterator() {
-            return m_Coll.spliterator();
+            return new ImmutableIndexerSpliterator<>(this::get, size(), Spliterator.DISTINCT);
+        }
+
+        @Override
+        public E getAtIndex(int index) {
+            if((index < 0) || (index >= (m_EndIndex - m_StartIndex))) {
+                throw new IndexOutOfBoundsException("index out of bounds");
+            }
+            return m_Coll.getAtIndex(m_StartIndex + index);
+        }
+
+        @Override
+        public int indexOfRange(E element, int fromIndex, int toIndex) {
+            final int size = size();
+            if(fromIndex < 0 || fromIndex >= size) {
+                throw new IndexOutOfBoundsException("fromIndex: "+ fromIndex);
+            }
+            if(toIndex < fromIndex || toIndex > size) {
+                throw new IndexOutOfBoundsException("toIndex: " + toIndex);
+            }
+            if(element == null) {
+                for (int i = fromIndex; i < toIndex; i++) {
+                    if(element == m_Coll.getAtIndex(m_StartIndex + i)) {
+                        return i;
+                    }
+                }
+            } else {
+                for (int i = fromIndex; i < toIndex; i++) {
+                    if(element.equals(m_Coll.getAtIndex(m_StartIndex + i))) {
+                        return i;
+                    }
+                }
+            }
+            return -1;
+        }
+
+        @Override
+        public List<E> asList() {
+            return this;
         }
     }
 
@@ -289,6 +333,11 @@ public final class Views {
         @Override
         public Spliterator<E> spliterator() {
             return m_List.spliterator();
+        }
+
+        @Override
+        public String toString() {
+            return m_List.toString();
         }
 
         @Override

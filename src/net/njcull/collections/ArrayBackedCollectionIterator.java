@@ -27,32 +27,6 @@ final class ArrayBackedCollectionIterator<E> implements Iterator<E> {
     }
 
     /**
-     * Create a new {@code Iterator} for the supplied array-backed collection,
-     * from the {@code startIndex} to the {@code endIndex}.
-     * <p>
-     * Todo: eligible for removal?
-     *
-     * @param coll the array-backed set on which the iterator indexes
-     * @param startIndex the first index, inclusive
-     * @param endIndex the last index, exclusive
-     * @throws IllegalArgumentException {@code startIndex} is less than zero,
-     * greater than the size of the collection, or {@code endIndex} is
-     * less than {@code startIndex}
-     */
-    ArrayBackedCollectionIterator(ArrayBackedCollection<E> coll, int startIndex, int endIndex) {
-        m_Coll = Objects.requireNonNull(coll);
-        m_EndIndex = endIndex;
-        m_Index = startIndex;
-
-        if ((startIndex < 0) || (startIndex >= coll.size())) {
-            throw new IllegalArgumentException("start index: " + startIndex);
-        }
-        if ((endIndex < startIndex) || (endIndex > coll.size())) {
-            throw new IllegalArgumentException("end index: " + endIndex);
-        }
-    }
-
-    /**
      * Returns {@code true} if the iteration has more elements.
      *
      * @return {@code true} if the iteration has more elements, otherwise

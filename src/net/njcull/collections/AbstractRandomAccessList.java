@@ -239,6 +239,35 @@ public abstract class AbstractRandomAccessList<E> extends AbstractList<E> implem
     }
 
     /**
+     * Returns a string representation of this list.  The string
+     * representation consists of a sequence of the list's elements in the
+     * order they are returned by its {@code get(int)} method, enclosed in
+     * square brackets ({@code "[]"}).  Adjacent elements are separated by
+     * the characters {@code ", "} (comma and space).  Elements are converted
+     * to strings as by {@link String#valueOf(Object)}.
+     *
+     * @return a string representation of this list
+     */
+    @Override
+    public String toString() {
+        final int sz = this.size();
+        if (sz == 0) {
+            return "[]";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append('[');
+        for (int i = 0; i < sz; ) {
+            E e = this.get(i++);
+            sb.append(e == this ? "(this Collection)" : e);
+            if (i < sz) {
+                sb.append(',').append(' ');
+            }
+        }
+        return sb.append(']').toString();
+    }
+
+    /**
      * An iterator that takes a List, assumed to be a random access list,
      * and iterates over it by index. The size of the list is assumed to be
      * less than {@code Integer.MAX_VALUE}.

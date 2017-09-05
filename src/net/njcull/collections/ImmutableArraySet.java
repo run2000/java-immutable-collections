@@ -141,6 +141,7 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
         return (E)m_Elements[index];
     }
 
+    @Override
     public int indexOf(Object element) {
         final int size = m_Elements.length;
         if(element == null) {
@@ -234,13 +235,14 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
      * Creates a {@code Spliterator} over the elements in this set.
      *
      * <p>The {@code Spliterator} reports {@code Spliterator.DISTINCT},
-     * {@code Spliterator.IMMUTABLE}, and {@code Spliterator.CONCURRENT}.
+     * {@code Spliterator.ORDERED}, {@code Spliterator.IMMUTABLE},
+     * {@code Spliterator.SIZED}, and {@code Spliterator.SUBSIZED}.
      *
      * @return a {@code Spliterator} over the elements in this set
      */
     @Override
     public Spliterator<E> spliterator() {
-        return Spliterators.spliterator(this, Spliterator.DISTINCT | Spliterator.IMMUTABLE | Spliterator.CONCURRENT);
+        return new ImmutableIndexerSpliterator<E>(this::getAtIndex, size(), Spliterator.DISTINCT);
     }
 
     @Override

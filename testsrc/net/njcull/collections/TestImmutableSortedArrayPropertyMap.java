@@ -293,6 +293,226 @@ public class TestImmutableSortedArrayPropertyMap {
     }
 
     @Test
+    public void testSplitter() throws Exception {
+        Collection<TestClassWithProperty<String>> coll1 = new HashSet<>();
+        coll1.add(new TestClassWithProperty<>("a", "ac"));
+        coll1.add(new TestClassWithProperty<>("b", "bc"));
+        coll1.add(new TestClassWithProperty<>("c", "cc"));
+        coll1.add(new TestClassWithProperty<>("d", "dx"));
+        coll1.add(new TestClassWithProperty<>("e", "ec"));
+        coll1.add(new TestClassWithProperty<>("f", "fc"));
+        coll1.add(new TestClassWithProperty<>("g", "gc"));
+        coll1.add(new TestClassWithProperty<>("m", "0ma"));
+        coll1.add(new TestClassWithProperty<>("n", "0na"));
+        coll1.add(new TestClassWithProperty<>("o", "Zoa"));
+        coll1.add(new TestClassWithProperty<>("p", "Zpa"));
+
+        ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>> result1 =
+                coll1.stream()
+                        .filter(p -> p.getValue().charAt(1) != 'x')
+                        .collect(Collectors.toImmutableSortedArrayPropertyMap(TestClassWithProperty::getName));
+
+        // Stream the results from one map, collect back to another
+        ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>> result2 =
+                result1.values().parallelStream()
+                        .collect(Collectors.toImmutableSortedArrayPropertyMap(TestClassWithProperty::getName));
+
+        Assert.assertEquals(10, result2.size());
+        Assert.assertEquals("{a=ac, b=bc, c=cc, e=ec, f=fc, g=gc, m=0ma, n=0na, o=Zoa, p=Zpa}", result2.toString());
+
+        Assert.assertEquals(0, result2.indexOfKey("a"));
+        Assert.assertEquals(1, result2.indexOfKey("b"));
+        Assert.assertEquals(2, result2.indexOfKey("c"));
+        Assert.assertEquals(3, result2.indexOfKey("e"));
+        Assert.assertEquals(4, result2.indexOfKey("f"));
+        Assert.assertEquals(5, result2.indexOfKey("g"));
+        Assert.assertEquals(6, result2.indexOfKey("m"));
+        Assert.assertEquals(7, result2.indexOfKey("n"));
+        Assert.assertEquals(8, result2.indexOfKey("o"));
+        Assert.assertEquals(9, result2.indexOfKey("p"));
+        Assert.assertEquals(-1, result2.indexOfKey("0"));
+
+        Assert.assertTrue(result2.containsKey("a"));
+        Assert.assertTrue(result2.containsKey("b"));
+        Assert.assertTrue(result2.containsKey("c"));
+        Assert.assertFalse(result2.containsKey("d"));
+        Assert.assertTrue(result2.containsKey("e"));
+        Assert.assertTrue(result2.containsKey("f"));
+        Assert.assertTrue(result2.containsKey("g"));
+        Assert.assertTrue(result2.containsKey("m"));
+        Assert.assertTrue(result2.containsKey("n"));
+        Assert.assertTrue(result2.containsKey("o"));
+        Assert.assertTrue(result2.containsKey("p"));
+        Assert.assertFalse(result2.containsKey("0"));
+
+        Assert.assertEquals("a", result2.keyAt(0));
+        Assert.assertEquals("b", result2.keyAt(1));
+        Assert.assertEquals("c", result2.keyAt(2));
+        Assert.assertEquals("e", result2.keyAt(3));
+        Assert.assertEquals("f", result2.keyAt(4));
+        Assert.assertEquals("g", result2.keyAt(5));
+        Assert.assertEquals("m", result2.keyAt(6));
+        Assert.assertEquals("n", result2.keyAt(7));
+        Assert.assertEquals("o", result2.keyAt(8));
+        Assert.assertEquals("p", result2.keyAt(9));
+
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("a", "ac")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("b", "bc")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("c", "cc")));
+        Assert.assertFalse(result2.containsValue(new TestClassWithProperty<>("d", "dx")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("e", "ec")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("f", "fc")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("g", "gc")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("m", "0ma")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("n", "0na")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("o", "Zoa")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("p", "Zpa")));
+        Assert.assertFalse(result2.containsValue(new TestClassWithProperty<String>("0", null)));
+
+        Assert.assertEquals(0, result2.indexOfValue(new TestClassWithProperty<>("a", "ac")));
+        Assert.assertEquals(1, result2.indexOfValue(new TestClassWithProperty<>("b", "bc")));
+        Assert.assertEquals(2, result2.indexOfValue(new TestClassWithProperty<>("c", "cc")));
+        Assert.assertEquals(3, result2.indexOfValue(new TestClassWithProperty<>("e", "ec")));
+        Assert.assertEquals(4, result2.indexOfValue(new TestClassWithProperty<>("f", "fc")));
+        Assert.assertEquals(5, result2.indexOfValue(new TestClassWithProperty<>("g", "gc")));
+        Assert.assertEquals(6, result2.indexOfValue(new TestClassWithProperty<>("m", "0ma")));
+        Assert.assertEquals(7, result2.indexOfValue(new TestClassWithProperty<>("n", "0na")));
+        Assert.assertEquals(8, result2.indexOfValue(new TestClassWithProperty<>("o", "Zoa")));
+        Assert.assertEquals(9, result2.indexOfValue(new TestClassWithProperty<>("p", "Zpa")));
+        Assert.assertEquals(-1, result2.indexOfValue(new TestClassWithProperty<String>("0", null)));
+
+        Assert.assertEquals("ac", result2.valueAt(0).getValue());
+        Assert.assertEquals("bc", result2.valueAt(1).getValue());
+        Assert.assertEquals("cc", result2.valueAt(2).getValue());
+        Assert.assertEquals("ec", result2.valueAt(3).getValue());
+        Assert.assertEquals("fc", result2.valueAt(4).getValue());
+        Assert.assertEquals("gc", result2.valueAt(5).getValue());
+        Assert.assertEquals("0ma", result2.valueAt(6).getValue());
+        Assert.assertEquals("0na", result2.valueAt(7).getValue());
+        Assert.assertEquals("Zoa", result2.valueAt(8).getValue());
+        Assert.assertEquals("Zpa", result2.valueAt(9).getValue());
+
+        Map.Entry<String, TestClassWithProperty<String>> entry = result2.entryAt(0);
+
+        Assert.assertEquals("a", entry.getKey());
+        Assert.assertEquals("ac", entry.getValue().getValue());
+
+        entry = result2.entryAt(1);
+        Assert.assertEquals("b", entry.getKey());
+        Assert.assertEquals("bc", entry.getValue().getValue());
+
+        entry = result2.entryAt(2);
+        Assert.assertEquals("c", entry.getKey());
+        Assert.assertEquals("cc", entry.getValue().getValue());
+
+        entry = result2.entryAt(3);
+        Assert.assertEquals("e", entry.getKey());
+        Assert.assertEquals("ec", entry.getValue().getValue());
+
+        entry = result2.entryAt(4);
+        Assert.assertEquals("f", entry.getKey());
+        Assert.assertEquals("fc", entry.getValue().getValue());
+
+        entry = result2.entryAt(5);
+        Assert.assertEquals("g", entry.getKey());
+        Assert.assertEquals("gc", entry.getValue().getValue());
+
+        entry = result2.entryAt(6);
+        Assert.assertEquals("m", entry.getKey());
+        Assert.assertEquals("0ma", entry.getValue().getValue());
+
+        entry = result2.entryAt(7);
+        Assert.assertEquals("n", entry.getKey());
+        Assert.assertEquals("0na", entry.getValue().getValue());
+
+        entry = result2.entryAt(8);
+        Assert.assertEquals("o", entry.getKey());
+        Assert.assertEquals("Zoa", entry.getValue().getValue());
+
+        entry = result2.entryAt(9);
+        Assert.assertEquals("p", entry.getKey());
+        Assert.assertEquals("Zpa", entry.getValue().getValue());
+
+        Assert.assertEquals("ac", result2.get("a").getValue());
+        Assert.assertEquals("bc", result2.get("b").getValue());
+        Assert.assertEquals("cc", result2.get("c").getValue());
+        Assert.assertEquals("ec", result2.get("e").getValue());
+        Assert.assertEquals("fc", result2.get("f").getValue());
+        Assert.assertEquals("gc", result2.get("g").getValue());
+        Assert.assertEquals("0ma", result2.get("m").getValue());
+        Assert.assertEquals("0na", result2.get("n").getValue());
+        Assert.assertEquals("Zoa", result2.get("o").getValue());
+        Assert.assertEquals("Zpa", result2.get("p").getValue());
+        Assert.assertSame(null, result2.get("0"));
+
+        ArrayBackedSet<Map.Entry<String, TestClassWithProperty<String>>> entrySet = result2.entrySet();
+        Iterator<Map.Entry<String, TestClassWithProperty<String>>> entryIt = entrySet.iterator();
+
+        Assert.assertTrue(entryIt.hasNext());
+        entry = entryIt.next();
+
+        Assert.assertEquals("a", entry.getKey());
+        Assert.assertEquals("ac", entry.getValue().getValue());
+
+        Assert.assertTrue(entryIt.hasNext());
+        entry = entryIt.next();
+
+        Assert.assertEquals("b", entry.getKey());
+        Assert.assertEquals("bc", entry.getValue().getValue());
+
+        Assert.assertTrue(entryIt.hasNext());
+        entry = entryIt.next();
+
+        Assert.assertEquals("c", entry.getKey());
+        Assert.assertEquals("cc", entry.getValue().getValue());
+
+        Assert.assertTrue(entryIt.hasNext());
+        entry = entryIt.next();
+
+        Assert.assertEquals("e", entry.getKey());
+        Assert.assertEquals("ec", entry.getValue().getValue());
+
+        Assert.assertTrue(entryIt.hasNext());
+        entry = entryIt.next();
+
+        Assert.assertEquals("f", entry.getKey());
+        Assert.assertEquals("fc", entry.getValue().getValue());
+
+        Assert.assertTrue(entryIt.hasNext());
+        entry = entryIt.next();
+
+        Assert.assertEquals("g", entry.getKey());
+        Assert.assertEquals("gc", entry.getValue().getValue());
+
+        Assert.assertTrue(entryIt.hasNext());
+        entry = entryIt.next();
+
+        Assert.assertEquals("m", entry.getKey());
+        Assert.assertEquals("0ma", entry.getValue().getValue());
+
+        Assert.assertTrue(entryIt.hasNext());
+        entry = entryIt.next();
+
+        Assert.assertEquals("n", entry.getKey());
+        Assert.assertEquals("0na", entry.getValue().getValue());
+
+        Assert.assertTrue(entryIt.hasNext());
+        entry = entryIt.next();
+
+        Assert.assertEquals("o", entry.getKey());
+        Assert.assertEquals("Zoa", entry.getValue().getValue());
+
+        Assert.assertTrue(entryIt.hasNext());
+        entry = entryIt.next();
+
+        Assert.assertEquals("p", entry.getKey());
+        Assert.assertEquals("Zpa", entry.getValue().getValue());
+
+        Assert.assertFalse(entryIt.hasNext());
+
+    }
+
+    @Test
     public void testCollectorWithComparator() throws Exception {
         Collection<TestClassWithProperty<String>> coll1 = new HashSet<>();
         coll1.add(new TestClassWithProperty<>("a", "ac"));
@@ -441,6 +661,226 @@ public class TestImmutableSortedArrayPropertyMap {
         Assert.assertSame(null, result.get("0"));
 
         ArrayBackedSet<Map.Entry<String, TestClassWithProperty<String>>> entrySet = result.entrySet();
+        Iterator<Map.Entry<String, TestClassWithProperty<String>>> entryIt = entrySet.iterator();
+
+        Assert.assertTrue(entryIt.hasNext());
+        entry = entryIt.next();
+
+        Assert.assertEquals("p", entry.getKey());
+        Assert.assertEquals("Zpa", entry.getValue().getValue());
+
+        Assert.assertTrue(entryIt.hasNext());
+        entry = entryIt.next();
+
+        Assert.assertEquals("o", entry.getKey());
+        Assert.assertEquals("Zoa", entry.getValue().getValue());
+
+        Assert.assertTrue(entryIt.hasNext());
+        entry = entryIt.next();
+
+        Assert.assertEquals("n", entry.getKey());
+        Assert.assertEquals("0na", entry.getValue().getValue());
+
+        Assert.assertTrue(entryIt.hasNext());
+        entry = entryIt.next();
+
+        Assert.assertEquals("m", entry.getKey());
+        Assert.assertEquals("0ma", entry.getValue().getValue());
+
+        Assert.assertTrue(entryIt.hasNext());
+        entry = entryIt.next();
+
+        Assert.assertEquals("g", entry.getKey());
+        Assert.assertEquals("gc", entry.getValue().getValue());
+
+        Assert.assertTrue(entryIt.hasNext());
+        entry = entryIt.next();
+
+        Assert.assertEquals("f", entry.getKey());
+        Assert.assertEquals("fc", entry.getValue().getValue());
+
+        Assert.assertTrue(entryIt.hasNext());
+        entry = entryIt.next();
+
+        Assert.assertEquals("e", entry.getKey());
+        Assert.assertEquals("ec", entry.getValue().getValue());
+
+        Assert.assertTrue(entryIt.hasNext());
+        entry = entryIt.next();
+
+        Assert.assertEquals("c", entry.getKey());
+        Assert.assertEquals("cc", entry.getValue().getValue());
+
+        Assert.assertTrue(entryIt.hasNext());
+        entry = entryIt.next();
+
+        Assert.assertEquals("b", entry.getKey());
+        Assert.assertEquals("bc", entry.getValue().getValue());
+
+        Assert.assertTrue(entryIt.hasNext());
+        entry = entryIt.next();
+
+        Assert.assertEquals("a", entry.getKey());
+        Assert.assertEquals("ac", entry.getValue().getValue());
+
+        Assert.assertFalse(entryIt.hasNext());
+
+    }
+
+    @Test
+    public void testSplitterWithComparator() throws Exception {
+        Collection<TestClassWithProperty<String>> coll1 = new HashSet<>();
+        coll1.add(new TestClassWithProperty<>("a", "ac"));
+        coll1.add(new TestClassWithProperty<>("b", "bc"));
+        coll1.add(new TestClassWithProperty<>("c", "cc"));
+        coll1.add(new TestClassWithProperty<>("d", "dx"));
+        coll1.add(new TestClassWithProperty<>("e", "ec"));
+        coll1.add(new TestClassWithProperty<>("f", "fc"));
+        coll1.add(new TestClassWithProperty<>("g", "gc"));
+        coll1.add(new TestClassWithProperty<>("m", "0ma"));
+        coll1.add(new TestClassWithProperty<>("n", "0na"));
+        coll1.add(new TestClassWithProperty<>("o", "Zoa"));
+        coll1.add(new TestClassWithProperty<>("p", "Zpa"));
+
+        ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>> result1 =
+                coll1.stream()
+                        .filter(p -> p.getValue().charAt(1) != 'x')
+                        .collect(Collectors.toImmutableSortedArrayPropertyMapComparingKeys(TestClassWithProperty::getName, reverseComparator));
+
+        // Stream the results from one map, collect back to another
+        ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>> result2 =
+                result1.values().parallelStream()
+                        .collect(Collectors.toImmutableSortedArrayPropertyMapComparingKeys(TestClassWithProperty::getName, reverseComparator));
+
+        Assert.assertEquals(10, result2.size());
+        Assert.assertEquals("{p=Zpa, o=Zoa, n=0na, m=0ma, g=gc, f=fc, e=ec, c=cc, b=bc, a=ac}", result2.toString());
+
+        Assert.assertEquals(9, result2.indexOfKey("a"));
+        Assert.assertEquals(8, result2.indexOfKey("b"));
+        Assert.assertEquals(7, result2.indexOfKey("c"));
+        Assert.assertEquals(6, result2.indexOfKey("e"));
+        Assert.assertEquals(5, result2.indexOfKey("f"));
+        Assert.assertEquals(4, result2.indexOfKey("g"));
+        Assert.assertEquals(3, result2.indexOfKey("m"));
+        Assert.assertEquals(2, result2.indexOfKey("n"));
+        Assert.assertEquals(1, result2.indexOfKey("o"));
+        Assert.assertEquals(0, result2.indexOfKey("p"));
+        Assert.assertEquals(-1, result2.indexOfKey("0"));
+
+        Assert.assertTrue(result2.containsKey("a"));
+        Assert.assertTrue(result2.containsKey("b"));
+        Assert.assertTrue(result2.containsKey("c"));
+        Assert.assertFalse(result2.containsKey("d"));
+        Assert.assertTrue(result2.containsKey("e"));
+        Assert.assertTrue(result2.containsKey("f"));
+        Assert.assertTrue(result2.containsKey("g"));
+        Assert.assertTrue(result2.containsKey("m"));
+        Assert.assertTrue(result2.containsKey("n"));
+        Assert.assertTrue(result2.containsKey("o"));
+        Assert.assertTrue(result2.containsKey("p"));
+        Assert.assertFalse(result2.containsKey("0"));
+
+        Assert.assertEquals("a", result2.keyAt(9));
+        Assert.assertEquals("b", result2.keyAt(8));
+        Assert.assertEquals("c", result2.keyAt(7));
+        Assert.assertEquals("e", result2.keyAt(6));
+        Assert.assertEquals("f", result2.keyAt(5));
+        Assert.assertEquals("g", result2.keyAt(4));
+        Assert.assertEquals("m", result2.keyAt(3));
+        Assert.assertEquals("n", result2.keyAt(2));
+        Assert.assertEquals("o", result2.keyAt(1));
+        Assert.assertEquals("p", result2.keyAt(0));
+
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("a", "ac")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("b", "bc")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("c", "cc")));
+        Assert.assertFalse(result2.containsValue(new TestClassWithProperty<>("d", "dx")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("e", "ec")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("f", "fc")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("g", "gc")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("m", "0ma")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("n", "0na")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("o", "Zoa")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("p", "Zpa")));
+        Assert.assertFalse(result2.containsValue(new TestClassWithProperty<String>("0", null)));
+
+        Assert.assertEquals(9, result2.indexOfValue(new TestClassWithProperty<>("a", "ac")));
+        Assert.assertEquals(8, result2.indexOfValue(new TestClassWithProperty<>("b", "bc")));
+        Assert.assertEquals(7, result2.indexOfValue(new TestClassWithProperty<>("c", "cc")));
+        Assert.assertEquals(6, result2.indexOfValue(new TestClassWithProperty<>("e", "ec")));
+        Assert.assertEquals(5, result2.indexOfValue(new TestClassWithProperty<>("f", "fc")));
+        Assert.assertEquals(4, result2.indexOfValue(new TestClassWithProperty<>("g", "gc")));
+        Assert.assertEquals(3, result2.indexOfValue(new TestClassWithProperty<>("m", "0ma")));
+        Assert.assertEquals(2, result2.indexOfValue(new TestClassWithProperty<>("n", "0na")));
+        Assert.assertEquals(1, result2.indexOfValue(new TestClassWithProperty<>("o", "Zoa")));
+        Assert.assertEquals(0, result2.indexOfValue(new TestClassWithProperty<>("p", "Zpa")));
+        Assert.assertEquals(-1, result2.indexOfValue(new TestClassWithProperty<String>("0", null)));
+
+        Assert.assertEquals("ac", result2.valueAt(9).getValue());
+        Assert.assertEquals("bc", result2.valueAt(8).getValue());
+        Assert.assertEquals("cc", result2.valueAt(7).getValue());
+        Assert.assertEquals("ec", result2.valueAt(6).getValue());
+        Assert.assertEquals("fc", result2.valueAt(5).getValue());
+        Assert.assertEquals("gc", result2.valueAt(4).getValue());
+        Assert.assertEquals("0ma", result2.valueAt(3).getValue());
+        Assert.assertEquals("0na", result2.valueAt(2).getValue());
+        Assert.assertEquals("Zoa", result2.valueAt(1).getValue());
+        Assert.assertEquals("Zpa", result2.valueAt(0).getValue());
+
+        Map.Entry<String, TestClassWithProperty<String>> entry = result2.entryAt(9);
+
+        Assert.assertEquals("a", entry.getKey());
+        Assert.assertEquals("ac", entry.getValue().getValue());
+
+        entry = result2.entryAt(8);
+        Assert.assertEquals("b", entry.getKey());
+        Assert.assertEquals("bc", entry.getValue().getValue());
+
+        entry = result2.entryAt(7);
+        Assert.assertEquals("c", entry.getKey());
+        Assert.assertEquals("cc", entry.getValue().getValue());
+
+        entry = result2.entryAt(6);
+        Assert.assertEquals("e", entry.getKey());
+        Assert.assertEquals("ec", entry.getValue().getValue());
+
+        entry = result2.entryAt(5);
+        Assert.assertEquals("f", entry.getKey());
+        Assert.assertEquals("fc", entry.getValue().getValue());
+
+        entry = result2.entryAt(4);
+        Assert.assertEquals("g", entry.getKey());
+        Assert.assertEquals("gc", entry.getValue().getValue());
+
+        entry = result2.entryAt(3);
+        Assert.assertEquals("m", entry.getKey());
+        Assert.assertEquals("0ma", entry.getValue().getValue());
+
+        entry = result2.entryAt(2);
+        Assert.assertEquals("n", entry.getKey());
+        Assert.assertEquals("0na", entry.getValue().getValue());
+
+        entry = result2.entryAt(1);
+        Assert.assertEquals("o", entry.getKey());
+        Assert.assertEquals("Zoa", entry.getValue().getValue());
+
+        entry = result2.entryAt(0);
+        Assert.assertEquals("p", entry.getKey());
+        Assert.assertEquals("Zpa", entry.getValue().getValue());
+
+        Assert.assertEquals("ac", result2.get("a").getValue());
+        Assert.assertEquals("bc", result2.get("b").getValue());
+        Assert.assertEquals("cc", result2.get("c").getValue());
+        Assert.assertEquals("ec", result2.get("e").getValue());
+        Assert.assertEquals("fc", result2.get("f").getValue());
+        Assert.assertEquals("gc", result2.get("g").getValue());
+        Assert.assertEquals("0ma", result2.get("m").getValue());
+        Assert.assertEquals("0na", result2.get("n").getValue());
+        Assert.assertEquals("Zoa", result2.get("o").getValue());
+        Assert.assertEquals("Zpa", result2.get("p").getValue());
+        Assert.assertSame(null, result2.get("0"));
+
+        ArrayBackedSet<Map.Entry<String, TestClassWithProperty<String>>> entrySet = result2.entrySet();
         Iterator<Map.Entry<String, TestClassWithProperty<String>>> entryIt = entrySet.iterator();
 
         Assert.assertTrue(entryIt.hasNext());

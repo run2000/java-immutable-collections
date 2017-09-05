@@ -135,6 +135,120 @@ public final class TestImmutableArrayBiMap {
     }
 
     @Test
+    public void testSplitter() throws Exception {
+        HashMap<String, String> map1 = new HashMap<>();
+        map1.put("a", "ac");
+        map1.put("b", "bc");
+        map1.put("c", "cc");
+        map1.put("d", "dx");
+        map1.put("e", "ec");
+        map1.put("f", "fc");
+        map1.put("g", "gc");
+        map1.put("m", "0ma");
+        map1.put("n", "0na");
+        map1.put("o", "Zoa");
+        map1.put("p", "Zpa");
+
+        ImmutableArrayMap<String, String> result1 =
+                map1.entrySet().stream()
+                        .filter(p -> p.getValue().charAt(1) != 'x')
+                        .collect(Collectors.toImmutableArrayBiMap());
+
+        Assert.assertEquals(10, result1.size());
+
+        // Stream the results from one map, collect back to another
+        ImmutableArrayMap<String, String> result2 =
+                result1.entrySet().parallelStream()
+                        .collect(Collectors.toImmutableArrayBiMap());
+
+        Assert.assertTrue(result2.indexOfKey("a") >= 0);
+        Assert.assertTrue(result2.indexOfKey("b") >= 0);
+        Assert.assertTrue(result2.indexOfKey("c") >= 0);
+        Assert.assertTrue(result2.indexOfKey("e") >= 0);
+        Assert.assertTrue(result2.indexOfKey("f") >= 0);
+        Assert.assertTrue(result2.indexOfKey("g") >= 0);
+        Assert.assertTrue(result2.indexOfKey("m") >= 0);
+        Assert.assertTrue(result2.indexOfKey("n") >= 0);
+        Assert.assertTrue(result2.indexOfKey("o") >= 0);
+        Assert.assertTrue(result2.indexOfKey("p") >= 0);
+        Assert.assertFalse(result2.indexOfKey("0") >= 0);
+        Assert.assertFalse(result2.indexOfKey(null) >= 0);
+
+        Assert.assertTrue(result2.containsKey("a"));
+        Assert.assertTrue(result2.containsKey("b"));
+        Assert.assertTrue(result2.containsKey("c"));
+        Assert.assertFalse(result2.containsKey("d"));
+        Assert.assertTrue(result2.containsKey("e"));
+        Assert.assertTrue(result2.containsKey("f"));
+        Assert.assertTrue(result2.containsKey("g"));
+        Assert.assertTrue(result2.containsKey("m"));
+        Assert.assertTrue(result2.containsKey("n"));
+        Assert.assertTrue(result2.containsKey("o"));
+        Assert.assertTrue(result2.containsKey("p"));
+        Assert.assertFalse(result2.containsKey("0"));
+        Assert.assertFalse(result2.containsKey(null));
+
+        Assert.assertTrue(result2.containsValue("ac"));
+        Assert.assertTrue(result2.containsValue("bc"));
+        Assert.assertTrue(result2.containsValue("cc"));
+        Assert.assertFalse(result2.containsValue("dx"));
+        Assert.assertTrue(result2.containsValue("ec"));
+        Assert.assertTrue(result2.containsValue("fc"));
+        Assert.assertTrue(result2.containsValue("gc"));
+        Assert.assertTrue(result2.containsValue("0ma"));
+        Assert.assertTrue(result2.containsValue("0na"));
+        Assert.assertTrue(result2.containsValue("Zoa"));
+        Assert.assertTrue(result2.containsValue("Zpa"));
+        Assert.assertFalse(result2.containsValue("0"));
+        Assert.assertFalse(result2.containsValue(null));
+
+        Assert.assertTrue(result2.indexOfValue("ac") >= 0);
+        Assert.assertTrue(result2.indexOfValue("bc") >= 0);
+        Assert.assertTrue(result2.indexOfValue("cc") >= 0);
+        Assert.assertTrue(result2.indexOfValue("ec") >= 0);
+        Assert.assertTrue(result2.indexOfValue("fc") >= 0);
+        Assert.assertTrue(result2.indexOfValue("gc") >= 0);
+        Assert.assertTrue(result2.indexOfValue("0ma") >= 0);
+        Assert.assertTrue(result2.indexOfValue("0na") >= 0);
+        Assert.assertTrue(result2.indexOfValue("Zoa") >= 0);
+        Assert.assertTrue(result2.indexOfValue("Zpa") >= 0);
+        Assert.assertFalse(result2.indexOfValue("0") >= 0);
+        Assert.assertFalse(result2.indexOfValue(null) >= 0);
+
+        Assert.assertTrue(result2.lastIndexOfValue("ac") >= 0);
+        Assert.assertTrue(result2.lastIndexOfValue("bc") >= 0);
+        Assert.assertTrue(result2.lastIndexOfValue("cc") >= 0);
+        Assert.assertTrue(result2.lastIndexOfValue("ec") >= 0);
+        Assert.assertTrue(result2.lastIndexOfValue("fc") >= 0);
+        Assert.assertTrue(result2.lastIndexOfValue("gc") >= 0);
+        Assert.assertTrue(result2.lastIndexOfValue("0ma") >= 0);
+        Assert.assertTrue(result2.lastIndexOfValue("0na") >= 0);
+        Assert.assertTrue(result2.lastIndexOfValue("Zoa") >= 0);
+        Assert.assertTrue(result2.lastIndexOfValue("Zpa") >= 0);
+        Assert.assertFalse(result2.lastIndexOfValue("0") >= 0);
+        Assert.assertFalse(result2.lastIndexOfValue(null) >= 0);
+
+        Assert.assertEquals("ac", result2.get("a"));
+        Assert.assertEquals("bc", result2.get("b"));
+        Assert.assertEquals("cc", result2.get("c"));
+        Assert.assertEquals("ec", result2.get("e"));
+        Assert.assertEquals("fc", result2.get("f"));
+        Assert.assertEquals("gc", result2.get("g"));
+        Assert.assertEquals("0ma", result2.get("m"));
+        Assert.assertEquals("0na", result2.get("n"));
+        Assert.assertEquals("Zoa", result2.get("o"));
+        Assert.assertEquals("Zpa", result2.get("p"));
+        Assert.assertSame(null, result2.get("0"));
+        Assert.assertSame(null, result2.get(null));
+
+        ArrayBackedSet<Map.Entry<String, String>> entrySet = result2.entrySet();
+        Iterator<Map.Entry<String, String>> entryIt = entrySet.iterator();
+
+        Assert.assertTrue(entryIt.hasNext());
+        Assert.assertEquals(10, result2.size());
+    }
+
+    @Test
     public void testMerge() throws Exception {
         HashMap<String, String> map1 = new HashMap<>();
         map1.put("a", "ac");

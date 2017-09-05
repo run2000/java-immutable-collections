@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.SortedMap;
+import java.util.Spliterator;
 import java.util.function.Function;
 
 /**
@@ -149,17 +150,23 @@ public final class ImmutableSortedArrayPropertyMap<K,V> extends AbstractMap<K,V>
      */
     @Override
     public ArrayBackedSet<Entry<K, V>> entrySet() {
-        return Views.setView(new ArrayBackedMapEntryList<>(this));
+        return Views.setView(
+                new ArrayBackedImmutableList<>(this::entryAt, size(),
+                        Spliterator.DISTINCT | Spliterator.NONNULL));
     }
 
     @Override
     public ArrayBackedSet<K> keySet() {
-        return Views.setView(new ArrayBackedMapKeyList<>(this));
+        return Views.setView(
+                new ArrayBackedImmutableList<K>(this::keyAt, size(),
+                        Spliterator.DISTINCT | Spliterator.SORTED,
+                        m_NullsKeyComparator));
     }
 
     @Override
     public ArrayBackedCollection<V> values() {
-        return Views.collectionView(new ArrayBackedMapValueList<V>(this));
+        return Views.collectionView(
+                new ArrayBackedImmutableList<>(this::valueAt, size()));
     }
 
     // Implement SortedMap

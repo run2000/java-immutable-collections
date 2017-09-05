@@ -220,7 +220,9 @@ public final class ImmutableSortedArraySet<E> extends AbstractSet<E> implements 
 
     @Override
     public Spliterator<E> spliterator() {
-        return Spliterators.spliterator(this, Spliterator.DISTINCT | Spliterator.IMMUTABLE | Spliterator.CONCURRENT);
+        return new ImmutableIndexerSpliterator<E>(this::getAtIndex, 0, size(),
+                m_NullsComparator,
+                Spliterator.DISTINCT | Spliterator.SORTED);
     }
 
     public List<E> asList() {

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Spliterator;
-import java.util.Spliterators;
 
 /**
  * A {@link Map} backed by an array of elements, and a separate array of
@@ -98,9 +97,7 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
         final int hc = Objects.hashCode(key);
         for(int i = 0; i < size; i++) {
             if(hc == m_HashCodes[i]) {
-                if(key == m_Map[i]) {
-                    return true;
-                } else if ((key != null) && (key.equals(m_Map[i]))) {
+                if(Objects.equals(key, m_Map[i])) {
                     return true;
                 }
             }
@@ -126,9 +123,7 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
 
         for(int i = 0; i < size; i++) {
             if(hc == m_HashCodes[size + i]) {
-                if(value == m_Map[size + i]) {
-                    return true;
-                } else if((value != null) && (value.equals(m_Map[size + i]))) {
+                if(Objects.equals(value, m_Map[size + i])) {
                     return true;
                 }
             }
@@ -207,9 +202,7 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
 
         for(int i = 0; i < size; i++) {
             if(hc == m_HashCodes[i]) {
-                if(key == m_Map[i]) {
-                    return i;
-                } else if ((key != null) && (key.equals(m_Map[i]))) {
+                if(Objects.equals(key, m_Map[i])) {
                     return i;
                 }
             }
@@ -224,9 +217,7 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
 
         for(int i = 0; i < size; i++) {
             if(hc == m_HashCodes[size + i]) {
-                if (value == m_Map[size + i]) {
-                    return i;
-                } else if ((value != null) && (value.equals(m_Map[size + i]))) {
+                if (Objects.equals(value, m_Map[size + i])) {
                     return i;
                 }
             }
@@ -248,9 +239,7 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
 
         for(int i = size - 1; i >= 0; i--) {
             if(hc == m_HashCodes[size + i]) {
-                if (value == m_Map[size + i]) {
-                    return i;
-                } else if ((value != null) && (value.equals(m_Map[size + i]))) {
+                if (Objects.equals(value, m_Map[size + i])) {
                     return i;
                 }
             }
@@ -260,20 +249,25 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
 
     @Override
     public ArrayBackedSet<Entry<K, V>> entrySet() {
-        return Views.setView(new ImmutableEntryList<>(this));
+        return Views.setView(
+                new ArrayBackedImmutableList<>(this::entryAt, size(),
+                        Spliterator.DISTINCT | Spliterator.NONNULL));
     }
 
     @Override
     public ArrayBackedSet<K> keySet() {
-        return Views.setView(new ArrayBackedMapKeyList<>(this));
+        return Views.setView(
+                new ArrayBackedImmutableList<>(this::keyAt, size(), Spliterator.DISTINCT));
     }
 
     @Override
     public ArrayBackedCollection<V> values() {
         if(m_BiMap) {
-            return Views.setView(new ArrayBackedBiMapValueList<>(this));
+            return Views.setView(
+                    new ArrayBackedImmutableList<>(this::valueAt, size(), Spliterator.DISTINCT));
         } else {
-            return Views.collectionView(new ArrayBackedMapValueList<>(this));
+            return Views.collectionView(
+                    new ArrayBackedImmutableList<>(this::valueAt, size()));
         }
     }
 
@@ -287,33 +281,4 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
     public static <K,V> ImmutableHashedArrayMapBuilder<K,V> builder() {
         return new ImmutableHashedArrayMapBuilder<K,V>();
     }
-
-    private static final class ImmutableEntryList<K,V> extends AbstractRandomAccessList<Entry<K,V>> {
-        private final ArrayBackedMap<K,V> m_Map;
-
-        ImmutableEntryList(ArrayBackedMap<K, V> map) {
-            this.m_Map = Objects.requireNonNull(map, "map must be non-null");
-        }
-
-        @Override
-        public Entry<K, V> get(int index) {
-            return m_Map.entryAt(index);
-        }
-
-        @Override
-        public int size() {
-            return m_Map.size();
-        }
-
-        @Override
-        public boolean isEmpty() {
-            return m_Map.isEmpty();
-        }
-
-        @Override
-        public Spliterator<Entry<K, V>> spliterator() {
-            return Spliterators.spliterator(this, Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.IMMUTABLE | Spliterator.CONCURRENT);
-        }
-    }
-
 }

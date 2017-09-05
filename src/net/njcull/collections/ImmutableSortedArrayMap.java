@@ -132,6 +132,13 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> impleme
         return value;
     }
 
+    /**
+     * <p>Entry set ordered by value.</p>
+     */
+    public Entry<K,V> sortedValueEntryAt(int index) {
+        return this.entryAt(this.sortedValueIndex(index));
+    }
+
     @Override
     public int indexOfKey(Object key) {
         int idx = indexOfKeyInternal(key);
@@ -170,7 +177,9 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> impleme
      */
     @Override
     public ArrayBackedSet<Entry<K, V>> entrySet() {
-        return Views.setView(new ArrayBackedMapEntryList<>(this));
+        return Views.setView(
+                new ArrayBackedImmutableList<>(this::entryAt, size(),
+                        Spliterator.DISTINCT | Spliterator.NONNULL));
     }
 
     /**
@@ -184,20 +193,29 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> impleme
      *         sorted in ascending value order
      */
     public ArrayBackedSet<Entry<K,V>> entrySetByValue() {
-        return Views.setView(new SortedValueEntryList<>(this));
+        return Views.setView(
+                new ArrayBackedImmutableList<>(this::sortedValueEntryAt, size(),
+                        Spliterator.DISTINCT | Spliterator.NONNULL));
     }
 
     @Override
     public ArrayBackedSet<K> keySet() {
-        return Views.setView(new ArrayBackedMapKeyList<>(this));
+        return Views.setView(
+                new ArrayBackedImmutableList<K>(this::keyAt, size(),
+                        Spliterator.DISTINCT | Spliterator.SORTED,
+                        m_NullsKeyComparator));
     }
 
     @Override
     public ArrayBackedCollection<V> values() {
         if(m_BiMap) {
-            return Views.setView(new SortedBiMapValueList<>(this));
+            return Views.setView(
+                    new ArrayBackedImmutableList<V>(this::sortedValueAt, size(),
+                            Spliterator.DISTINCT | Spliterator.SORTED,
+                            m_NullsValueComparator));
         } else {
-            return Views.collectionView(new SortedValueList<>(this));
+            return Views.collectionView(
+                    new ArrayBackedImmutableList<>(this::sortedValueAt, size()));
         }
     }
 
@@ -306,6 +324,8 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> impleme
     /**
      * Entry list sorted by values. Spliterator assumes the entries
      * are distinct.
+     * Todo: can remove now?
+     * @deprecated for removal
      */
     private static final class SortedValueEntryList<K,V> extends AbstractRandomAccessList<Entry<K,V>> {
         private final ImmutableSortedArrayMap<K,V> m_Map;
@@ -331,13 +351,15 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> impleme
 
         @Override
         public Spliterator<Entry<K, V>> spliterator() {
-            return Spliterators.spliterator(this, Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.IMMUTABLE | Spliterator.CONCURRENT);
+            return Spliterators.spliterator(this, Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.IMMUTABLE);
         }
     }
 
     /**
      * Value list sorted by values. Spliterator does not assume the entries
      * are distinct.
+     * Todo: can remove now?
+     * @deprecated for removal
      */
     private static final class SortedValueList<E> extends AbstractRandomAccessList<E> {
         private final ImmutableSortedArrayMap<?,E> m_Map;
@@ -363,13 +385,15 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> impleme
 
         @Override
         public Spliterator<E> spliterator() {
-            return Spliterators.spliterator(this, Spliterator.ORDERED | Spliterator.IMMUTABLE | Spliterator.CONCURRENT);
+            return Spliterators.spliterator(this, Spliterator.ORDERED | Spliterator.IMMUTABLE);
         }
     }
 
     /**
      * Value list sorted by values. Spliterator assumes the entries
      * are distinct.
+     * Todo: can remove now?
+     * @deprecated for removal
      */
     private static final class SortedBiMapValueList<E> extends AbstractRandomAccessList<E> {
         private final ImmutableSortedArrayMap<?,E> m_Map;
@@ -395,7 +419,7 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> impleme
 
         @Override
         public Spliterator<E> spliterator() {
-            return Spliterators.spliterator(this, Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.IMMUTABLE | Spliterator.CONCURRENT);
+            return Spliterators.spliterator(this, Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.IMMUTABLE);
         }
     }
 }

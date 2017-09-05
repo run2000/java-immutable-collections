@@ -220,5 +220,55 @@ public final class TestImmutableSortedArraySet {
                 .collect(Collectors.toImmutableSortedArraySet());
 
         Assert.assertEquals(7, result.size());
+
+        Assert.assertTrue(result.contains("d"));
+        Assert.assertTrue(result.contains("e"));
+        Assert.assertFalse(result.contains("Qrst"));
+        Assert.assertTrue(result.contains("f"));
+        Assert.assertTrue(result.contains("a"));
+        Assert.assertFalse(result.contains("abc"));
+        Assert.assertTrue(result.contains("b"));
+        Assert.assertTrue(result.contains("c"));
+        Assert.assertTrue(result.contains("g"));
+
+        Assert.assertEquals(3, result.indexOf("d"));
+        Assert.assertEquals(4, result.indexOf("e"));
+        Assert.assertEquals(5, result.indexOf("f"));
+        Assert.assertEquals(0, result.indexOf("a"));
+        Assert.assertEquals(1, result.indexOf("b"));
+        Assert.assertEquals(2, result.indexOf("c"));
+        Assert.assertEquals(6, result.indexOf("g"));
+    }
+
+    @Test
+    public void testSplitter() throws Exception {
+        List<String> abcdefg = Arrays.asList("d", "e", "Qrst", "f", "a", "abc", "b", "c", "g");
+
+        ArrayBackedSet<String> result1 = abcdefg.stream()
+                .filter(p -> p.length() == 1)
+                .collect(Collectors.toImmutableSortedArraySet());
+
+        ArrayBackedSet<String> result2 = result1.parallelStream()
+                .collect(Collectors.toImmutableSortedArraySet());
+
+        Assert.assertEquals(7, result2.size());
+
+        Assert.assertTrue(result2.contains("d"));
+        Assert.assertTrue(result2.contains("e"));
+        Assert.assertFalse(result2.contains("Qrst"));
+        Assert.assertTrue(result2.contains("f"));
+        Assert.assertTrue(result2.contains("a"));
+        Assert.assertFalse(result2.contains("abc"));
+        Assert.assertTrue(result2.contains("b"));
+        Assert.assertTrue(result2.contains("c"));
+        Assert.assertTrue(result2.contains("g"));
+
+        Assert.assertEquals(3, result2.indexOf("d"));
+        Assert.assertEquals(4, result2.indexOf("e"));
+        Assert.assertEquals(5, result2.indexOf("f"));
+        Assert.assertEquals(0, result2.indexOf("a"));
+        Assert.assertEquals(1, result2.indexOf("b"));
+        Assert.assertEquals(2, result2.indexOf("c"));
+        Assert.assertEquals(6, result2.indexOf("g"));
     }
 }

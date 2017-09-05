@@ -9,7 +9,6 @@ import java.util.Objects;
 import java.util.RandomAccess;
 import java.util.Set;
 import java.util.Spliterator;
-import java.util.Spliterators;
 
 /**
  * A {@link Set} backed by an array of elements, and a separate int array of
@@ -167,15 +166,14 @@ public final class ImmutableHashedArraySet<E> extends AbstractSet<E> implements 
         return (E)m_Elements[index];
     }
 
+    @Override
     public int indexOf(Object element) {
         final int size = m_Elements.length;
         final int hc = Objects.hashCode(element);
 
         for(int i = 0; i < size; i++) {
             if(hc == m_HashCodes[i]) {
-                if (element == m_Elements[i]) {
-                    return i;
-                } else if ((element != null) && (element.equals(m_Elements[i]))) {
+                if (Objects.equals(element, m_Elements[i])) {
                     return i;
                 }
             }
@@ -195,9 +193,7 @@ public final class ImmutableHashedArraySet<E> extends AbstractSet<E> implements 
         final int hc = Objects.hashCode(element);
         for (int i = fromIndex; i < toIndex; i++) {
             if(hc == m_HashCodes[i]) {
-                if (element == m_Elements[i]) {
-                    return i;
-                } else if ((element != null) && (element.equals(m_Elements[i]))) {
+                if (Objects.equals(element, m_Elements[i])) {
                     return i;
                 }
             }
@@ -256,13 +252,14 @@ public final class ImmutableHashedArraySet<E> extends AbstractSet<E> implements 
      * Creates a {@code Spliterator} over the elements in this set.
      *
      * <p>The {@code Spliterator} reports {@code Spliterator.DISTINCT},
-     * {@code Spliterator.IMMUTABLE}, and {@code Spliterator.CONCURRENT}.
+     * {@code Spliterator.ORDERED}, {@code Spliterator.IMMUTABLE},
+     * {@code Spliterator.SIZED}, and {@code Spliterator.SUBSIZED}.
      *
      * @return a {@code Spliterator} over the elements in this set
      */
     @Override
     public Spliterator<E> spliterator() {
-        return Spliterators.spliterator(this, Spliterator.DISTINCT | Spliterator.IMMUTABLE | Spliterator.CONCURRENT);
+        return new ImmutableIndexerSpliterator<E>(this::getAtIndex, size(), Spliterator.DISTINCT);
     }
 
     @Override
