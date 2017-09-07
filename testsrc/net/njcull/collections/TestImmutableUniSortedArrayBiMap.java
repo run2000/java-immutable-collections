@@ -10,18 +10,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Tests for ImmutableSortedArrayMap.
+ * Tests for ImmutableUniSortedArrayMap.
  *
  * @author run2000
  * @version 8/01/2016.
  */
-public final class TestImmutableSortedArrayBiMap {
+public final class TestImmutableUniSortedArrayBiMap {
 
     @Test
     public void testEmptyMap() throws Exception {
-        Map<String, String> test = ImmutableSortedArrayMap.<String, String>builder().asBiMap().build();
+        Map<String, String> test = ImmutableUniSortedArrayMap.<String, String>builder().asBiMap().build();
         Assert.assertFalse(test.containsKey("3"));
-        Assert.assertSame(test, ImmutableSortedArrayMap.emptyMap());
+        Assert.assertSame(test, ImmutableUniSortedArrayMap.emptyMap());
         Assert.assertTrue(test.isEmpty());
         Assert.assertEquals(0, test.size());
     }
@@ -41,10 +41,10 @@ public final class TestImmutableSortedArrayBiMap {
         map1.put("o", "Zoa");
         map1.put("p", "Zpa");
 
-        ImmutableSortedArrayMap<String, String> result =
+        ImmutableUniSortedArrayMap<String, String> result =
                 map1.entrySet().stream()
                 .filter(p -> p.getValue().charAt(1) != 'x')
-                .collect(Collectors.toImmutableSortedArrayBiMap());
+                .collect(Collectors.toImmutableUniSortedArrayBiMap());
 
         Assert.assertEquals(10, result.size());
         Assert.assertEquals("{a=ac, b=bc, c=cc, e=ec, f=fc, g=gc, m=0ma, n=0na, o=Zoa, p=Zpa}", result.toString());
@@ -120,29 +120,6 @@ public final class TestImmutableSortedArrayBiMap {
         Assert.assertEquals("0na", result.valueAt(7));
         Assert.assertEquals("Zoa", result.valueAt(8));
         Assert.assertEquals("Zpa", result.valueAt(9));
-
-        Assert.assertEquals(0, result.indexOfValueSorted("0ma"));
-        Assert.assertEquals(1, result.indexOfValueSorted("0na"));
-        Assert.assertEquals(2, result.indexOfValueSorted("Zoa"));
-        Assert.assertEquals(3, result.indexOfValueSorted("Zpa"));
-        Assert.assertEquals(4, result.indexOfValueSorted("ac"));
-        Assert.assertEquals(5, result.indexOfValueSorted("bc"));
-        Assert.assertEquals(6, result.indexOfValueSorted("cc"));
-        Assert.assertEquals(7, result.indexOfValueSorted("ec"));
-        Assert.assertEquals(8, result.indexOfValueSorted("fc"));
-        Assert.assertEquals(9, result.indexOfValueSorted("gc"));
-        Assert.assertEquals(-1, result.indexOfValueSorted("0"));
-
-        Assert.assertEquals("0ma", result.sortedValueAt(0));
-        Assert.assertEquals("0na", result.sortedValueAt(1));
-        Assert.assertEquals("Zoa", result.sortedValueAt(2));
-        Assert.assertEquals("Zpa", result.sortedValueAt(3));
-        Assert.assertEquals("ac", result.sortedValueAt(4));
-        Assert.assertEquals("bc", result.sortedValueAt(5));
-        Assert.assertEquals("cc", result.sortedValueAt(6));
-        Assert.assertEquals("ec", result.sortedValueAt(7));
-        Assert.assertEquals("fc", result.sortedValueAt(8));
-        Assert.assertEquals("gc", result.sortedValueAt(9));
 
         Map.Entry<String, String> entry = result.entryAt(0);
 
@@ -262,71 +239,6 @@ public final class TestImmutableSortedArrayBiMap {
 
         Assert.assertFalse(entryIt.hasNext());
 
-        entrySet = result.entrySetByValue();
-        entryIt = entrySet.iterator();
-
-        Assert.assertTrue(entryIt.hasNext());
-        entry = entryIt.next();
-
-        Assert.assertEquals("m", entry.getKey());
-        Assert.assertEquals("0ma", entry.getValue());
-
-        Assert.assertTrue(entryIt.hasNext());
-        entry = entryIt.next();
-
-        Assert.assertEquals("n", entry.getKey());
-        Assert.assertEquals("0na", entry.getValue());
-
-        Assert.assertTrue(entryIt.hasNext());
-        entry = entryIt.next();
-
-        Assert.assertEquals("o", entry.getKey());
-        Assert.assertEquals("Zoa", entry.getValue());
-
-        Assert.assertTrue(entryIt.hasNext());
-        entry = entryIt.next();
-
-        Assert.assertEquals("p", entry.getKey());
-        Assert.assertEquals("Zpa", entry.getValue());
-
-        Assert.assertTrue(entryIt.hasNext());
-        entry = entryIt.next();
-
-        Assert.assertEquals("a", entry.getKey());
-        Assert.assertEquals("ac", entry.getValue());
-
-        Assert.assertTrue(entryIt.hasNext());
-        entry = entryIt.next();
-
-        Assert.assertEquals("b", entry.getKey());
-        Assert.assertEquals("bc", entry.getValue());
-
-        Assert.assertTrue(entryIt.hasNext());
-        entry = entryIt.next();
-
-        Assert.assertEquals("c", entry.getKey());
-        Assert.assertEquals("cc", entry.getValue());
-
-        Assert.assertTrue(entryIt.hasNext());
-        entry = entryIt.next();
-
-        Assert.assertEquals("e", entry.getKey());
-        Assert.assertEquals("ec", entry.getValue());
-
-        Assert.assertTrue(entryIt.hasNext());
-        entry = entryIt.next();
-
-        Assert.assertEquals("f", entry.getKey());
-        Assert.assertEquals("fc", entry.getValue());
-
-        Assert.assertTrue(entryIt.hasNext());
-        entry = entryIt.next();
-
-        Assert.assertEquals("g", entry.getKey());
-        Assert.assertEquals("gc", entry.getValue());
-
-        Assert.assertFalse(entryIt.hasNext());
-
     }
 
     @Test
@@ -344,15 +256,15 @@ public final class TestImmutableSortedArrayBiMap {
         map1.put("o", "Zoa");
         map1.put("p", "Zpa");
 
-        ImmutableSortedArrayMap<String, String> result1 =
+        ImmutableUniSortedArrayMap<String, String> result1 =
                 map1.entrySet().stream()
                         .filter(p -> p.getValue().charAt(1) != 'x')
-                        .collect(Collectors.toImmutableSortedArrayBiMap());
+                        .collect(Collectors.toImmutableUniSortedArrayBiMap());
 
         // Stream the results from one map, collect back to another
-        ImmutableSortedArrayMap<String, String> result2 =
+        ImmutableUniSortedArrayMap<String, String> result2 =
                 result1.entrySet().parallelStream()
-                        .collect(Collectors.toImmutableSortedArrayBiMap());
+                        .collect(Collectors.toImmutableUniSortedArrayBiMap());
 
         Assert.assertEquals(10, result2.size());
         Assert.assertEquals("{a=ac, b=bc, c=cc, e=ec, f=fc, g=gc, m=0ma, n=0na, o=Zoa, p=Zpa}", result2.toString());
@@ -428,29 +340,6 @@ public final class TestImmutableSortedArrayBiMap {
         Assert.assertEquals("0na", result2.valueAt(7));
         Assert.assertEquals("Zoa", result2.valueAt(8));
         Assert.assertEquals("Zpa", result2.valueAt(9));
-
-        Assert.assertEquals(0, result2.indexOfValueSorted("0ma"));
-        Assert.assertEquals(1, result2.indexOfValueSorted("0na"));
-        Assert.assertEquals(2, result2.indexOfValueSorted("Zoa"));
-        Assert.assertEquals(3, result2.indexOfValueSorted("Zpa"));
-        Assert.assertEquals(4, result2.indexOfValueSorted("ac"));
-        Assert.assertEquals(5, result2.indexOfValueSorted("bc"));
-        Assert.assertEquals(6, result2.indexOfValueSorted("cc"));
-        Assert.assertEquals(7, result2.indexOfValueSorted("ec"));
-        Assert.assertEquals(8, result2.indexOfValueSorted("fc"));
-        Assert.assertEquals(9, result2.indexOfValueSorted("gc"));
-        Assert.assertEquals(-1, result2.indexOfValueSorted("0"));
-
-        Assert.assertEquals("0ma", result2.sortedValueAt(0));
-        Assert.assertEquals("0na", result2.sortedValueAt(1));
-        Assert.assertEquals("Zoa", result2.sortedValueAt(2));
-        Assert.assertEquals("Zpa", result2.sortedValueAt(3));
-        Assert.assertEquals("ac", result2.sortedValueAt(4));
-        Assert.assertEquals("bc", result2.sortedValueAt(5));
-        Assert.assertEquals("cc", result2.sortedValueAt(6));
-        Assert.assertEquals("ec", result2.sortedValueAt(7));
-        Assert.assertEquals("fc", result2.sortedValueAt(8));
-        Assert.assertEquals("gc", result2.sortedValueAt(9));
 
         Map.Entry<String, String> entry = result2.entryAt(0);
 
@@ -570,71 +459,6 @@ public final class TestImmutableSortedArrayBiMap {
 
         Assert.assertFalse(entryIt.hasNext());
 
-        entrySet = result2.entrySetByValue();
-        entryIt = entrySet.iterator();
-
-        Assert.assertTrue(entryIt.hasNext());
-        entry = entryIt.next();
-
-        Assert.assertEquals("m", entry.getKey());
-        Assert.assertEquals("0ma", entry.getValue());
-
-        Assert.assertTrue(entryIt.hasNext());
-        entry = entryIt.next();
-
-        Assert.assertEquals("n", entry.getKey());
-        Assert.assertEquals("0na", entry.getValue());
-
-        Assert.assertTrue(entryIt.hasNext());
-        entry = entryIt.next();
-
-        Assert.assertEquals("o", entry.getKey());
-        Assert.assertEquals("Zoa", entry.getValue());
-
-        Assert.assertTrue(entryIt.hasNext());
-        entry = entryIt.next();
-
-        Assert.assertEquals("p", entry.getKey());
-        Assert.assertEquals("Zpa", entry.getValue());
-
-        Assert.assertTrue(entryIt.hasNext());
-        entry = entryIt.next();
-
-        Assert.assertEquals("a", entry.getKey());
-        Assert.assertEquals("ac", entry.getValue());
-
-        Assert.assertTrue(entryIt.hasNext());
-        entry = entryIt.next();
-
-        Assert.assertEquals("b", entry.getKey());
-        Assert.assertEquals("bc", entry.getValue());
-
-        Assert.assertTrue(entryIt.hasNext());
-        entry = entryIt.next();
-
-        Assert.assertEquals("c", entry.getKey());
-        Assert.assertEquals("cc", entry.getValue());
-
-        Assert.assertTrue(entryIt.hasNext());
-        entry = entryIt.next();
-
-        Assert.assertEquals("e", entry.getKey());
-        Assert.assertEquals("ec", entry.getValue());
-
-        Assert.assertTrue(entryIt.hasNext());
-        entry = entryIt.next();
-
-        Assert.assertEquals("f", entry.getKey());
-        Assert.assertEquals("fc", entry.getValue());
-
-        Assert.assertTrue(entryIt.hasNext());
-        entry = entryIt.next();
-
-        Assert.assertEquals("g", entry.getKey());
-        Assert.assertEquals("gc", entry.getValue());
-
-        Assert.assertFalse(entryIt.hasNext());
-
     }
 
     @Test
@@ -652,10 +476,10 @@ public final class TestImmutableSortedArrayBiMap {
         map1.put("o", "Zoa");
         map1.put("p", "Zpa");
 
-        ImmutableSortedArrayMap<String, String> result1 =
+        ImmutableUniSortedArrayMap<String, String> result1 =
                 map1.entrySet().stream()
                         .filter(p -> p.getValue().charAt(1) != 'x')
-                        .collect(Collectors.toImmutableSortedArrayBiMap());
+                        .collect(Collectors.toImmutableUniSortedArrayBiMap());
 
         // Stream the results from one map, collect back to an arraylist
         ArrayList<String> result2 =
@@ -717,10 +541,10 @@ public final class TestImmutableSortedArrayBiMap {
         map1.put("o", "Zoa");
         map1.put("p", "Zpa");
 
-        ImmutableSortedArrayMap<String, String> result1 =
+        ImmutableUniSortedArrayMap<String, String> result1 =
                 map1.entrySet().stream()
                         .filter(p -> p.getValue().charAt(1) != 'x')
-                        .collect(Collectors.toImmutableSortedArrayBiMap());
+                        .collect(Collectors.toImmutableUniSortedArrayBiMap());
 
         // Stream the results from one map, collect back to another
         ArrayList<String> result2 =
@@ -728,7 +552,7 @@ public final class TestImmutableSortedArrayBiMap {
                         .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 
         Assert.assertEquals(10, result2.size());
-        Assert.assertEquals("[0ma, 0na, Zoa, Zpa, ac, bc, cc, ec, fc, gc]", result2.toString());
+        Assert.assertEquals("[ac, bc, cc, ec, fc, gc, 0ma, 0na, Zoa, Zpa]", result2.toString());
 
         Assert.assertTrue(result2.contains("ac"));
         Assert.assertTrue(result2.contains("bc"));
@@ -743,28 +567,28 @@ public final class TestImmutableSortedArrayBiMap {
         Assert.assertTrue(result2.contains("Zpa"));
         Assert.assertFalse(result2.contains("0"));
 
-        Assert.assertEquals(4, result2.indexOf("ac"));
-        Assert.assertEquals(5, result2.indexOf("bc"));
-        Assert.assertEquals(6, result2.indexOf("cc"));
-        Assert.assertEquals(7, result2.indexOf("ec"));
-        Assert.assertEquals(8, result2.indexOf("fc"));
-        Assert.assertEquals(9, result2.indexOf("gc"));
-        Assert.assertEquals(0, result2.indexOf("0ma"));
-        Assert.assertEquals(1, result2.indexOf("0na"));
-        Assert.assertEquals(2, result2.indexOf("Zoa"));
-        Assert.assertEquals(3, result2.indexOf("Zpa"));
+        Assert.assertEquals(0, result2.indexOf("ac"));
+        Assert.assertEquals(1, result2.indexOf("bc"));
+        Assert.assertEquals(2, result2.indexOf("cc"));
+        Assert.assertEquals(3, result2.indexOf("ec"));
+        Assert.assertEquals(4, result2.indexOf("fc"));
+        Assert.assertEquals(5, result2.indexOf("gc"));
+        Assert.assertEquals(6, result2.indexOf("0ma"));
+        Assert.assertEquals(7, result2.indexOf("0na"));
+        Assert.assertEquals(8, result2.indexOf("Zoa"));
+        Assert.assertEquals(9, result2.indexOf("Zpa"));
         Assert.assertEquals(-1, result2.indexOf("0"));
 
-        Assert.assertEquals("ac", result2.get(4));
-        Assert.assertEquals("bc", result2.get(5));
-        Assert.assertEquals("cc", result2.get(6));
-        Assert.assertEquals("ec", result2.get(7));
-        Assert.assertEquals("fc", result2.get(8));
-        Assert.assertEquals("gc", result2.get(9));
-        Assert.assertEquals("0ma", result2.get(0));
-        Assert.assertEquals("0na", result2.get(1));
-        Assert.assertEquals("Zoa", result2.get(2));
-        Assert.assertEquals("Zpa", result2.get(3));
+        Assert.assertEquals("ac", result2.get(0));
+        Assert.assertEquals("bc", result2.get(1));
+        Assert.assertEquals("cc", result2.get(2));
+        Assert.assertEquals("ec", result2.get(3));
+        Assert.assertEquals("fc", result2.get(4));
+        Assert.assertEquals("gc", result2.get(5));
+        Assert.assertEquals("0ma", result2.get(6));
+        Assert.assertEquals("0na", result2.get(7));
+        Assert.assertEquals("Zoa", result2.get(8));
+        Assert.assertEquals("Zpa", result2.get(9));
 
     }
 
@@ -785,10 +609,10 @@ public final class TestImmutableSortedArrayBiMap {
         map2.put("o", "oa");
         map2.put("p", "pa");
 
-        ImmutableSortedArrayMapBuilder<String, String> builder1 =
-                new ImmutableSortedArrayMapBuilder<>();
-        ImmutableSortedArrayMapBuilder<String, String> builder2 =
-                new ImmutableSortedArrayMapBuilder<>();
+        ImmutableUniSortedArrayMapBuilder<String, String> builder1 =
+                new ImmutableUniSortedArrayMapBuilder<>();
+        ImmutableUniSortedArrayMapBuilder<String, String> builder2 =
+                new ImmutableUniSortedArrayMapBuilder<>();
 
         builder1.with(map1.entrySet());
 
@@ -802,8 +626,8 @@ public final class TestImmutableSortedArrayBiMap {
 
     @Test
     public void testBuilder() throws Exception {
-      ImmutableSortedArrayMap<String, String> map =
-              ImmutableSortedArrayMap.<String, String>builder()
+      ImmutableUniSortedArrayMap<String, String> map =
+              ImmutableUniSortedArrayMap.<String, String>builder()
               .with("c", "5", "d", "4", "e", "3")
               .with("a", "7", "b", "96")
               .with("f", "2", "g", "1").asBiMap().build();
@@ -838,28 +662,17 @@ public final class TestImmutableSortedArrayBiMap {
         ArrayBackedCollection<String> values = map.values();
         Assert.assertFalse(values.isEmpty());
         Assert.assertEquals(7, values.size());
-        Assert.assertEquals("[1, 2, 3, 4, 5, 7, 96]", values.toString());
+        Assert.assertEquals("[7, 96, 5, 4, 3, 2, 1]", values.toString());
         List<String> valueList = values.asList();
         Assert.assertFalse(valueList.isEmpty());
         Assert.assertEquals(7, valueList.size());
-        Assert.assertEquals("[1, 2, 3, 4, 5, 7, 96]", valueList.toString());
-
-        ArrayBackedSet<Map.Entry<String, String>> entrySetByValue = map.entrySetByValue();
-        Assert.assertFalse(entrySetByValue.isEmpty());
-        Assert.assertEquals(7, entrySetByValue.size());
-        Assert.assertEquals("[g=1, f=2, e=3, d=4, c=5, a=7, b=96]", entrySetByValue.toString());
-        List<Map.Entry<String, String>> entryListByValue = entrySetByValue.asList();
-        Assert.assertFalse(entryListByValue.isEmpty());
-        Assert.assertEquals(7, entryListByValue.size());
-        Assert.assertEquals("[g=1, f=2, e=3, d=4, c=5, a=7, b=96]", entryListByValue.toString());
-
-        Assert.assertEquals(1, map.indexOfValue("96"));
+        Assert.assertEquals("[7, 96, 5, 4, 3, 2, 1]", valueList.toString());
     }
 
     @Test
     public void testSubMap() throws Exception {
-        ImmutableSortedArrayMapBuilder<String, String> builder =
-                new ImmutableSortedArrayMapBuilder<>();
+        ImmutableUniSortedArrayMapBuilder<String, String> builder =
+                new ImmutableUniSortedArrayMapBuilder<>();
         builder.with("a", "ac");
         builder.with("b", "bc");
         builder.with("c", "cc");
@@ -868,12 +681,12 @@ public final class TestImmutableSortedArrayBiMap {
         builder.with("f", "fc");
         builder.with("g", "gc");
 
-        ImmutableSortedArrayMap<String, String> map = builder.asBiMap().build();
-        ImmutableSortedArrayMap<String, String> headMap = map.headMap("d");
-        ImmutableSortedArrayMap<String, String> tailMap = map.tailMap("e");
-        ImmutableSortedArrayMap<String, String> subMap = map.subMap("d", "e");
-        ImmutableSortedArrayMap<String, String> emptySubMap = map.subMap("ab", "ac");
-        ImmutableSortedArrayMap<String, String> fullSubMap = map.subMap("a", "h");
+        ImmutableUniSortedArrayMap<String, String> map = builder.asBiMap().build();
+        ImmutableUniSortedArrayMap<String, String> headMap = map.headMap("d");
+        ImmutableUniSortedArrayMap<String, String> tailMap = map.tailMap("e");
+        ImmutableUniSortedArrayMap<String, String> subMap = map.subMap("d", "e");
+        ImmutableUniSortedArrayMap<String, String> emptySubMap = map.subMap("ab", "ac");
+        ImmutableUniSortedArrayMap<String, String> fullSubMap = map.subMap("a", "h");
 
         Assert.assertEquals(3, headMap.size());
         Assert.assertEquals(3, tailMap.size());
