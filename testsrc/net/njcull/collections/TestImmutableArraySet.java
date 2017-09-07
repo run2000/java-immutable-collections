@@ -320,5 +320,15 @@ public final class TestImmutableArraySet {
         Assert.assertTrue(result2.contains("b"));
         Assert.assertTrue(result2.contains("c"));
         Assert.assertTrue(result2.contains("g"));
+
+        Assert.assertEquals(0, result2.indexOf("d"));
+        Assert.assertEquals(1, result2.indexOf("e"));
+        Assert.assertEquals(-1, result2.indexOf("Qrst"));
+        Assert.assertEquals(2, result2.indexOf("f"));
+        Assert.assertEquals(3, result2.indexOf("a"));
+        Assert.assertEquals(-1, result2.indexOf("abc"));
+        Assert.assertEquals(4, result2.indexOf("b"));
+        Assert.assertEquals(5, result2.indexOf("c"));
+        Assert.assertEquals(6, result2.indexOf("g"));
     }
 }

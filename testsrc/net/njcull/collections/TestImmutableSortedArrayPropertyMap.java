@@ -3,6 +3,7 @@ package net.njcull.collections;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -509,6 +510,191 @@ public class TestImmutableSortedArrayPropertyMap {
         Assert.assertEquals("Zpa", entry.getValue().getValue());
 
         Assert.assertFalse(entryIt.hasNext());
+
+    }
+
+    @Test
+    public void testKeySplitter() throws Exception {
+        Collection<TestClassWithProperty<String>> coll1 = new HashSet<>();
+        coll1.add(new TestClassWithProperty<>("a", "ac"));
+        coll1.add(new TestClassWithProperty<>("b", "bc"));
+        coll1.add(new TestClassWithProperty<>("c", "cc"));
+        coll1.add(new TestClassWithProperty<>("d", "dx"));
+        coll1.add(new TestClassWithProperty<>("e", "ec"));
+        coll1.add(new TestClassWithProperty<>("f", "fc"));
+        coll1.add(new TestClassWithProperty<>("g", "gc"));
+        coll1.add(new TestClassWithProperty<>("m", "0ma"));
+        coll1.add(new TestClassWithProperty<>("n", "0na"));
+        coll1.add(new TestClassWithProperty<>("o", "Zoa"));
+        coll1.add(new TestClassWithProperty<>("p", "Zpa"));
+
+        ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>> result1 =
+                coll1.stream()
+                        .filter(p -> p.getValue().charAt(1) != 'x')
+                        .collect(Collectors.toImmutableSortedArrayPropertyMap(TestClassWithProperty::getName));
+
+        // Stream the results from one map, collect back to an arraylist
+        ArrayList<String> result2 =
+                result1.keySet().parallelStream()
+                        .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+
+        Assert.assertEquals(10, result2.size());
+        Assert.assertEquals("[a, b, c, e, f, g, m, n, o, p]", result2.toString());
+
+        Assert.assertEquals(0, result2.indexOf("a"));
+        Assert.assertEquals(1, result2.indexOf("b"));
+        Assert.assertEquals(2, result2.indexOf("c"));
+        Assert.assertEquals(3, result2.indexOf("e"));
+        Assert.assertEquals(4, result2.indexOf("f"));
+        Assert.assertEquals(5, result2.indexOf("g"));
+        Assert.assertEquals(6, result2.indexOf("m"));
+        Assert.assertEquals(7, result2.indexOf("n"));
+        Assert.assertEquals(8, result2.indexOf("o"));
+        Assert.assertEquals(9, result2.indexOf("p"));
+        Assert.assertEquals(-1, result2.indexOf("0"));
+
+        Assert.assertTrue(result2.contains("a"));
+        Assert.assertTrue(result2.contains("b"));
+        Assert.assertTrue(result2.contains("c"));
+        Assert.assertFalse(result2.contains("d"));
+        Assert.assertTrue(result2.contains("e"));
+        Assert.assertTrue(result2.contains("f"));
+        Assert.assertTrue(result2.contains("g"));
+        Assert.assertTrue(result2.contains("m"));
+        Assert.assertTrue(result2.contains("n"));
+        Assert.assertTrue(result2.contains("o"));
+        Assert.assertTrue(result2.contains("p"));
+        Assert.assertFalse(result2.contains("0"));
+
+        Assert.assertEquals("a", result2.get(0));
+        Assert.assertEquals("b", result2.get(1));
+        Assert.assertEquals("c", result2.get(2));
+        Assert.assertEquals("e", result2.get(3));
+        Assert.assertEquals("f", result2.get(4));
+        Assert.assertEquals("g", result2.get(5));
+        Assert.assertEquals("m", result2.get(6));
+        Assert.assertEquals("n", result2.get(7));
+        Assert.assertEquals("o", result2.get(8));
+        Assert.assertEquals("p", result2.get(9));
+
+    }
+
+    @Test
+    public void testValueSplitter() throws Exception {
+        Collection<TestClassWithProperty<String>> coll1 = new HashSet<>();
+        coll1.add(new TestClassWithProperty<>("a", "ac"));
+        coll1.add(new TestClassWithProperty<>("b", "bc"));
+        coll1.add(new TestClassWithProperty<>("c", "cc"));
+        coll1.add(new TestClassWithProperty<>("d", "dx"));
+        coll1.add(new TestClassWithProperty<>("e", "ec"));
+        coll1.add(new TestClassWithProperty<>("f", "fc"));
+        coll1.add(new TestClassWithProperty<>("g", "gc"));
+        coll1.add(new TestClassWithProperty<>("m", "0ma"));
+        coll1.add(new TestClassWithProperty<>("n", "0na"));
+        coll1.add(new TestClassWithProperty<>("o", "Zoa"));
+        coll1.add(new TestClassWithProperty<>("p", "Zpa"));
+
+        ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>> result1 =
+                coll1.stream()
+                        .filter(p -> p.getValue().charAt(1) != 'x')
+                        .collect(Collectors.toImmutableSortedArrayPropertyMap(TestClassWithProperty::getName));
+
+        // Stream the results from one map, collect back to another
+        ArrayList<TestClassWithProperty<String>> result2 =
+                result1.values().parallelStream()
+                        .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+
+        Assert.assertEquals(10, result2.size());
+        Assert.assertEquals("[ac, bc, cc, ec, fc, gc, 0ma, 0na, Zoa, Zpa]", result2.toString());
+
+        Assert.assertTrue(result2.contains(new TestClassWithProperty<>("a", "ac")));
+        Assert.assertTrue(result2.contains(new TestClassWithProperty<>("b", "bc")));
+        Assert.assertTrue(result2.contains(new TestClassWithProperty<>("c", "cc")));
+        Assert.assertFalse(result2.contains(new TestClassWithProperty<>("d", "dx")));
+        Assert.assertTrue(result2.contains(new TestClassWithProperty<>("e", "ec")));
+        Assert.assertTrue(result2.contains(new TestClassWithProperty<>("f", "fc")));
+        Assert.assertTrue(result2.contains(new TestClassWithProperty<>("g", "gc")));
+        Assert.assertTrue(result2.contains(new TestClassWithProperty<>("m", "0ma")));
+        Assert.assertTrue(result2.contains(new TestClassWithProperty<>("n", "0na")));
+        Assert.assertTrue(result2.contains(new TestClassWithProperty<>("o", "Zoa")));
+        Assert.assertTrue(result2.contains(new TestClassWithProperty<>("p", "Zpa")));
+        Assert.assertFalse(result2.contains(new TestClassWithProperty<String>("0", null)));
+
+        Assert.assertEquals(0, result2.indexOf(new TestClassWithProperty<>("a", "ac")));
+        Assert.assertEquals(1, result2.indexOf(new TestClassWithProperty<>("b", "bc")));
+        Assert.assertEquals(2, result2.indexOf(new TestClassWithProperty<>("c", "cc")));
+        Assert.assertEquals(3, result2.indexOf(new TestClassWithProperty<>("e", "ec")));
+        Assert.assertEquals(4, result2.indexOf(new TestClassWithProperty<>("f", "fc")));
+        Assert.assertEquals(5, result2.indexOf(new TestClassWithProperty<>("g", "gc")));
+        Assert.assertEquals(6, result2.indexOf(new TestClassWithProperty<>("m", "0ma")));
+        Assert.assertEquals(7, result2.indexOf(new TestClassWithProperty<>("n", "0na")));
+        Assert.assertEquals(8, result2.indexOf(new TestClassWithProperty<>("o", "Zoa")));
+        Assert.assertEquals(9, result2.indexOf(new TestClassWithProperty<>("p", "Zpa")));
+        Assert.assertEquals(-1, result2.indexOf(new TestClassWithProperty<String>("0", null)));
+
+        Assert.assertEquals("ac", result2.get(0).getValue());
+        Assert.assertEquals("bc", result2.get(1).getValue());
+        Assert.assertEquals("cc", result2.get(2).getValue());
+        Assert.assertEquals("ec", result2.get(3).getValue());
+        Assert.assertEquals("fc", result2.get(4).getValue());
+        Assert.assertEquals("gc", result2.get(5).getValue());
+        Assert.assertEquals("0ma", result2.get(6).getValue());
+        Assert.assertEquals("0na", result2.get(7).getValue());
+        Assert.assertEquals("Zoa", result2.get(8).getValue());
+        Assert.assertEquals("Zpa", result2.get(9).getValue());
+
+    }
+
+    @Test
+    public void testEntrySplitter() throws Exception {
+        Collection<TestClassWithProperty<String>> coll1 = new HashSet<>();
+        coll1.add(new TestClassWithProperty<>("a", "ac"));
+        coll1.add(new TestClassWithProperty<>("b", "bc"));
+        coll1.add(new TestClassWithProperty<>("c", "cc"));
+        coll1.add(new TestClassWithProperty<>("d", "dx"));
+        coll1.add(new TestClassWithProperty<>("e", "ec"));
+        coll1.add(new TestClassWithProperty<>("f", "fc"));
+        coll1.add(new TestClassWithProperty<>("g", "gc"));
+        coll1.add(new TestClassWithProperty<>("m", "0ma"));
+        coll1.add(new TestClassWithProperty<>("n", "0na"));
+        coll1.add(new TestClassWithProperty<>("o", "Zoa"));
+        coll1.add(new TestClassWithProperty<>("p", "Zpa"));
+
+        ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>> result1 =
+                coll1.stream()
+                        .filter(p -> p.getValue().charAt(1) != 'x')
+                        .collect(Collectors.toImmutableSortedArrayPropertyMap(TestClassWithProperty::getName));
+
+        // Stream the results from one map, collect back to another
+        Map<String, TestClassWithProperty<String>> result2 =
+                result1.entrySet().parallelStream()
+                        .collect(java.util.stream.Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        Assert.assertTrue(result2.containsKey("a"));
+        Assert.assertTrue(result2.containsKey("b"));
+        Assert.assertTrue(result2.containsKey("c"));
+        Assert.assertFalse(result2.containsKey("d"));
+        Assert.assertTrue(result2.containsKey("e"));
+        Assert.assertTrue(result2.containsKey("f"));
+        Assert.assertTrue(result2.containsKey("g"));
+        Assert.assertTrue(result2.containsKey("m"));
+        Assert.assertTrue(result2.containsKey("n"));
+        Assert.assertTrue(result2.containsKey("o"));
+        Assert.assertTrue(result2.containsKey("p"));
+        Assert.assertFalse(result2.containsKey("0"));
+
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("a", "ac")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("b", "bc")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("c", "cc")));
+        Assert.assertFalse(result2.containsValue(new TestClassWithProperty<>("d", "dx")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("e", "ec")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("f", "fc")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("g", "gc")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("m", "0ma")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("n", "0na")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("o", "Zoa")));
+        Assert.assertTrue(result2.containsValue(new TestClassWithProperty<>("p", "Zpa")));
+        Assert.assertFalse(result2.containsValue(new TestClassWithProperty<String>("0", null)));
 
     }
 

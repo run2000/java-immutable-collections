@@ -3,6 +3,7 @@ package net.njcull.collections;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -246,6 +247,129 @@ public final class TestImmutableArrayBiMap {
 
         Assert.assertTrue(entryIt.hasNext());
         Assert.assertEquals(10, result2.size());
+    }
+
+    @Test
+    public void testKeySplitter() throws Exception {
+        ImmutableArrayMapBuilder<String, String> builder = ImmutableArrayMapBuilder.newBiMap();
+        builder.with("a", "ac");
+        builder.with("b", "bc");
+        builder.with("c", "cc");
+        builder.with("e", "ec");
+        builder.with("f", "fc");
+        builder.with("g", "gc");
+        builder.with("m", "0ma");
+        builder.with("n", "0na");
+        builder.with("o", "Zoa");
+        builder.with("p", "Zpa");
+
+        ImmutableArrayMap<String, String> result1 = builder.build();
+
+        Assert.assertEquals(10, result1.size());
+        Assert.assertEquals("{a=ac, b=bc, c=cc, e=ec, f=fc, g=gc, m=0ma, n=0na, o=Zoa, p=Zpa}", result1.toString());
+
+        // Stream the results from one map, collect back to a result list
+        ArrayList<String> result2 =
+                result1.keySet().parallelStream()
+                        .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+
+        Assert.assertEquals(10, result2.size());
+        Assert.assertEquals("[a, b, c, e, f, g, m, n, o, p]", result2.toString());
+
+        Assert.assertEquals(0, result2.indexOf("a"));
+        Assert.assertEquals(1,result2.indexOf("b"));
+        Assert.assertEquals(2, result2.indexOf("c"));
+        Assert.assertEquals(3, result2.indexOf("e"));
+        Assert.assertEquals(4, result2.indexOf("f"));
+        Assert.assertEquals(5, result2.indexOf("g"));
+        Assert.assertEquals(6, result2.indexOf("m"));
+        Assert.assertEquals(7, result2.indexOf("n"));
+        Assert.assertEquals(8, result2.indexOf("o"));
+        Assert.assertEquals(9, result2.indexOf("p"));
+        Assert.assertEquals(-1, result2.indexOf("0"));
+        Assert.assertEquals(-1, result2.indexOf(null));
+
+        Assert.assertTrue(result2.contains("a"));
+        Assert.assertTrue(result2.contains("b"));
+        Assert.assertTrue(result2.contains("c"));
+        Assert.assertFalse(result2.contains("d"));
+        Assert.assertTrue(result2.contains("e"));
+        Assert.assertTrue(result2.contains("f"));
+        Assert.assertTrue(result2.contains("g"));
+        Assert.assertTrue(result2.contains("m"));
+        Assert.assertTrue(result2.contains("n"));
+        Assert.assertTrue(result2.contains("o"));
+        Assert.assertTrue(result2.contains("p"));
+        Assert.assertFalse(result2.contains("0"));
+        Assert.assertFalse(result2.contains(null));
+    }
+
+    @Test
+    public void testValueSplitter() throws Exception {
+        ImmutableArrayMapBuilder<String, String> builder = ImmutableArrayMapBuilder.newBiMap();
+        builder.with("a", "ac");
+        builder.with("b", "bc");
+        builder.with("c", "cc");
+        builder.with("e", "ec");
+        builder.with("f", "fc");
+        builder.with("g", "gc");
+        builder.with("m", "0ma");
+        builder.with("n", "0na");
+        builder.with("o", "Zoa");
+        builder.with("p", "Zpa");
+
+        ImmutableArrayMap<String, String> result1 = builder.build();
+
+        Assert.assertEquals(10, result1.size());
+        Assert.assertEquals("{a=ac, b=bc, c=cc, e=ec, f=fc, g=gc, m=0ma, n=0na, o=Zoa, p=Zpa}", result1.toString());
+
+        // Stream the results from one map, collect back to a result list
+        ArrayList<String> result2 =
+                result1.values().parallelStream()
+                        .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+
+        Assert.assertEquals(10, result2.size());
+        Assert.assertEquals("[ac, bc, cc, ec, fc, gc, 0ma, 0na, Zoa, Zpa]", result2.toString());
+
+        Assert.assertTrue(result2.contains("ac"));
+        Assert.assertTrue(result2.contains("bc"));
+        Assert.assertTrue(result2.contains("cc"));
+        Assert.assertFalse(result2.contains("dx"));
+        Assert.assertTrue(result2.contains("ec"));
+        Assert.assertTrue(result2.contains("fc"));
+        Assert.assertTrue(result2.contains("gc"));
+        Assert.assertTrue(result2.contains("0ma"));
+        Assert.assertTrue(result2.contains("0na"));
+        Assert.assertTrue(result2.contains("Zoa"));
+        Assert.assertTrue(result2.contains("Zpa"));
+        Assert.assertFalse(result2.contains("0"));
+        Assert.assertFalse(result2.contains(null));
+
+        Assert.assertEquals(0, result2.indexOf("ac"));
+        Assert.assertEquals(1, result2.indexOf("bc"));
+        Assert.assertEquals(2, result2.indexOf("cc"));
+        Assert.assertEquals(3, result2.indexOf("ec"));
+        Assert.assertEquals(4, result2.indexOf("fc"));
+        Assert.assertEquals(5, result2.indexOf("gc"));
+        Assert.assertEquals(6, result2.indexOf("0ma"));
+        Assert.assertEquals(7, result2.indexOf("0na"));
+        Assert.assertEquals(8, result2.indexOf("Zoa"));
+        Assert.assertEquals(9, result2.indexOf("Zpa"));
+        Assert.assertEquals(-1, result2.indexOf("0"));
+        Assert.assertEquals(-1, result2.indexOf(null));
+
+        Assert.assertTrue(result2.lastIndexOf("ac") >= 0);
+        Assert.assertTrue(result2.lastIndexOf("bc") >= 0);
+        Assert.assertTrue(result2.lastIndexOf("cc") >= 0);
+        Assert.assertTrue(result2.lastIndexOf("ec") >= 0);
+        Assert.assertTrue(result2.lastIndexOf("fc") >= 0);
+        Assert.assertTrue(result2.lastIndexOf("gc") >= 0);
+        Assert.assertTrue(result2.lastIndexOf("0ma") >= 0);
+        Assert.assertTrue(result2.lastIndexOf("0na") >= 0);
+        Assert.assertTrue(result2.lastIndexOf("Zoa") >= 0);
+        Assert.assertTrue(result2.lastIndexOf("Zpa") >= 0);
+        Assert.assertFalse(result2.lastIndexOf("0") >= 0);
+        Assert.assertFalse(result2.lastIndexOf(null) >= 0);
     }
 
     @Test
