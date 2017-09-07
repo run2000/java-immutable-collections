@@ -109,6 +109,7 @@ public final class TestImmutableUniSortedArrayBiMap {
         Assert.assertEquals(8, result.indexOfValue("Zoa"));
         Assert.assertEquals(9, result.indexOfValue("Zpa"));
         Assert.assertEquals(-1, result.indexOfValue("0"));
+        Assert.assertEquals(-1, result.indexOfValue(null));
 
         Assert.assertEquals("ac", result.valueAt(0));
         Assert.assertEquals("bc", result.valueAt(1));
@@ -329,6 +330,7 @@ public final class TestImmutableUniSortedArrayBiMap {
         Assert.assertEquals(8, result2.indexOfValue("Zoa"));
         Assert.assertEquals(9, result2.indexOfValue("Zpa"));
         Assert.assertEquals(-1, result2.indexOfValue("0"));
+        Assert.assertEquals(-1, result2.indexOfValue(null));
 
         Assert.assertEquals("ac", result2.valueAt(0));
         Assert.assertEquals("bc", result2.valueAt(1));
@@ -459,6 +461,19 @@ public final class TestImmutableUniSortedArrayBiMap {
 
         Assert.assertFalse(entryIt.hasNext());
 
+        List<String> keyList = result2.keySet().asList();
+
+        Assert.assertEquals(0, keyList.indexOf("a"));
+        Assert.assertEquals(1, keyList.indexOf("b"));
+        Assert.assertEquals(2, keyList.indexOf("c"));
+        Assert.assertEquals(3, keyList.indexOf("e"));
+        Assert.assertEquals(4, keyList.indexOf("f"));
+        Assert.assertEquals(5, keyList.indexOf("g"));
+        Assert.assertEquals(6, keyList.indexOf("m"));
+        Assert.assertEquals(7, keyList.indexOf("n"));
+        Assert.assertEquals(8, keyList.indexOf("o"));
+        Assert.assertEquals(9, keyList.indexOf("p"));
+        Assert.assertEquals(-1, keyList.indexOf(null));
     }
 
     @Test
