@@ -19,11 +19,19 @@ public final class TestImmutableSortedArrayBiMap {
 
     @Test
     public void testEmptyMap() throws Exception {
-        Map<String, String> test = ImmutableSortedArrayMap.<String, String>builder().asBiMap().build();
+        ImmutableSortedArrayMap<String, String> test = ImmutableSortedArrayMap.<String, String>builder().asBiMap().build();
         Assert.assertFalse(test.containsKey("3"));
         Assert.assertSame(test, ImmutableSortedArrayMap.emptyMap());
         Assert.assertTrue(test.isEmpty());
         Assert.assertEquals(0, test.size());
+
+        Assert.assertEquals("{}", test.toString());
+        Assert.assertEquals(0, test.hashCode());
+
+        ArrayBackedCollection<String> keys = test.keySet();
+        Assert.assertEquals("[]", keys.toString());
+        Assert.assertEquals(0, keys.hashCode());
+        Assert.assertEquals(1, keys.asList().hashCode());
     }
 
     @Test
@@ -825,6 +833,26 @@ public final class TestImmutableSortedArrayBiMap {
         Assert.assertFalse(keyList.isEmpty());
         Assert.assertEquals(7, keyList.size());
         Assert.assertEquals("[a, b, c, d, e, f, g]", keyList.toString());
+        Assert.assertNull(map.comparator());
+
+        List<String> subKeys = keyList.subList(2, 5);
+        Assert.assertFalse(subKeys.isEmpty());
+        Assert.assertEquals(3, subKeys.size());
+        Assert.assertEquals("[c, d, e]", subKeys.toString());
+
+        ArrayBackedCollection<String> keyColl = (ArrayBackedCollection<String>)keyList;
+        Assert.assertEquals("a", keyColl.getAtIndex(0));
+        Assert.assertEquals("b", keyColl.getAtIndex(1));
+        Assert.assertEquals("c", keyColl.getAtIndex(2));
+        Assert.assertEquals("d", keyColl.getAtIndex(3));
+        Assert.assertEquals("e", keyColl.getAtIndex(4));
+        Assert.assertEquals("f", keyColl.getAtIndex(5));
+        Assert.assertEquals("g", keyColl.getAtIndex(6));
+
+        Assert.assertEquals(3, keyColl.indexOfRange("d", 2, 5));
+        Assert.assertEquals(4, keyColl.indexOfRange("e", 2, 5));
+        Assert.assertEquals(2, keyColl.indexOfRange("c", 2, 5));
+        Assert.assertEquals(-1, keyColl.indexOfRange(null, 2, 5));
 
         ArrayBackedSet<Map.Entry<String, String>> entrySet = map.entrySet();
         Assert.assertFalse(entrySet.isEmpty());

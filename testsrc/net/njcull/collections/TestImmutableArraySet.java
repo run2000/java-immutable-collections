@@ -18,11 +18,15 @@ public final class TestImmutableArraySet {
 
     @Test
     public void testEmptySet() throws Exception {
-        Set<String> test = ImmutableArraySet.<String>builder().build();
+        ImmutableArraySet<String> test = ImmutableArraySet.<String>builder().build();
         Assert.assertFalse(test.contains("3"));
         Assert.assertSame(test, ImmutableArraySet.emptySet());
         Assert.assertTrue(test.isEmpty());
         Assert.assertEquals(0, test.size());
+
+        Assert.assertEquals("[]", test.toString());
+        Assert.assertEquals(0, test.hashCode());
+        Assert.assertEquals(1, test.asList().hashCode());
     }
 
     @Test
