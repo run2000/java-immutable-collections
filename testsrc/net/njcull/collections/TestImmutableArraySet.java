@@ -354,7 +354,14 @@ public final class TestImmutableArraySet {
 
         try {
             Assert.assertTrue(set.add("k"));
-            Assert.fail("Put operation for existing item should fail");
+            Assert.fail("Add operation for new item should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            Assert.assertTrue(set.add("c"));
+            Assert.fail("Add operation for existing item should fail");
         } catch (UnsupportedOperationException e) {
             Assert.assertNotNull(e);
         }
@@ -388,6 +395,9 @@ public final class TestImmutableArraySet {
             Assert.assertNotNull(e);
         }
 
+        // No exception, since no elements to add
+        Assert.assertFalse(set.addAll(Collections.emptyList()));
+
         // No exception, since no elements removed
         List<String> s = Collections.singletonList("k");
         Assert.assertFalse(set.removeAll(s));
@@ -395,6 +405,9 @@ public final class TestImmutableArraySet {
         // No exception, since all elements retained
         s = Arrays.<String>asList("a", "b", "c", "d", "e", "f", "g");
         Assert.assertFalse(set.retainAll(s));
+
+        // No exception, since clearing an empty collection does nothing
+        ImmutableArraySet.emptySet().clear();
 
         // The list returned from keySet().asList() is itself an ArrayBackedCollection
         ArrayBackedCollection<String> list1 = (ArrayBackedCollection)set.asList();

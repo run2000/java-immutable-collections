@@ -1300,6 +1300,13 @@ public class TestImmutableSortedArrayPropertyMap {
         }
 
         try {
+            Assert.assertNull(map.put("q", new TestClassWithProperty<>("q", "26")));
+            Assert.fail("Put operation for new item should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
             Assert.assertEquals("4", map.put("d", new TestClassWithProperty<>("a", "ac")));
             Assert.fail("Put operation for existing item should fail");
         } catch (UnsupportedOperationException e) {
@@ -1343,6 +1350,9 @@ public class TestImmutableSortedArrayPropertyMap {
         // No exception, since all elements retained
         s = Arrays.<String>asList("a", "b", "c", "d", "e", "f", "g");
         Assert.assertFalse(map.keySet().retainAll(s));
+
+        // No exception, since clearing an empty collection does nothing
+        ImmutableSortedArrayPropertyMap.emptyMap().clear();
 
         // The list returned from keySet().asList() is itself an ArrayBackedCollection
         ArrayBackedCollection<String> keys1 = (ArrayBackedCollection)map.keySet().asList();

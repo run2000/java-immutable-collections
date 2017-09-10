@@ -65,6 +65,9 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
     @Override
     public boolean addAll(Collection<? extends E> c) {
         if(!c.isEmpty()) {
+            // Note: this is the same behaviour as AbstractCollection and
+            // AbstractSet. Even if all elements already exist in the set,
+            // and false would be returned, an exception is thrown anyway.
             throw new UnsupportedOperationException("No adding");
         }
         return false;
