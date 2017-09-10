@@ -4,6 +4,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -739,5 +741,74 @@ public final class TestImmutableUniSortedArrayBiMap {
 
         Assert.assertEquals("a", map.firstKey());
         Assert.assertEquals("g", map.lastKey());
+    }
+
+    @Test
+    public void testExceptions() throws Exception {
+        ImmutableUniSortedArrayMap<String, String> map =
+                ImmutableUniSortedArrayMap.<String, String>builder()
+                        .asBiMap()
+                        .with("c", "5", "d", "4", "e", "3")
+                        .with("a", "7", "b", "96")
+                        .with("f", "2", "g", "1").build();
+
+        Assert.assertEquals(7, map.size());
+
+        try {
+            Assert.assertEquals("5", map.remove("c"));
+            Assert.fail("Remove of existing item should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            Assert.assertEquals("4", map.put("d", "27"));
+            Assert.fail("Put operation for existing item should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            map.clear();
+            Assert.fail("Clear operation for non-empty set should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            Map<String, String> s = Collections.singletonMap("j", "j");
+            map.putAll(s);
+            Assert.fail("putAll operation should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            List<String> s = Collections.singletonList("g");
+            map.keySet().removeAll(s);
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            List<String> s = Collections.singletonList("e");
+            map.keySet().retainAll(s);
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        // No exception, since no elements removed
+        List<String> s = Collections.singletonList("k");
+        Assert.assertFalse(map.keySet().removeAll(s));
+
+        // No exception, since all elements retained
+        s = Arrays.<String>asList("a", "b", "c", "d", "e", "f", "g");
+        Assert.assertFalse(map.keySet().retainAll(s));
+
+        // The list returned from keySet().asList() is itself an ArrayBackedCollection
+        ArrayBackedCollection<String> keys1 = (ArrayBackedCollection)map.keySet().asList();
+        List<String> keys2 = keys1.asList();
+        Assert.assertSame(keys1, keys2);
+
     }
 }

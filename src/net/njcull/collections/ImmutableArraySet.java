@@ -81,7 +81,12 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
      */
     @Override
     public boolean retainAll(Collection<?> c) {
-        throw new UnsupportedOperationException("No removals");
+        for(int i = 0; i < m_Elements.length; i++) {
+            if(!c.contains(m_Elements[i])) {
+                throw new UnsupportedOperationException("No removals");
+            }
+        }
+        return false;
     }
 
     /**
@@ -99,7 +104,11 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
     @Override
     public boolean removeAll(Collection<?> c) {
         if(!c.isEmpty()) {
-            throw new UnsupportedOperationException("No removals");
+            for(int i = 0; i < m_Elements.length; i++) {
+                if(c.contains(m_Elements[i])) {
+                    throw new UnsupportedOperationException("No removals");
+                }
+            }
         }
         return false;
     }

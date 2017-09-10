@@ -4,7 +4,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -1271,6 +1273,82 @@ public class TestImmutableSortedArrayPropertyMap {
 
         Assert.assertEquals("a", map.firstKey());
         Assert.assertEquals("g", map.lastKey());
+    }
+
+
+    @Test
+    public void testExceptions() throws Exception {
+        ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>> map =
+        ImmutableSortedArrayPropertyMap.<String, TestClassWithProperty<String>>builder()
+            .with(new TestClassWithProperty<>("a", "ac"))
+            .with(new TestClassWithProperty<>("b", "bc"))
+            .with(new TestClassWithProperty<>("c", "cc"))
+            .with(new TestClassWithProperty<>("d", "dx"))
+            .with(new TestClassWithProperty<>("e", "ec"))
+            .with(new TestClassWithProperty<>("f", "fc"))
+            .with(new TestClassWithProperty<>("g", "gc"))
+            .byKeyMethod(TestClassWithProperty::getName)
+            .build();
+
+        Assert.assertEquals(7, map.size());
+
+        try {
+            Assert.assertEquals("5", map.remove("c"));
+            Assert.fail("Remove of existing item should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            Assert.assertEquals("4", map.put("d", new TestClassWithProperty<>("a", "ac")));
+            Assert.fail("Put operation for existing item should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            map.clear();
+            Assert.fail("Clear operation for non-empty set should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            Map<String, TestClassWithProperty<String>> s =
+                    Collections.singletonMap("j", new TestClassWithProperty<>("f", "fc"));
+            map.putAll(s);
+            Assert.fail("putAll operation should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            List<String> s = Collections.singletonList("g");
+            map.keySet().removeAll(s);
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            List<String> s = Collections.singletonList("e");
+            map.keySet().retainAll(s);
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        // No exception, since no elements removed
+        List<String> s = Collections.singletonList("k");
+        Assert.assertFalse(map.keySet().removeAll(s));
+
+        // No exception, since all elements retained
+        s = Arrays.<String>asList("a", "b", "c", "d", "e", "f", "g");
+        Assert.assertFalse(map.keySet().retainAll(s));
+
+        // The list returned from keySet().asList() is itself an ArrayBackedCollection
+        ArrayBackedCollection<String> keys1 = (ArrayBackedCollection)map.keySet().asList();
+        List<String> keys2 = keys1.asList();
+        Assert.assertSame(keys1, keys2);
+
     }
 
     /**

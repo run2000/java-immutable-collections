@@ -86,6 +86,7 @@ public final class TestImmutableSortedArraySet {
         Assert.assertEquals("e", it.next());
         Assert.assertFalse(it.hasNext());
 
+        Assert.assertNull(set.comparator());
         List<String> list = set.asList();
         List<String> arrayList = Arrays.asList("a", "b", "c", "d", "e");
 
@@ -274,5 +275,71 @@ public final class TestImmutableSortedArraySet {
         Assert.assertEquals(1, result2.indexOf("b"));
         Assert.assertEquals(2, result2.indexOf("c"));
         Assert.assertEquals(6, result2.indexOf("g"));
+    }
+
+    @Test
+    public void testExceptions() throws Exception {
+        ImmutableSortedArraySetBuilder<String> builder = new ImmutableSortedArraySetBuilder<String>();
+        ImmutableSortedArraySet<String> set = builder
+                .with("a", "b", "b", "c", "d", "e")
+                .with("f", "g")
+                .build();
+
+        try {
+            Assert.assertTrue(set.remove("c"));
+            Assert.fail("Remove of existing item should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            Assert.assertTrue(set.add("k"));
+            Assert.fail("Put operation for existing item should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            set.clear();
+            Assert.fail("Clear operation for non-empty set should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            Set<String> s = Collections.singleton("j");
+            set.addAll(s);
+            Assert.fail("addAll operation should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            List<String> s = Collections.singletonList("g");
+            set.removeAll(s);
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            List<String> s = Collections.singletonList("e");
+            set.retainAll(s);
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        // No exception, since no elements removed
+        List<String> s = Collections.singletonList("k");
+        Assert.assertFalse(set.removeAll(s));
+
+        // No exception, since all elements retained
+        s = Arrays.<String>asList("a", "b", "c", "d", "e", "f", "g");
+        Assert.assertFalse(set.retainAll(s));
+
+        // The list returned from keySet().asList() is itself an ArrayBackedCollection
+        ArrayBackedCollection<String> list1 = (ArrayBackedCollection)set.asList();
+        List<String> list2 = list1.asList();
+        Assert.assertSame(list1, list2);
+
     }
 }
