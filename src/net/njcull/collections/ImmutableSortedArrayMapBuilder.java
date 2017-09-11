@@ -19,42 +19,112 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
     private static final Object[] EMPTY_ELEMENTS = new Object[0];
     private static final Comparator<Comparable> naturalOrder = Comparator.nullsFirst(Comparator.<Comparable>naturalOrder());
 
+    /**
+     * Create a new builder instance that builds a new immutable sorted map.
+     *
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @return a new builder for building a new map
+     */
     public static <K,V> ImmutableSortedArrayMapBuilder<K,V> newMap() {
         ImmutableSortedArrayMapBuilder<K,V> builder = new ImmutableSortedArrayMapBuilder<>();
         return builder.asMap();
     }
 
+    /**
+     * Create a new builder instance that builds a new immutable sorted bimap.
+     *
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @return a new builder for building a new bimap
+     */
     public static <K,V> ImmutableSortedArrayMapBuilder<K,V> newBiMap() {
         ImmutableSortedArrayMapBuilder<K,V> builder = new ImmutableSortedArrayMapBuilder<>();
         return builder.asBiMap();
     }
 
+    /**
+     * Create a new builder instance that builds a new immutable sorted map
+     * using the supplied comparator for sorting the keys.
+     *
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @param cmp the key comparator for sorting the map
+     * @return a new builder for building a new map
+     */
     public static <K,V> ImmutableSortedArrayMapBuilder<K,V> newMapComparingKeys(Comparator<? super K> cmp) {
         ImmutableSortedArrayMapBuilder<K,V> builder = new ImmutableSortedArrayMapBuilder<>();
         return builder.byComparingKeys(cmp);
     }
 
+    /**
+     * Create a new builder instance that builds a new immutable sorted bimap
+     * using the supplied comparator for sorting the keys.
+     *
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @param cmp the key comparator for sorting the map
+     * @return a new builder for building a new map
+     */
     public static <K,V> ImmutableSortedArrayMapBuilder<K,V> newBiMapComparingKeys(Comparator<? super K> cmp) {
         ImmutableSortedArrayMapBuilder<K,V> builder = new ImmutableSortedArrayMapBuilder<>();
         return builder.byComparingKeys(cmp).asBiMap();
     }
 
+    /**
+     * Create a new builder instance that builds a new immutable sorted map
+     * using the supplied comparator for sorting the values.
+     *
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @param cmp the values comparator for sorting the map
+     * @return a new builder for building a new map
+     */
     public static <K,V> ImmutableSortedArrayMapBuilder<K,V> newMapComparingValues(Comparator<? super V> cmp) {
         ImmutableSortedArrayMapBuilder<K,V> builder = new ImmutableSortedArrayMapBuilder<>();
         return builder.byComparingValues(cmp);
     }
 
+    /**
+     * Create a new builder instance that builds a new immutable sorted bimap
+     * using the supplied comparator for sorting the values.
+     *
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @param cmp the values comparator for sorting the map
+     * @return a new builder for building a new map
+     */
     public static <K,V> ImmutableSortedArrayMapBuilder<K,V> newBiMapComparingValues(Comparator<? super V> cmp) {
         ImmutableSortedArrayMapBuilder<K,V> builder = new ImmutableSortedArrayMapBuilder<>();
         return builder.byComparingValues(cmp).asBiMap();
     }
 
+    /**
+     * Create a new builder instance that builds a new immutable sorted map
+     * using the supplied comparators for sorting the keys and values.
+     *
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @param keyCmp the keys comparator for sorting the map
+     * @param valCmp the values comparator for sorting the map
+     * @return a new builder for building a new map
+     */
     public static <K,V> ImmutableSortedArrayMapBuilder<K,V> newMapComparing(Comparator<? super K> keyCmp, Comparator<? super V> valCmp) {
         ImmutableSortedArrayMapBuilder<K,V> builder = new ImmutableSortedArrayMapBuilder<>();
         return builder.byComparingKeys(keyCmp)
                 .byComparingValues(valCmp);
     }
 
+    /**
+     * Create a new builder instance that builds a new immutable sorted bimap
+     * using the supplied comparators for sorting the keys and values.
+     *
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @param keyCmp the keys comparator for sorting the map
+     * @param valCmp the values comparator for sorting the map
+     * @return a new builder for building a new map
+     */
     public static <K,V> ImmutableSortedArrayMapBuilder<K,V> newBiMapComparing(Comparator<? super K> keyCmp, Comparator<? super V> valCmp) {
         ImmutableSortedArrayMapBuilder<K,V> builder = new ImmutableSortedArrayMapBuilder<>();
         return builder.byComparingKeys(keyCmp)
@@ -62,39 +132,82 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
                 .asBiMap();
     }
 
+    /**
+     * Create a new builder instance for constructing a new immutable
+     * sorted array map.
+     */
     public ImmutableSortedArrayMapBuilder() {
     }
 
+    /**
+     * Use the supplied comparator to sort the keys in the resulting map.
+     *
+     * @param cmp the comparator for sorting the keys in the map
+     * @return this builder, for chaining purposes
+     */
     public ImmutableSortedArrayMapBuilder<K,V> byComparingKeys(Comparator<? super K> cmp) {
         this.m_KeyComparator = cmp;
         return this;
     }
 
+    /**
+     * Sort the keys for the resulting map using the keys' natural order.
+     *
+     * @return this builder, for chaining purposes
+     */
     public ImmutableSortedArrayMapBuilder<K,V> byNaturalKeyOrder() {
         this.m_KeyComparator = null;
         return this;
     }
 
+    /**
+     * Use the supplied comparator to sort the values in the resulting map.
+     *
+     * @param cmp the comparator for sorting the values in the map
+     * @return this builder, for chaining purposes
+     */
     public ImmutableSortedArrayMapBuilder<K,V> byComparingValues(Comparator<? super V> cmp) {
         this.m_ValueComparator = cmp;
         return this;
     }
 
+    /**
+     * Sort the values for the resulting map using the values' natural order.
+     *
+     * @return this builder, for chaining purposes
+     */
     public ImmutableSortedArrayMapBuilder<K,V> byNaturalValueOrder() {
         this.m_ValueComparator = null;
         return this;
     }
 
+    /**
+     * The builder will build the resulting map as a map, not a bi-map.
+     *
+     * @return this builder, for chaining purposes
+     */
     public ImmutableSortedArrayMapBuilder<K,V> asMap() {
         m_Bimap = false;
         return this;
     }
 
+    /**
+     * The builder will build the resulting map as a bi-map.
+     *
+     * @return this builder, for chaining purposes
+     */
     public ImmutableSortedArrayMapBuilder<K,V> asBiMap() {
         m_Bimap = true;
         return this;
     }
 
+    /**
+     * All the map entries from the supplied iterable will be added to the
+     * resulting map.
+     *
+     * @param it the iterable containing elements to be added
+     * @return this builder, for chaining purposes
+     */
     public ImmutableSortedArrayMapBuilder<K,V> with(Iterable<Map.Entry<K,V>> it) {
         int count = 0;
 
@@ -110,6 +223,13 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
         return this;
     }
 
+    /**
+     * All the map entries from the supplied map will be added to the
+     * resulting map.
+     *
+     * @param map the map containing elements to be added
+     * @return this builder, for chaining purposes
+     */
     @SuppressWarnings("unchecked")
     public ImmutableSortedArrayMapBuilder<K,V> with(Map<? extends K, ? extends V> map) {
         Set<? extends Map.Entry<? extends K, ? extends V>> entries = map.entrySet();
@@ -124,6 +244,13 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
         return this;
     }
 
+    /**
+     * Add the given key and value pair to the resulting map.
+     *
+     * @param key the key to be added
+     * @param val the value to be added
+     * @return this builder, for chaining purposes
+     */
     public ImmutableSortedArrayMapBuilder<K,V> with(K key, V val) {
         ensureCapacity(1);
         m_Keys[m_Size] = key;
@@ -131,6 +258,15 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
         return this;
     }
 
+    /**
+     * Add the given key and value pairs to the resulting map.
+     *
+     * @param k1 the first key to be added
+     * @param v1 the first value to be added
+     * @param k2 the second key to be added
+     * @param v2 the second value to be added
+     * @return this builder, for chaining purposes
+     */
     public ImmutableSortedArrayMapBuilder<K,V> with(K k1, V v1, K k2, V v2) {
         ensureCapacity(2);
         m_Keys[m_Size] = k1;
@@ -140,6 +276,17 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
         return this;
     }
 
+    /**
+     * Add the given key and value pairs to the resulting map.
+     *
+     * @param k1 the first key to be added
+     * @param v1 the first value to be added
+     * @param k2 the second key to be added
+     * @param v2 the second value to be added
+     * @param k3 the third key to be added
+     * @param v3 the third value to be added
+     * @return this builder, for chaining purposes
+     */
     public ImmutableSortedArrayMapBuilder<K,V> with(K k1, V v1, K k2, V v2, K k3, V v3) {
         ensureCapacity(3);
         m_Keys[m_Size] = k1;
@@ -151,6 +298,19 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
         return this;
     }
 
+    /**
+     * Add the given key and value pairs to the resulting map.
+     *
+     * @param k1 the first key to be added
+     * @param v1 the first value to be added
+     * @param k2 the second key to be added
+     * @param v2 the second value to be added
+     * @param k3 the third key to be added
+     * @param v3 the third value to be added
+     * @param k4 the fourth key to be added
+     * @param v4 the fourth value to be added
+     * @return this builder, for chaining purposes
+     */
     public ImmutableSortedArrayMapBuilder<K,V> with(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
         ensureCapacity(4);
         m_Keys[m_Size] = k1;
@@ -164,6 +324,12 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
         return this;
     }
 
+    /**
+     * Add the values from the supplied map entry to the resulting map.
+     *
+     * @param entry the entry containing the key and value to be added
+     * @return this builder, for chaining purposes
+     */
     public final ImmutableSortedArrayMapBuilder<K,V> with(Map.Entry<? extends K,? extends V> entry) {
         ensureCapacity(1);
         m_Keys[m_Size] = entry.getKey();
@@ -171,6 +337,12 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
         return this;
     }
 
+    /**
+     * Add the values from the supplied map entries to the resulting map.
+     *
+     * @param entries the entries containing the keys and values to be added
+     * @return this builder, for chaining purposes
+     */
     @SafeVarargs
     public final ImmutableSortedArrayMapBuilder<K,V> with(Map.Entry<? extends K,? extends V>... entries) {
         int len = entries.length;
@@ -183,9 +355,11 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
     }
 
     /**
-     * For combiner.
+     * For the stream combiner, merge the entries from the supplied builder
+     * to this builder.
      *
-     * @param entries the entries to be merged into this builder
+     * @param entries the builder containing the entries to be merged into
+     * this builder
      * @return this builder containing the merged items
      */
     public ImmutableSortedArrayMapBuilder<K,V> merge(ImmutableSortedArrayMapBuilder<? extends K, ? extends V> entries) {
@@ -207,11 +381,19 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
         }
     }
 
+    /**
+     * Returns the number of entries in this builder.
+     *
+     * @return the number of entries in this builder
+     */
     public int size() {
         return m_Size;
     }
 
     /**
+     * Build the immutable map. Validates all keys and values added, including
+     * sorting the keys and values, and checking for duplicate keys and values
+     * as necessary.
      *
      * @return an ImmutableArrayMap containing the elements in the builder
      * @throws IllegalStateException there was a duplicate key or value
@@ -273,6 +455,11 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
         return new ImmutableSortedArrayMap<>(elements, sortedValues, keyComparator, valueComparator, m_Bimap);
     }
 
+    /**
+     * Reset this builder to its initial state.
+     *
+     * @return this builder, for chaining purposes
+     */
     public ImmutableSortedArrayMapBuilder<K,V> clear() {
         m_Keys = EMPTY_ELEMENTS;
         m_Values = EMPTY_ELEMENTS;
@@ -283,6 +470,9 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
         return this;
     }
 
+    /**
+     * Comparator for creating sorted indexes into the key and value array.
+     */
     private static final class ArrayComparator implements Comparator<Integer> {
         private final Object[] m_Values;
         private final int m_Offset;
