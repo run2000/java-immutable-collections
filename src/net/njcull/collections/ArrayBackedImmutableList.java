@@ -139,6 +139,15 @@ final class ArrayBackedImmutableList<E> extends AbstractRandomAccessList<E>
         return new ImmutableIndexerSpliterator<>(m_Indexer, m_Size, m_Comparator, m_Characteristics);
     }
 
+    /**
+     * Get the element at the specified array index. Equivalent to
+     * {@link #get(int)} for list implementations.
+     *
+     * @param index the index of the item to be retrieved
+     * @return the item at the specified index
+     * @throws IndexOutOfBoundsException if the index is out of range
+     *         (<code>index &lt; 0 || index &gt;= size()</code>)
+     */
     @Override
     public E getAtIndex(int index) {
         if((index < 0) || (index >= m_Size)) {
@@ -147,6 +156,21 @@ final class ArrayBackedImmutableList<E> extends AbstractRandomAccessList<E>
         return m_Indexer.apply(index);
     }
 
+    /**
+     * Determine the index of the given element, if it exists within the
+     * specified range in this collection.
+     *
+     * @param element the element to be found
+     * @param fromIndex the start index, must be zero or greater
+     * @param toIndex the exclusive end index, must be greater than or equal to
+     *                the start index
+     * @return a zero or positive integer if the element is in the specified
+     * range of the backing array, otherwise less than zero to indicate
+     * its absence
+     * @throws IndexOutOfBoundsException if fromIndex or toIndex is out of range
+     *         ({@code index < 0 || index >= size()}), or toIndex
+     *         is less than fromIndex
+     */
     @Override
     public int indexOfRange(E element, int fromIndex, int toIndex) {
         if(fromIndex < 0 || fromIndex >= m_Size) {
@@ -171,6 +195,12 @@ final class ArrayBackedImmutableList<E> extends AbstractRandomAccessList<E>
         return -1;
     }
 
+    /**
+     * Return a backing list view for this collection. For this implementation,
+     * this object is the same as the backing list.
+     *
+     * @return this list
+     */
     @Override
     public List<E> asList() {
         return this;

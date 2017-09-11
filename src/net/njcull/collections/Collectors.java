@@ -85,6 +85,17 @@ public final class Collectors {
                 ImmutableSortedArraySetBuilder::build);
     }
 
+    /**
+     * Returns a {@code Collector} that accumulates the input elements into a
+     * new {@code ImmutableArrayMap}, with elements ordered by the insertion
+     * order.
+     *
+     * @param <K> the type of keys in the resulting map
+     * @param <V> the type of values in the resulting map
+     * @return a {@code Collector} which collects all the input keys and values
+     * into a {@code ImmutableArrayMap}, with elements ordered by the insertion
+     * order
+     */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableArrayMap<K,V>> toImmutableArrayMap() {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableArrayMapBuilder<K,V>, ImmutableArrayMap<K,V>>of(
                 ImmutableArrayMapBuilder::<K,V>newMap,
@@ -93,6 +104,21 @@ public final class Collectors {
                 ImmutableArrayMapBuilder::build);
     }
 
+    /**
+     * Returns a {@code Collector} that accumulates the input elements into a
+     * new {@code ImmutableArrayMap}, created as a bimap, with elements
+     * ordered by the insertion order.
+     * <p>
+     * A bimap is a map where both keys and values are unique. Any given key
+     * can be mapped "forwards" to a single value; any given value can be
+     * mapped "backwards" to a single key.
+     *
+     * @param <K> the type of keys in the resulting map
+     * @param <V> the type of values in the resulting map
+     * @return a {@code Collector} which collects all the input keys and values
+     * into a {@code ImmutableArrayMap}, created as a bimap, with elements
+     * ordered by the insertion order
+     */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableArrayMap<K,V>> toImmutableArrayBiMap() {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableArrayMapBuilder<K,V>, ImmutableArrayMap<K,V>>of(
                 ImmutableArrayMapBuilder::<K,V>newBiMap,
@@ -101,6 +127,17 @@ public final class Collectors {
                 ImmutableArrayMapBuilder::build);
     }
 
+    /**
+     * Returns a {@code Collector} that accumulates the input elements into a
+     * new {@code ImmutableHashedArrayMap}, with elements ordered by the
+     * insertion order.
+     *
+     * @param <K> the type of keys in the resulting map
+     * @param <V> the type of values in the resulting map
+     * @return a {@code Collector} which collects all the input keys and values
+     * into a {@code ImmutableHashedArrayMap}, with elements ordered by the
+     * insertion order
+     */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableHashedArrayMap<K,V>> toImmutableHashedArrayMap() {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableHashedArrayMapBuilder<K,V>, ImmutableHashedArrayMap<K,V>>of(
                 ImmutableHashedArrayMapBuilder::<K,V>newMap,
@@ -109,6 +146,21 @@ public final class Collectors {
                 ImmutableHashedArrayMapBuilder::build);
     }
 
+    /**
+     * Returns a {@code Collector} that accumulates the input elements into a
+     * new {@code ImmutableHashedArrayMap}, created as a bimap, with elements
+     * ordered by the insertion order.
+     * <p>
+     * A bimap is a map where both keys and values are unique. Any given key
+     * can be mapped "forwards" to a single value; any given value can be
+     * mapped "backwards" to a single key.
+     *
+     * @param <K> the type of keys in the resulting map
+     * @param <V> the type of values in the resulting map
+     * @return a {@code Collector} which collects all the input keys and values
+     * into a {@code ImmutableHashedArrayMap}, created as a bimap, with elements
+     * ordered by the insertion order
+     */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableHashedArrayMap<K,V>> toImmutableHashedArrayBiMap() {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableHashedArrayMapBuilder<K,V>, ImmutableHashedArrayMap<K,V>>of(
                 ImmutableHashedArrayMapBuilder::<K,V>newBiMap,
@@ -117,6 +169,17 @@ public final class Collectors {
                 ImmutableHashedArrayMapBuilder::build);
     }
 
+    /**
+     * Returns a {@code Collector} that accumulates the input elements into a
+     * new {@code ImmutableSortedArrayMap}, with elements ordered by their
+     * natural order.
+     *
+     * @param <K> the type of keys in the resulting map
+     * @param <V> the type of values in the resulting map
+     * @return a {@code Collector} which collects all the input keys and values
+     * into a {@code ImmutableSortedArrayMap}, with elements ordered by their
+     * natural order
+     */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableSortedArrayMap<K,V>> toImmutableSortedArrayMap() {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableSortedArrayMapBuilder<K,V>, ImmutableSortedArrayMap<K,V>>of(
                 ImmutableSortedArrayMapBuilder::newMap,
@@ -125,6 +188,17 @@ public final class Collectors {
                 ImmutableSortedArrayMapBuilder::build);
     }
 
+    /**
+     * Returns a {@code Collector} that accumulates the input elements into a
+     * new {@code ImmutableSortedArrayMap}, with keys ordered by the given
+     * comparator.
+     *
+     * @param <K> the type of keys in the resulting map
+     * @param <V> the type of values in the resulting map
+     * @return a {@code Collector} which collects all the input keys and values
+     * into a {@code ImmutableSortedArrayMap}, with keys ordered by the given
+     * comparator
+     */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableSortedArrayMap<K,V>> toImmutableSortedArrayMapComparingKeys(
             final Comparator<? super K> keyCmp) {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableSortedArrayMapBuilder<K,V>, ImmutableSortedArrayMap<K,V>>of(
@@ -134,6 +208,17 @@ public final class Collectors {
                 ImmutableSortedArrayMapBuilder::build);
     }
 
+    /**
+     * Returns a {@code Collector} that accumulates the input elements into a
+     * new {@code ImmutableSortedArrayMap}, with values ordered by the given
+     * comparator.
+     *
+     * @param <K> the type of keys in the resulting map
+     * @param <V> the type of values in the resulting map
+     * @return a {@code Collector} which collects all the input keys and values
+     * into a {@code ImmutableSortedArrayMap}, with values ordered by the given
+     * comparator
+     */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableSortedArrayMap<K,V>> toImmutableSortedArrayMapComparingValues(
             final Comparator<? super V> valCmp) {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableSortedArrayMapBuilder<K,V>, ImmutableSortedArrayMap<K,V>>of(
@@ -143,7 +228,19 @@ public final class Collectors {
                 ImmutableSortedArrayMapBuilder::build);
     }
 
-    public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableSortedArrayMap<K,V>> toImmutableSortedArrayMapComparingKeysAndValues(final Comparator<? super K> keyCmp, final Comparator<? super V> valCmp) {
+    /**
+     * Returns a {@code Collector} that accumulates the input elements into a
+     * new {@code ImmutableSortedArrayMap}, with keys and values ordered by
+     * the given comparators.
+     *
+     * @param <K> the type of keys in the resulting map
+     * @param <V> the type of values in the resulting map
+     * @return a {@code Collector} which collects all the input keys and values
+     * into a {@code ImmutableSortedArrayMap}, with keys and values ordered by
+     * the given comparators
+     */
+    public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableSortedArrayMap<K,V>> toImmutableSortedArrayMapComparingKeysAndValues(
+            final Comparator<? super K> keyCmp, final Comparator<? super V> valCmp) {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableSortedArrayMapBuilder<K,V>, ImmutableSortedArrayMap<K,V>>of(
                 () -> ImmutableSortedArrayMapBuilder.newMapComparing(keyCmp, valCmp),
                 ImmutableSortedArrayMapBuilder::with,
@@ -151,6 +248,17 @@ public final class Collectors {
                 ImmutableSortedArrayMapBuilder::build);
     }
 
+    /**
+     * Returns a {@code Collector} that accumulates the input elements into a
+     * new {@code ImmutableSortedArrayMap}, created as a bimap, with elements
+     * ordered by their natural order.
+     *
+     * @param <K> the type of keys in the resulting map
+     * @param <V> the type of values in the resulting map
+     * @return a {@code Collector} which collects all the input keys and values
+     * into a {@code ImmutableSortedArrayMap}, with elements ordered by their
+     * natural order
+     */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableSortedArrayMap<K,V>> toImmutableSortedArrayBiMap() {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableSortedArrayMapBuilder<K,V>, ImmutableSortedArrayMap<K,V>>of(
                 ImmutableSortedArrayMapBuilder::<K,V>newBiMap,
@@ -159,6 +267,17 @@ public final class Collectors {
                 ImmutableSortedArrayMapBuilder::build);
     }
 
+    /**
+     * Returns a {@code Collector} that accumulates the input elements into a
+     * new {@code ImmutableSortedArrayMap}, created as a bimap, with keys
+     * ordered by the given comparator.
+     *
+     * @param <K> the type of keys in the resulting map
+     * @param <V> the type of values in the resulting map
+     * @return a {@code Collector} which collects all the input keys and values
+     * into a {@code ImmutableSortedArrayMap}, with keys ordered by the given
+     * comparator
+     */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableSortedArrayMap<K,V>> toImmutableSortedArrayBiMapComparingKeys(
             final Comparator<? super K> keyCmp) {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableSortedArrayMapBuilder<K,V>, ImmutableSortedArrayMap<K,V>>of(
@@ -168,6 +287,17 @@ public final class Collectors {
                 ImmutableSortedArrayMapBuilder::build);
     }
 
+    /**
+     * Returns a {@code Collector} that accumulates the input elements into a
+     * new {@code ImmutableSortedArrayMap}, created as a bimap, with values
+     * ordered by the given comparator.
+     *
+     * @param <K> the type of keys in the resulting map
+     * @param <V> the type of values in the resulting map
+     * @return a {@code Collector} which collects all the input keys and values
+     * into a {@code ImmutableSortedArrayMap}, with values ordered by the given
+     * comparator
+     */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableSortedArrayMap<K,V>> toImmutableSortedArrayBiMapComparingValues(
             final Comparator<? super V> valCmp) {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableSortedArrayMapBuilder<K,V>, ImmutableSortedArrayMap<K,V>>of(
@@ -177,6 +307,17 @@ public final class Collectors {
                 ImmutableSortedArrayMapBuilder::build);
     }
 
+    /**
+     * Returns a {@code Collector} that accumulates the input elements into a
+     * new {@code ImmutableSortedArrayMap}, created as a bimap, with keys
+     * and values ordered by the given comparators.
+     *
+     * @param <K> the type of keys in the resulting map
+     * @param <V> the type of values in the resulting map
+     * @return a {@code Collector} which collects all the input keys and values
+     * into a {@code ImmutableSortedArrayMap}, with keys and values ordered by
+     * the given comparators
+     */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableSortedArrayMap<K,V>> toImmutableSortedArrayBiMapComparingKeysAndValues(
             final Comparator<? super K> keyCmp, final Comparator<? super V> valCmp) {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableSortedArrayMapBuilder<K,V>, ImmutableSortedArrayMap<K,V>>of(
@@ -186,6 +327,17 @@ public final class Collectors {
                 ImmutableSortedArrayMapBuilder::build);
     }
 
+    /**
+     * Returns a {@code Collector} that accumulates the input elements into a
+     * new {@code ImmutableUniSortedArrayMap}, with keys ordered by their
+     * natural order.
+     *
+     * @param <K> the type of keys in the resulting map
+     * @param <V> the type of values in the resulting map
+     * @return a {@code Collector} which collects all the input keys and values
+     * into a {@code ImmutableSortedArrayMap}, with keys ordered by their
+     * natural order
+     */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableUniSortedArrayMap<K,V>> toImmutableUniSortedArrayMap() {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableUniSortedArrayMapBuilder<K,V>, ImmutableUniSortedArrayMap<K,V>>of(
                 ImmutableUniSortedArrayMapBuilder::newMap,
@@ -194,6 +346,17 @@ public final class Collectors {
                 ImmutableUniSortedArrayMapBuilder::build);
     }
 
+    /**
+     * Returns a {@code Collector} that accumulates the input elements into a
+     * new {@code ImmutableUniSortedArrayMap}, with keys ordered by the given
+     * comparator.
+     *
+     * @param <K> the type of keys in the resulting map
+     * @param <V> the type of values in the resulting map
+     * @return a {@code Collector} which collects all the input keys and values
+     * into a {@code ImmutableSortedArrayMap}, with keys ordered by the given
+     * comparator
+     */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableUniSortedArrayMap<K,V>> toImmutableUniSortedArrayMapComparing(
             final Comparator<? super K> keyCmp) {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableUniSortedArrayMapBuilder<K,V>, ImmutableUniSortedArrayMap<K,V>>of(
@@ -203,6 +366,17 @@ public final class Collectors {
                 ImmutableUniSortedArrayMapBuilder::build);
     }
 
+    /**
+     * Returns a {@code Collector} that accumulates the input elements into a
+     * new {@code ImmutableUniSortedArrayMap}, created as a bimap, with keys
+     * ordered by their natural order.
+     *
+     * @param <K> the type of keys in the resulting map
+     * @param <V> the type of values in the resulting map
+     * @return a {@code Collector} which collects all the input keys and values
+     * into a {@code ImmutableSortedArrayMap}, with keys ordered by their
+     * natural order
+     */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableUniSortedArrayMap<K,V>> toImmutableUniSortedArrayBiMap() {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableUniSortedArrayMapBuilder<K,V>, ImmutableUniSortedArrayMap<K,V>>of(
                 ImmutableUniSortedArrayMapBuilder::<K,V>newBiMap,
@@ -211,6 +385,17 @@ public final class Collectors {
                 ImmutableUniSortedArrayMapBuilder::build);
     }
 
+    /**
+     * Returns a {@code Collector} that accumulates the input elements into a
+     * new {@code ImmutableUniSortedArrayMap}, created as a bimap, with keys
+     * ordered by the given comparator.
+     *
+     * @param <K> the type of keys in the resulting map
+     * @param <V> the type of values in the resulting map
+     * @return a {@code Collector} which collects all the input keys and values
+     * into a {@code ImmutableSortedArrayMap}, with keys ordered by the given
+     * comparator
+     */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableUniSortedArrayMap<K,V>> toImmutableUniSortedArrayBiMapComparing(
             final Comparator<? super K> keyCmp) {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableUniSortedArrayMapBuilder<K,V>, ImmutableUniSortedArrayMap<K,V>>of(
@@ -220,6 +405,17 @@ public final class Collectors {
                 ImmutableUniSortedArrayMapBuilder::build);
     }
 
+    /**
+     * Returns a {@code Collector} that accumulates the input elements into a
+     * new {@code ImmutableSortedArrayPropertyMap}, with keys generated by
+     * the given key supplier, and keys ordered by their natural order.
+     *
+     * @param <K> the type of keys in the resulting map
+     * @param <V> the type of values in the resulting map
+     * @return a {@code Collector} which collects all the input keys and values
+     * into a {@code ImmutableSortedArrayMap}, with keys ordered by their
+     * natural order
+     */
     public static <K,V> Collector<V, ?, ImmutableSortedArrayPropertyMap<K,V>> toImmutableSortedArrayPropertyMap(
             final Function<? super V,? extends K> keySupplier) {
         return Collector.of(
@@ -229,6 +425,17 @@ public final class Collectors {
                 ImmutableSortedArrayPropertyMapBuilder::build);
     }
 
+    /**
+     * Returns a {@code Collector} that accumulates the input elements into a
+     * new {@code ImmutableSortedArrayPropertyMap}, with keys generated by
+     * the given key supplier, and keys ordered by the given comparator.
+     *
+     * @param <K> the type of keys in the resulting map
+     * @param <V> the type of values in the resulting map
+     * @return a {@code Collector} which collects all the input keys and values
+     * into a {@code ImmutableSortedArrayMap}, with keys ordered by the given
+     * comparator
+     */
     public static <K,V> Collector<V, ?, ImmutableSortedArrayPropertyMap<K,V>> toImmutableSortedArrayPropertyMapComparingKeys(
             final Function<? super V,? extends K> keySupplier, final Comparator<? super K> keyCmp) {
         return Collector.of(

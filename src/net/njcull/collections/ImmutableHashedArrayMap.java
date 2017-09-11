@@ -37,12 +37,12 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
     private static final ImmutableHashedArrayMap<?,?> EMPTY = new ImmutableHashedArrayMap<>(new Object[0], new int[0], true);
 
     /**
-     * Returns an immutable empty array map. Each call to this method will return
-     * the same empty map.
+     * Returns an immutable empty hashed array map. Each call to this method
+     * will return the same empty map.
      *
      * @param <K> the type of keys maintained by this map
      * @param <V> the type of mapped values
-     * @return an immutable empty array map
+     * @return an immutable empty hashed array map
      */
     @SuppressWarnings("unchecked")
     public static <K,V> ImmutableHashedArrayMap<K,V> emptyMap() {
@@ -163,6 +163,14 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
         return null;
     }
 
+    /**
+     * Returns an Entry object for the map entry at the given array index.
+     *
+     * @param index the index in the array of the entry to be retrieved
+     * @return an Entry object corresponding to the given array index
+     * @throws IndexOutOfBoundsException if the index is less than zero or
+     * index is greater than or equal to the map size
+     */
     @SuppressWarnings("unchecked")
     @Override
     public Entry<K,V> entryAt(int index) {
@@ -175,6 +183,14 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
         return new SimpleImmutableEntry<K, V>(key, value);
     }
 
+    /**
+     * Returns the key of the map entry at the given array index.
+     *
+     * @param index the index in the array of the key to be retrieved
+     * @return the key at the given array index
+     * @throws IndexOutOfBoundsException if the index is less than zero or
+     * index is greater than or equal to the map size
+     */
     @SuppressWarnings("unchecked")
     @Override
     public K keyAt(int index) {
@@ -185,6 +201,14 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
         return key;
     }
 
+    /**
+     * Returns the value of the map entry at the given array index.
+     *
+     * @param index the index in the array of the value to be retrieved
+     * @return the value at the given array index
+     * @throws IndexOutOfBoundsException if the index is less than zero or
+     * index is greater than or equal to the map size
+     */
     @SuppressWarnings("unchecked")
     @Override
     public V valueAt(int index) {
@@ -196,6 +220,13 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
         return value;
     }
 
+    /**
+     * Returns the array index of the given key in the map.
+     *
+     * @param key the key to be found in the map
+     * @return a zero or positive integer if the key is in the
+     * backing array, otherwise less than zero to indicate its absence
+     */
     @Override
     public int indexOfKey(Object key) {
         final int size = m_Map.length / 2;
@@ -211,6 +242,14 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
         return -1;
     }
 
+    /**
+     * Returns the array index of the given value in the map. If there is
+     * more than one value, the first index is returned.
+     *
+     * @param value the value to be found in the map
+     * @return a zero or positive integer if the value is in the
+     * backing array, otherwise less than zero to indicate its absence
+     */
     @Override
     public int indexOfValue(Object value) {
         final int size = m_Map.length / 2;
@@ -227,8 +266,8 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
     }
 
     /**
-     * For a BiMap, this will return the same value as
-     * {@link #indexOfValue(Object)}.
+     * Returns the last array index of the given value in the map. For a BiMap,
+     * this will return the same value as {@link #indexOfValue(Object)}.
      *
      * @param value the value to be found in the map
      * @return a zero or positive integer if the value is in the
@@ -248,6 +287,12 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
         return -1;
     }
 
+    /**
+     * Returns an {@link ArrayBackedSet} view of the mappings contained in this
+     * map. The set is backed by the map.
+     *
+     * @return an array-backed set view of the mappings contained in this map
+     */
     @Override
     public ArrayBackedSet<Entry<K, V>> entrySet() {
         return Views.setView(
@@ -255,12 +300,25 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
                         Spliterator.DISTINCT | Spliterator.NONNULL));
     }
 
+    /**
+     * Returns an {@link ArrayBackedSet} view of the keys contained in this
+     * map. The set is backed by the map.
+     *
+     * @return an array-backed set view of the keys contained in this map
+     */
     @Override
     public ArrayBackedSet<K> keySet() {
         return Views.setView(
                 new ArrayBackedImmutableList<>(this::keyAt, size(), Spliterator.DISTINCT));
     }
 
+    /**
+     * Returns an {@link ArrayBackedCollection} view of the values contained
+     * in this map. The collection is backed by the map.
+     *
+     * @return an array-backed collection view of the values contained in this
+     * map
+     */
     @Override
     public ArrayBackedCollection<V> values() {
         if(m_BiMap) {
@@ -272,21 +330,62 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
         }
     }
 
+    /**
+     * Returns the value to which the specified key is mapped, or
+     * {@code defaultValue} if this map contains no mapping for the key.
+     *
+     * @param key the key whose associated value is to be returned
+     * @param defaultValue the default mapping of the key
+     * @return the value to which the specified key is mapped, or
+     * {@code defaultValue} if this map contains no mapping for the key
+     */
     @Override
     public V getOrDefault(Object key, V defaultValue) {
         return ArrayBackedMap.getOrDefault(this, key, defaultValue);
     }
 
+    /**
+     * Performs the given action for each entry in this map until all entries
+     * have been processed or the action throws an exception.   Unless
+     * otherwise specified by the implementing class, actions are performed in
+     * the order of entry set iteration (if an iteration order is specified.)
+     * Exceptions thrown by the action are relayed to the caller.
+     *
+     * @param action The action to be performed for each entry
+     * @throws NullPointerException if the specified action is null
+     */
     @Override
     public void forEach(BiConsumer<? super K, ? super V> action) {
         ArrayBackedMap.forEach(this, action);
     }
 
+    /**
+     * Returns a string representation of this map.  The string representation
+     * consists of a list of key-value mappings in the order returned by the
+     * map's {@code entryAt} indexer, enclosed in braces ({@code "{}"}).
+     * Adjacent mappings are separated by the characters
+     * {@code ", "} (comma and space).  Each key-value mapping is rendered as
+     * the key followed by an equals sign ({@code "="}) followed by the
+     * associated value.  Keys and values are converted to strings as by
+     * {@link String#valueOf(Object)}.
+     *
+     * @return a string representation of this map
+     */
     @Override
     public String toString() {
         return ArrayBackedMap.toString(this);
     }
 
+    /**
+     * Returns the hash code value for this map.  The hash code of a map is
+     * defined to be the sum of the hash codes of each entry in the map's
+     * {@code entrySet()} view.  This ensures that {@code m1.equals(m2)}
+     * implies that {@code m1.hashCode()==m2.hashCode()} for any two maps
+     * {@code m1} and {@code m2}, as required by the general contract of
+     * {@link Object#hashCode}.
+     *
+     * @return the hash code value for this map
+     */
     @Override
     public int hashCode() {
         return ArrayBackedMap.hashCode(this);

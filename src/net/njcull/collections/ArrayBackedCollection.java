@@ -22,7 +22,7 @@ public interface ArrayBackedCollection<E> extends Collection<E> {
      * @param index the index of the item to be retrieved
      * @return the item at the specified index
      * @throws IndexOutOfBoundsException if the index is out of range
-     *         (<code>index &lt; 0 || index &gt;= size()</code>)
+     *         ({@code index < 0 || index >= size()})
      */
     E getAtIndex(int index);
 
@@ -64,7 +64,7 @@ public interface ArrayBackedCollection<E> extends Collection<E> {
      * range of the backing array, otherwise less than zero to indicate
      * its absence
      * @throws IndexOutOfBoundsException if fromIndex or toIndex is out of range
-     *         (<code>index &lt; 0 || index &gt;= size()</code>), or toIndex
+     *         ({@code index < 0 || index >= size()}), or toIndex
      *         is less than fromIndex
      */
     default int indexOfRange(E element, int fromIndex, int toIndex) {
@@ -110,9 +110,9 @@ public interface ArrayBackedCollection<E> extends Collection<E> {
     }
 
     /**
-     * Return a backing list view for this set.
+     * Return a backing list view for this collection.
      *
-     * @return a list containing all the elements of this {@code Collection}
+     * @return a list view containing all the elements of this {@code Collection}
      */
     List<E> asList();
 

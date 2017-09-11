@@ -125,9 +125,9 @@ public interface ArrayBackedMap<K, V> extends Map<K, V> {
     /**
      * Returns the hash code value for this map.  The hash code of a map is
      * defined to be the sum of the hash codes of each entry in the map's
-     * <tt>entrySet()</tt> view.  This ensures that <tt>m1.equals(m2)</tt>
-     * implies that <tt>m1.hashCode()==m2.hashCode()</tt> for any two maps
-     * <tt>m1</tt> and <tt>m2</tt>, as required by the general contract of
+     * {@code entrySet()} view.  This ensures that {@code m1.equals(m2)}
+     * implies that {@code m1.hashCode()==m2.hashCode()} for any two maps
+     * {@code m1} and {@code m2}, as required by the general contract of
      * {@link Object#hashCode}.
      * <p>
      * This implementation is handled as a static method rather than a
@@ -135,8 +135,6 @@ public interface ArrayBackedMap<K, V> extends Map<K, V> {
      * of {@code Object}.
      *
      * @return the hash code value for this map
-     * @see Map.Entry#hashCode()
-     * @see Object#equals(Object)
      */
     static <K,V> int hashCode(ArrayBackedMap<K,V> m) {
         final int sz = m.size();
@@ -205,9 +203,8 @@ public interface ArrayBackedMap<K, V> extends Map<K, V> {
 
     /**
      * Performs the given action for each entry in this map until all entries
-     * have been processed or the action throws an exception.   Unless
-     * otherwise specified by the implementing class, actions are performed in
-     * the order of entry set iteration (if an iteration order is specified.)
+     * have been processed or the action throws an exception. Actions are
+     * performed in the order of entry set iteration.
      * Exceptions thrown by the action are relayed to the caller.
      * <p>
      * This implementation is handled as a static method rather than a

@@ -30,16 +30,15 @@ public interface ArrayBackedSet<E> extends ArrayBackedCollection<E>, Set<E> {
      * @param <E> the type of elements in the set
      * @param s the set for which the hashcode will be generated
      * @return the hash code value for the given set
-     * @see Object#equals(Object)
-     * @see Set#equals(Object)
      */
     static <E> int hashCode(ArrayBackedSet<E> s) {
         final int sz = s.size();
         int h = 0;
         for (int i = 0; i < sz; i++) {
             E obj = s.getAtIndex(i);
-            if (obj != null)
+            if (obj != null) {
                 h += obj.hashCode();
+            }
         }
         return h;
     }

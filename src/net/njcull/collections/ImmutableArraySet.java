@@ -56,7 +56,6 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
 
     /**
      * Adds all of the elements in the specified collection to this collection.
-     * (optional operation).
      *
      * @param c collection containing elements to be added to this collection
      * @return {@code false} this collection is not changed as a result of the call
@@ -159,7 +158,7 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
      * Returns {@code true} if this set contains the specified element.
      * More formally, returns {@code true} if and only if this set
      * contains an element {@code e} such that
-     * {@code (o==null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;o.equals(e))}.
+     * {@code (o==null ? e==null : o.equals(e))}.
      *
      * @param element the element whose presence in this set is to be tested
      * @return {@code true} if this set contains the specified element,
@@ -170,6 +169,14 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
         return indexOf(element) >= 0;
     }
 
+    /**
+     * Get the element at the specified array index.
+     *
+     * @param index the index of the item to be retrieved
+     * @return the item at the specified index
+     * @throws IndexOutOfBoundsException if the index is out of range
+     *         ({@code index < 0 || index >= size()})
+     */
     @SuppressWarnings("unchecked")
     public E getAtIndex(int index) {
         if((index < 0) || (index >= m_Elements.length)) {
@@ -178,6 +185,14 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
         return (E)m_Elements[index];
     }
 
+    /**
+     * Determine the index of the given element, if it exists in this
+     * collection.
+     *
+     * @param element the element to be found
+     * @return a zero or positive integer if the element is in the
+     * backing array, otherwise less than zero to indicate its absence
+     */
     @Override
     public int indexOf(Object element) {
         final int size = m_Elements.length;
@@ -221,6 +236,11 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
         return -1;
     }
 
+    /**
+     * Returns an iterator over the elements contained in this collection.
+     *
+     * @return an iterator over the elements contained in this collection
+     */
     @Override
     public Iterator<E> iterator() {
         return new ArrayBackedCollectionIterator<>(this);
@@ -283,6 +303,21 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
         return ArrayBackedCollection.toString(this);
     }
 
+    /**
+     * Returns the hash code value for the given set. The hash code of a set is
+     * defined to be the sum of the hash codes of the elements in the set,
+     * where the hash code of a {@code null} element is defined to be zero.
+     * This ensures that {@code s1.equals(s2)} implies that
+     * {@code s1.hashCode()==s2.hashCode()} for any two sets {@code s1}
+     * and {@code s2}, as required by the general contract of
+     * {@link Object#hashCode}.
+     * <p>
+     * This implementation is handled as a static method rather than a
+     * default method because a default method cannot override any methods
+     * of {@code Object}.
+     *
+     * @return the hash code value for the given set
+     */
     @Override
     public int hashCode() {
         return ArrayBackedSet.hashCode(this);
@@ -302,6 +337,11 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
         return new ImmutableIndexerSpliterator<E>(this::getAtIndex, size(), Spliterator.DISTINCT);
     }
 
+    /**
+     * Return a backing list view for this collection.
+     *
+     * @return a list view containing all the elements of this {@code Set}
+     */
     @Override
     public List<E> asList() {
         return Views.listView(this);
