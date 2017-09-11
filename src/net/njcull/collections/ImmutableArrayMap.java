@@ -1,6 +1,7 @@
 package net.njcull.collections;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 
 /**
  * A {@link Map} backed by an array of elements. The array is the
@@ -276,6 +277,16 @@ public final class ImmutableArrayMap<K,V> extends AbstractMap<K,V> implements Ar
             return Views.collectionView(
                     new ArrayBackedImmutableList<>(this::valueAt, size()));
         }
+    }
+
+    @Override
+    public V getOrDefault(Object key, V defaultValue) {
+        return ArrayBackedMap.getOrDefault(this, key, defaultValue);
+    }
+
+    @Override
+    public void forEach(BiConsumer<? super K, ? super V> action) {
+        ArrayBackedMap.forEach(this, action);
     }
 
     @Override

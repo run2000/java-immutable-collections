@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.SortedMap;
 import java.util.Spliterator;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 /**
@@ -237,6 +238,16 @@ public final class ImmutableSortedArrayPropertyMap<K,V> extends AbstractMap<K,V>
             throw new NoSuchElementException();
         }
         return m_KeySupplier.apply((V) m_Map[size - 1]);
+    }
+
+    @Override
+    public V getOrDefault(Object key, V defaultValue) {
+        return ArrayBackedMap.getOrDefault(this, key, defaultValue);
+    }
+
+    @Override
+    public void forEach(BiConsumer<? super K, ? super V> action) {
+        ArrayBackedMap.forEach(this, action);
     }
 
     @Override

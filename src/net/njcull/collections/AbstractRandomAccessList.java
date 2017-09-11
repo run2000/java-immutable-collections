@@ -1,6 +1,8 @@
 package net.njcull.collections;
 
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * Extends {@link java.util.AbstractList} with a sane {@link #equals(Object)}
@@ -156,6 +158,51 @@ public abstract class AbstractRandomAccessList<E> extends AbstractList<E> implem
             }
         }
         return modified;
+    }
+
+    /**
+     * Removes all of the elements of this collection that satisfy the given
+     * predicate.  Errors or runtime exceptions thrown during iteration or by
+     * the predicate are relayed to the caller.
+     *
+     * @param filter a predicate which returns {@code true} for elements to be
+     *        removed
+     * @return {@code true} if any elements were removed, otherwise {@code false}
+     * @throws NullPointerException if the specified filter is null
+     * @throws UnsupportedOperationException elements cannot be removed
+     *         from this collection.
+     */
+    @Override
+    public boolean removeIf(Predicate<? super E> filter) {
+        Objects.requireNonNull(filter);
+        boolean modified = false;
+
+        for (int i = size() - 1; i >= 0; i--) {
+            if (filter.test(get(i))) {
+                remove(i);
+                modified = true;
+            }
+        }
+        return modified;
+    }
+
+    /**
+     * Performs the given action for each element of the {@code Iterable}
+     * until all elements have been processed or the action throws an
+     * exception. Actions are performed in the order of iteration.
+     * Exceptions thrown by the action are relayed to the caller.
+     *
+     * @param action The action to be performed for each element
+     * @throws NullPointerException if the specified action is null
+     */
+    @Override
+    public void forEach(Consumer<? super E> action) {
+        Objects.requireNonNull(action);
+        final int size = size();
+
+        for (int i = 0; i < size; i++) {
+            action.accept(get(i));
+        }
     }
 
     /**

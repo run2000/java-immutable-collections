@@ -1,6 +1,7 @@
 package net.njcull.collections;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * Immutable views backing onto another collection type.
@@ -117,6 +118,11 @@ public final class Views {
         @Override
         public boolean retainAll(Collection<?> c) {
             return m_List.retainAll(c);
+        }
+
+        @Override
+        public boolean removeIf(Predicate<? super E> filter) {
+            return m_List.removeIf(filter);
         }
 
         @Override
@@ -322,6 +328,11 @@ public final class Views {
         @Override
         public boolean retainAll(Collection<?> c) {
             return m_List.retainAll(c);
+        }
+
+        @Override
+        public boolean removeIf(Predicate<? super E> filter) {
+            return m_List.removeIf(filter);
         }
 
         @Override

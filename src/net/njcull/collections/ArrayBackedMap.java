@@ -1,6 +1,8 @@
 package net.njcull.collections;
 
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.BiConsumer;
 
 /**
  * <p>A {@code Map} implemented by a backing array, with {@link ArrayBackedSet}
@@ -181,5 +183,47 @@ public interface ArrayBackedMap<K, V> extends Map<K, V> {
             }
         }
         return sb.append('}').toString();
+    }
+
+    /**
+     * Returns the value to which the specified key is mapped, or
+     * {@code defaultValue} if this map contains no mapping for the key.
+     * <p>
+     * This implementation is handled as a static method rather than a
+     * default method to avoid the diamond inheritance problem with default
+     * methods.
+     *
+     * @param key the key whose associated value is to be returned
+     * @param defaultValue the default mapping of the key
+     * @return the value to which the specified key is mapped, or
+     * {@code defaultValue} if this map contains no mapping for the key
+     */
+    static <K,V> V getOrDefault(ArrayBackedMap<K,V> m, Object key, V defaultValue) {
+        final int idx = m.indexOfKey(key);
+        return (idx >= 0) ? m.valueAt(idx) : defaultValue;
+    }
+
+    /**
+     * Performs the given action for each entry in this map until all entries
+     * have been processed or the action throws an exception.   Unless
+     * otherwise specified by the implementing class, actions are performed in
+     * the order of entry set iteration (if an iteration order is specified.)
+     * Exceptions thrown by the action are relayed to the caller.
+     * <p>
+     * This implementation is handled as a static method rather than a
+     * default method to avoid the diamond inheritance problem with default
+     * methods.
+     *
+     * @param action The action to be performed for each entry
+     * @throws NullPointerException if the specified action is null
+     */
+    static <K,V> void forEach(ArrayBackedMap<K,V> m, BiConsumer<? super K, ? super V> action) {
+        Objects.requireNonNull(action);
+        final int sz = m.size();
+
+        for (int i = 0; i < sz; i++) {
+            Entry<K,V> e = m.entryAt(i);
+            action.accept(e.getKey(), e.getValue());
+        }
     }
 }

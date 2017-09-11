@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Spliterator;
+import java.util.function.BiConsumer;
 
 /**
  * A {@link Map} backed by an array of elements, and a separate array of
@@ -269,6 +270,16 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
             return Views.collectionView(
                     new ArrayBackedImmutableList<>(this::valueAt, size()));
         }
+    }
+
+    @Override
+    public V getOrDefault(Object key, V defaultValue) {
+        return ArrayBackedMap.getOrDefault(this, key, defaultValue);
+    }
+
+    @Override
+    public void forEach(BiConsumer<? super K, ? super V> action) {
+        ArrayBackedMap.forEach(this, action);
     }
 
     @Override

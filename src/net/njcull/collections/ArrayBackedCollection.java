@@ -2,6 +2,8 @@ package net.njcull.collections;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * <p>A {@code Collection} implemented by a backing array, and has a {@link List}
@@ -87,6 +89,24 @@ public interface ArrayBackedCollection<E> extends Collection<E> {
             }
         }
         return -1;
+    }
+
+    /**
+     * Performs the given action for each element of the {@code Iterable}
+     * until all elements have been processed or the action throws an
+     * exception. Actions are performed in the order of iteration.
+     * Exceptions thrown by the action are relayed to the caller.
+     *
+     * @param action The action to be performed for each element
+     * @throws NullPointerException if the specified action is null
+     */
+    default void forEach(Consumer<? super E> action) {
+        Objects.requireNonNull(action);
+        final int size = size();
+
+        for (int i = 0; i < size; i++) {
+            action.accept(getAtIndex(i));
+        }
     }
 
     /**

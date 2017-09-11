@@ -1,6 +1,7 @@
 package net.njcull.collections;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * A {@link SortedSet} backed by an array of elements. The array is the
@@ -83,6 +84,30 @@ public final class ImmutableSortedArraySet<E> extends AbstractSet<E> implements 
                 if(c.contains(m_Elements[i])) {
                     throw new UnsupportedOperationException("No removals");
                 }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Removes all of the elements of this collection that satisfy the given
+     * predicate.  Errors or runtime exceptions thrown during iteration or by
+     * the predicate are relayed to the caller.
+     *
+     * @param filter a predicate which returns {@code true} for elements to be
+     *        removed
+     * @return {@code false} no elements were removed
+     * @throws NullPointerException if the specified filter is null
+     * @throws UnsupportedOperationException elements cannot be removed
+     *         from this collection.
+     */
+    @Override
+    public boolean removeIf(Predicate<? super E> filter) {
+        Objects.requireNonNull(filter);
+
+        for (int i = m_Elements.length - 1; i >= 0; i--) {
+            if (filter.test(getAtIndex(i))) {
+                throw new UnsupportedOperationException("No removals");
             }
         }
         return false;
