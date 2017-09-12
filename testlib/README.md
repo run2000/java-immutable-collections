@@ -5,8 +5,8 @@ and running the test suite.
 
 ## Populating this directory
 
-This can be done using [Apache Ivy][1], using the supplied ivy.xml and the
-[Ant][2] `resolve` task. This task is standalone from the rest of the build
+This can be done using [Apache Ivy][1], using the supplied `ivy.xml` and the
+[Ant][2] "resolve" task. This task is standalone from the rest of the build
 targets to avoid a hard dependency on Ivy.
 
 Alternatively, copy in the `junit-4.x.jar` and `hamcrest-core-1.x.jar`
