@@ -1,5 +1,5 @@
 # ImmutableCollections - Java immutable array-based collections
-Copyright (c) 2016 Nicholas Cull <run2000@gmail.com>  
+Copyright (c) 2017 Nicholas Cull <run2000@gmail.com>  
 See LICENSE.txt for licensing information.
 
 ***

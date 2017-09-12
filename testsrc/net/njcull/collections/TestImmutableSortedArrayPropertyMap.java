@@ -62,7 +62,6 @@ public class TestImmutableSortedArrayPropertyMap {
         ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>> map = builder.build();
         Assert.assertEquals(11, map.size());
         Assert.assertEquals("{a=fc, b=bc, c=cc, d=dx, e=ec, f=ac, g=gc, m=Zoa, n=0na, o=0ma, p=Zpa}", map.toString());
-        System.out.println(map.toString());
     }
 
     @Test
@@ -85,7 +84,6 @@ public class TestImmutableSortedArrayPropertyMap {
         ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>> map = builder.build();
         Assert.assertEquals(11, map.size());
         Assert.assertEquals("{null=null, ac=ac, bc=bc, cc=cc, dx=dx, ec=ec, gc=gc, ma=0ma, na=0na, oa=Zoa, pa=Zpa}", map.toString());
-        System.out.println(map.toString());
     }
 
     @Test

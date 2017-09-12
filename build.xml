@@ -1,0 +1,75 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="java-immutable-collections" default="dist" basedir=".">
+    <description>
+        Build, test, javadoc, and distribution for java-immutable-collections
+    </description>
+    <!-- set global properties for this build -->
+    <property name="src" location="src"/>
+    <property name="test" location="testsrc"/>
+    <property name="build" location="build"/>
+    <property name="dist" location="dist"/>
+
+    <target name="init">
+        <!-- Create the time stamp -->
+        <tstamp/>
+        <!-- Create the build directory structure used by compile -->
+        <mkdir dir="${build}"/>
+        <mkdir dir="${build}/dist" />
+        <mkdir dir="${build}/test" />
+        <mkdir dir="${build}/javadoc" />
+    </target>
+
+    <target name="resolve" description="retrieve test dependencies with ivy">
+        <ivy:retrieve pattern="testlib/[artifact]-[revision].[ext]" type="jar" sync="true" />
+    </target>
+
+    <target name="compile" depends="init"
+            description="compile the distribution source">
+        <javac srcdir="${src}" destdir="${build}/dist" source="1.8" target="1.8" includeantruntime="false">
+            <compilerarg value="-Xlint:unchecked" />
+        </javac>
+    </target>
+
+    <target name="test" depends="compile"
+            description="compile and run tests">
+        <javac srcdir="${test}" destdir="${build}/test" source="1.8" target="1.8" includeantruntime="false" classpath="${build}/dist">
+            <classpath>
+                <pathelement path="${build}/dist"/>
+                <fileset dir="testlib">
+                    <include name="*.jar"/>
+                </fileset>
+            </classpath>
+            <compilerarg value="-Xlint:unchecked" />
+        </javac>
+        <junit fork="true" printsummary="true">
+            <classpath>
+                <pathelement path="${build}/dist"/>
+                <pathelement path="${build}/test"/>
+                <fileset dir="testlib">
+                    <include name="*.jar"/>
+                </fileset>
+            </classpath>
+            <test name="net.njcull.collections.TestAll" />
+        </junit>
+    </target>
+
+    <target name="javadoc" depends="init"
+            description="javadoc the source files">
+        <javadoc sourcepath="${src}" destdir="${build}/javadoc">
+        </javadoc>
+    </target>
+
+    <target name="dist" depends="compile,test,javadoc"
+            description="generate the distribution">
+        <mkdir dir="${dist}/lib"/>
+
+        <jar jarfile="${dist}/lib/java-immutable-collections-${DSTAMP}.jar" basedir="${build}/dist"/>
+        <zip zipfile="${dist}/lib/java-immutable-collections-javadoc-${DSTAMP}.zip" basedir="${build}/javadoc"/>
+    </target>
+
+    <target name="clean"
+            description="clean up">
+        <!-- Delete the ${build} and ${dist} directory trees -->
+        <delete dir="${build}"/>
+        <delete dir="${dist}"/>
+    </target>
+</project>
