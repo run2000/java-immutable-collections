@@ -1,6 +1,6 @@
 <project xmlns:ivy="antlib:org.apache.ivy.ant" name="java-immutable-collections" default="dist" basedir=".">
     <description>
-        Build, test, javadoc, and distribution for java-immutable-collections
+        Build, test, javadoc, and distribution for java-immutable-collections.
     </description>
     <!-- set global properties for this build -->
     <property name="src" location="src"/>
@@ -18,8 +18,8 @@
         <mkdir dir="${build}/javadoc" />
     </target>
 
-    <target name="resolve" description="retrieve test dependencies with ivy">
-        <ivy:retrieve pattern="testlib/[artifact]-[revision].[ext]" type="jar" sync="true" />
+    <target name="resolve" description="retrieve test dependencies with Ivy - no dependencies">
+        <ivy:retrieve pattern="testlib/[artifact]-[revision].[ext]" type="jar" conf="test" />
     </target>
 
     <target name="compile" depends="init"
@@ -66,9 +66,7 @@
         <zip zipfile="${dist}/lib/java-immutable-collections-javadoc-${DSTAMP}.zip" basedir="${build}/javadoc"/>
     </target>
 
-    <target name="clean"
-            description="clean up">
-        <!-- Delete the ${build} and ${dist} directory trees -->
+    <target name="clean" description="clean up">
         <delete dir="${build}"/>
         <delete dir="${dist}"/>
     </target>

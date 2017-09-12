@@ -4,7 +4,7 @@ See LICENSE.txt for licensing information.
 
 ***
 
-### Array-based Immutable Collections for Java
+### Array-based Immutable Collections for Java 1.8
 
 * Sorted and unsorted variations
 
