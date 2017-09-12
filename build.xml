@@ -19,6 +19,7 @@
     </target>
 
     <target name="resolve" description="retrieve test dependencies with Ivy - no dependencies">
+        <ivy:resolve resolveMode="default" keep="true"/>
         <ivy:retrieve pattern="testlib/[artifact]-[revision].[ext]" type="jar" conf="test" />
     </target>
 

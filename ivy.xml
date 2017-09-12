@@ -5,10 +5,10 @@
             Array-based Immutable Collections for Java 1.8
         </description>
     </info>
-    <configurations>
+    <configurations defaultconfmapping="test->default">
         <conf name="test" description="for the unit tests only" />
     </configurations>
     <dependencies>
-        <dependency org="junit" name="junit" rev="4.12" revConstraint="[4.12,5.0)" conf="test->default" />
+        <dependency org="junit" name="junit" rev="4.12" revConstraint="[4.12,5.0)" conf="test" />
     </dependencies>
 </ivy-module>
