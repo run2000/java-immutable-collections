@@ -14,6 +14,7 @@ public final class ImmutableSortedArraySetBuilder<E> {
     private int m_Size = 0;
 
     private static final Object[] EMPTY_ELEMENTS = new Object[0];
+    @SuppressWarnings("unchecked")
     private static final Comparator<Comparable> naturalOrder = Comparator.nullsFirst(Comparator.<Comparable>naturalOrder());
 
     public static <E> ImmutableSortedArraySetBuilder<E> newComparing(Comparator<? super E> cmp) {

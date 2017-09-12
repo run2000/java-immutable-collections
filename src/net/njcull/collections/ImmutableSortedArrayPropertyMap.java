@@ -202,6 +202,7 @@ public final class ImmutableSortedArrayPropertyMap<K,V> extends AbstractMap<K,V>
         return idx >= 0 ? idx : -1;
     }
 
+    @SuppressWarnings("unchecked")
     private int indexOfKeyInternal(Object key) {
         return BinarySearchUtils.indexedSearch(this::keyAt, m_Map.length, key, m_NullsKeyComparator);
     }
@@ -252,6 +253,7 @@ public final class ImmutableSortedArrayPropertyMap<K,V> extends AbstractMap<K,V>
      *
      * @return an array-backed set view of the keys contained in this map
      */
+    @SuppressWarnings("unchecked")
     @Override
     public ArrayBackedSet<K> keySet() {
         return Views.setView(

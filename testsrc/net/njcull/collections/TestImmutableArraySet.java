@@ -410,7 +410,7 @@ public final class TestImmutableArraySet {
         ImmutableArraySet.emptySet().clear();
 
         // The list returned from keySet().asList() is itself an ArrayBackedCollection
-        ArrayBackedCollection<String> list1 = (ArrayBackedCollection)set.asList();
+        ArrayBackedCollection<String> list1 = (ArrayBackedCollection<String>)set.asList();
         List<String> list2 = list1.asList();
         Assert.assertSame(list1, list2);
 

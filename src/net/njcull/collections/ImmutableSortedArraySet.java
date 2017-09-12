@@ -464,6 +464,7 @@ public final class ImmutableSortedArraySet<E> extends AbstractSet<E> implements 
      *
      * @return a {@code Spliterator} over the elements in this set
      */
+    @SuppressWarnings("unchecked")
     @Override
     public Spliterator<E> spliterator() {
         return new ImmutableIndexerSpliterator<E>(this::getAtIndex, 0, size(),

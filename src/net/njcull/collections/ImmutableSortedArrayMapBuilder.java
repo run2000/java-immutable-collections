@@ -17,6 +17,7 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
     private boolean m_Bimap = false;
 
     private static final Object[] EMPTY_ELEMENTS = new Object[0];
+    @SuppressWarnings("unchecked")
     private static final Comparator<Comparable> naturalOrder = Comparator.nullsFirst(Comparator.<Comparable>naturalOrder());
 
     /**
@@ -399,6 +400,7 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
      * @throws IllegalStateException there was a duplicate key or value
      * specified in the builder
      */
+    @SuppressWarnings("unchecked")
     public ImmutableSortedArrayMap<K,V> build() {
         if(m_Size == 0) {
             return ImmutableSortedArrayMap.<K,V>emptyMap();

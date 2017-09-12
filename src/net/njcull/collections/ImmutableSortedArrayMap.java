@@ -247,6 +247,7 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> impleme
         return idx >= 0 ? idx : -1;
     }
 
+    @SuppressWarnings("unchecked")
     private int indexOfKeyInternal(Object key) {
         return BinarySearchUtils.indexedSearch(this::keyAt, m_Map.length / 2, key, m_NullsKeyComparator);
     }
@@ -260,6 +261,7 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> impleme
      * @return a zero or positive integer if the value is in the
      * backing array, otherwise less than zero to indicate its absence
      */
+    @SuppressWarnings("unchecked")
     @Override
     public int indexOfValue(Object value) {
         int idx = BinarySearchUtils.indexedSearch(this::sortedValueAt, m_Map.length / 2, value, m_NullsValueComparator);
@@ -276,12 +278,13 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> impleme
      * @return a zero or positive integer if the value is in the
      * backing array, otherwise less than zero to indicate its absence
      */
+    @SuppressWarnings("unchecked")
     public int indexOfValueSorted(Object value) {
         int idx = BinarySearchUtils.indexedSearch(this::sortedValueAt, m_Map.length / 2, value, m_NullsValueComparator);
         return idx >= 0 ? idx : -1;
     }
 
-    int sortedValueIndex(int idx) {
+    private int sortedValueIndex(int idx) {
         if(idx < 0 || idx > m_SortedValues.length) {
             throw new IndexOutOfBoundsException("index: " + idx);
         }
@@ -320,6 +323,7 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> impleme
      *
      * @return an array-backed set view of the keys contained in this map
      */
+    @SuppressWarnings("unchecked")
     @Override
     public ArrayBackedSet<K> keySet() {
         return Views.setView(
@@ -335,6 +339,7 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> impleme
      * @return an array-backed collection view of the values contained in this
      * map
      */
+    @SuppressWarnings("unchecked")
     @Override
     public ArrayBackedCollection<V> values() {
         if(m_BiMap) {

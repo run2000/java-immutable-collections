@@ -20,6 +20,7 @@ public final class ImmutableSortedArrayPropertyMapBuilder<K,V> {
     private int m_Size = 0;
 
     private static final Object[] EMPTY_ELEMENTS = new Object[0];
+    @SuppressWarnings("unchecked")
     private static final Comparator<Comparable> naturalOrder = Comparator.nullsFirst(Comparator.<Comparable>naturalOrder());
 
     /**
@@ -265,6 +266,7 @@ public final class ImmutableSortedArrayPropertyMapBuilder<K,V> {
      * @throws IllegalStateException there was a duplicate key or value
      * specified in the builder
      */
+    @SuppressWarnings("unchecked")
     public ImmutableSortedArrayPropertyMap<K,V> build() {
         if(m_Size == 0) {
             return ImmutableSortedArrayPropertyMap.<K,V>emptyMap();

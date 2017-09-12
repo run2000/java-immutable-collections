@@ -1353,7 +1353,7 @@ public class TestImmutableSortedArrayPropertyMap {
         ImmutableSortedArrayPropertyMap.emptyMap().clear();
 
         // The list returned from keySet().asList() is itself an ArrayBackedCollection
-        ArrayBackedCollection<String> keys1 = (ArrayBackedCollection)map.keySet().asList();
+        ArrayBackedCollection<String> keys1 = (ArrayBackedCollection<String>)map.keySet().asList();
         List<String> keys2 = keys1.asList();
         Assert.assertSame(keys1, keys2);
 
