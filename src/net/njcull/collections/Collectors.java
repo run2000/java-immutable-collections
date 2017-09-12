@@ -195,6 +195,8 @@ public final class Collectors {
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
+     * @param keyCmp a comparator for ordering keys, or {@code null} to indicate
+     * natural key ordering
      * @return a {@code Collector} which collects all the input keys and values
      * into a {@code ImmutableSortedArrayMap}, with keys ordered by the given
      * comparator
@@ -215,6 +217,8 @@ public final class Collectors {
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
+     * @param valCmp a comparator for ordering values, or {@code null}
+     * to indicate natural value ordering
      * @return a {@code Collector} which collects all the input keys and values
      * into a {@code ImmutableSortedArrayMap}, with values ordered by the given
      * comparator
@@ -235,6 +239,10 @@ public final class Collectors {
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
+     * @param keyCmp a comparator for ordering keys, or {@code null} to indicate
+     * natural key ordering
+     * @param valCmp a comparator for ordering values, or {@code null}
+     * to indicate natural value ordering
      * @return a {@code Collector} which collects all the input keys and values
      * into a {@code ImmutableSortedArrayMap}, with keys and values ordered by
      * the given comparators
@@ -274,6 +282,8 @@ public final class Collectors {
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
+     * @param keyCmp a comparator for ordering keys, or {@code null} to indicate
+     * natural key ordering
      * @return a {@code Collector} which collects all the input keys and values
      * into a {@code ImmutableSortedArrayMap}, with keys ordered by the given
      * comparator
@@ -294,6 +304,8 @@ public final class Collectors {
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
+     * @param valCmp a comparator for ordering values, or {@code null}
+     * to indicate natural value ordering
      * @return a {@code Collector} which collects all the input keys and values
      * into a {@code ImmutableSortedArrayMap}, with values ordered by the given
      * comparator
@@ -314,6 +326,10 @@ public final class Collectors {
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
+     * @param keyCmp a comparator for ordering keys, or {@code null} to indicate
+     * natural key ordering
+     * @param valCmp a comparator for ordering values, or {@code null}
+     * to indicate natural value ordering
      * @return a {@code Collector} which collects all the input keys and values
      * into a {@code ImmutableSortedArrayMap}, with keys and values ordered by
      * the given comparators
@@ -353,6 +369,8 @@ public final class Collectors {
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
+     * @param keyCmp a comparator for ordering keys, or {@code null} to indicate
+     * natural key ordering
      * @return a {@code Collector} which collects all the input keys and values
      * into a {@code ImmutableSortedArrayMap}, with keys ordered by the given
      * comparator
@@ -392,6 +410,8 @@ public final class Collectors {
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
+     * @param keyCmp a comparator for ordering keys, or {@code null} to indicate
+     * natural key ordering
      * @return a {@code Collector} which collects all the input keys and values
      * into a {@code ImmutableSortedArrayMap}, with keys ordered by the given
      * comparator
@@ -412,6 +432,7 @@ public final class Collectors {
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
+     * @param keySupplier a function for generating a key from a given value
      * @return a {@code Collector} which collects all the input keys and values
      * into a {@code ImmutableSortedArrayMap}, with keys ordered by their
      * natural order
@@ -432,6 +453,9 @@ public final class Collectors {
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
+     * @param keySupplier a function for generating a key from a given value
+     * @param keyCmp a comparator for ordering keys, or {@code null} to indicate
+     * natural key ordering
      * @return a {@code Collector} which collects all the input keys and values
      * into a {@code ImmutableSortedArrayMap}, with keys ordered by the given
      * comparator

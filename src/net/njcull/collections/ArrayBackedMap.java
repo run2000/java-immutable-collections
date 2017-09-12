@@ -134,6 +134,9 @@ public interface ArrayBackedMap<K, V> extends Map<K, V> {
      * default method because a default method cannot override any methods
      * of {@code Object}.
      *
+     * @param <K> the type of keys in the map
+     * @param <V> the type of values in the map
+     * @param m the map from which the hashcode will be generated
      * @return the hash code value for this map
      */
     static <K,V> int hashCode(ArrayBackedMap<K,V> m) {
@@ -159,6 +162,9 @@ public interface ArrayBackedMap<K, V> extends Map<K, V> {
      * default method because a default method cannot override any methods
      * of {@code Object}.
      *
+     * @param <K> the type of keys in the map
+     * @param <V> the type of values in the map
+     * @param m the map from which the string value will be generated
      * @return a string representation of this map
      */
     static <K,V> String toString(ArrayBackedMap<K,V> m) {
@@ -191,6 +197,9 @@ public interface ArrayBackedMap<K, V> extends Map<K, V> {
      * default method to avoid the diamond inheritance problem with default
      * methods.
      *
+     * @param <K> the type of keys in the map
+     * @param <V> the type of values in the map
+     * @param m the map from which the value will be determined
      * @param key the key whose associated value is to be returned
      * @param defaultValue the default mapping of the key
      * @return the value to which the specified key is mapped, or
@@ -211,6 +220,9 @@ public interface ArrayBackedMap<K, V> extends Map<K, V> {
      * default method to avoid the diamond inheritance problem with default
      * methods.
      *
+     * @param <K> the type of keys in the map
+     * @param <V> the type of values in the map
+     * @param m the map on which the action will be performed
      * @param action The action to be performed for each entry
      * @throws NullPointerException if the specified action is null
      */
