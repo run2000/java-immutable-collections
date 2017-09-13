@@ -48,9 +48,10 @@ public final class TestImmutableHashedArraySet {
         Assert.assertEquals("[a, b, c, d, e, f, g]", set.toString());
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testSetList() throws Exception {
-        ImmutableHashedArraySetBuilder<String> builder = new ImmutableHashedArraySetBuilder<String>();
+        ImmutableHashedArraySetBuilder<String> builder = new ImmutableHashedArraySetBuilder<>();
         ImmutableHashedArraySet<String> set = builder
                 .with("a", "b", "b", "c", "d", "e")
                 .with("b", "a")
@@ -62,7 +63,7 @@ public final class TestImmutableHashedArraySet {
         Assert.assertFalse(set.contains("da"));
         Assert.assertFalse(set.contains("g"));
 
-        // Binary search indexes
+        // Linear search indexes
         Assert.assertEquals(-1, set.indexOf("0"));
         Assert.assertEquals(0, set.indexOf("a"));
         Assert.assertEquals(-1, set.indexOf("ab"));
@@ -76,6 +77,37 @@ public final class TestImmutableHashedArraySet {
         Assert.assertEquals("c", set.getAtIndex(2));
         Assert.assertEquals("b", set.getAtIndex(1));
         Assert.assertEquals("a", set.getAtIndex(0));
+
+        // New methods in 1.8 - forEach, removeIf
+        Assert.assertFalse(set.removeIf(e -> e.length() > 1));
+
+        StringBuilder builder2 = new StringBuilder();
+        set.forEach(builder2::append);
+        Assert.assertEquals("abcde", builder2.toString());
+
+        // toArray()
+        Object[] arrAct = set.toArray();
+        Object[] arrExp = new Object[] { "a", "b", "c", "d", "e" };
+        Assert.assertArrayEquals(arrExp, arrAct);
+
+        // toArray(String[]) -- three cases to consider
+        String[] arrAct1 = new String[4];
+        String[] arrExp1 = new String[] { "a", "b", "c", "d", "e" };
+
+        String[] arrAct1a = set.toArray(arrAct1);
+        Assert.assertNotSame(arrAct, arrAct1);
+        Assert.assertArrayEquals(arrExp1, arrAct1a);
+
+        String[] arrAct2 = new String[5];
+        String[] arrAct2a = set.toArray(arrAct2);
+        Assert.assertSame(arrAct2, arrAct2a);
+        Assert.assertArrayEquals(arrExp1, arrAct2);
+
+        String[] arrAct3 = new String[6];
+        String[] arrExp3 = new String[] { "a", "b", "c", "d", "e", null };
+        String[] arrAct3a = set.toArray(arrAct3);
+        Assert.assertSame(arrAct3, arrAct3a);
+        Assert.assertArrayEquals(arrExp3, arrAct3);
 
         Iterator<String> it = set.iterator();
         Assert.assertEquals("a", it.next());
@@ -119,6 +151,21 @@ public final class TestImmutableHashedArraySet {
         Assert.assertEquals("e", it.next());
         Assert.assertFalse(it.hasNext());
 
+        ArrayBackedCollection<String> arrayBacked = (ArrayBackedCollection<String>)list;
+
+        Assert.assertEquals("e", arrayBacked.getAtIndex(4));
+        Assert.assertEquals("d", arrayBacked.getAtIndex(3));
+        Assert.assertEquals("c", arrayBacked.getAtIndex(2));
+        Assert.assertEquals("b", arrayBacked.getAtIndex(1));
+        Assert.assertEquals("a", arrayBacked.getAtIndex(0));
+
+        Assert.assertEquals( -1, arrayBacked.indexOfRange(null, 1, 5));
+        Assert.assertEquals( -1, arrayBacked.indexOfRange("a", 1, 5));
+        Assert.assertEquals( 1, arrayBacked.indexOfRange("b", 1, 5));
+        Assert.assertEquals( 2, arrayBacked.indexOfRange("c", 1, 5));
+        Assert.assertEquals( 3, arrayBacked.indexOfRange("d", 1, 5));
+        Assert.assertEquals( 4, arrayBacked.indexOfRange("e", 1, 5));
+
         List<String> subList = list.subList(1, 5);
 
         Assert.assertFalse(subList.contains("0"));
@@ -138,6 +185,38 @@ public final class TestImmutableHashedArraySet {
         Assert.assertEquals(3, subList.indexOf("e"));
         Assert.assertEquals(-1, subList.indexOf("g"));
 
+        // New methods in 1.8 - forEach, removeIf
+        Assert.assertFalse(subList.removeIf(e -> e.length() > 1));
+
+        StringBuilder builder3 = new StringBuilder();
+        subList.forEach(builder3::append);
+        Assert.assertEquals("bcde", builder3.toString());
+
+        // toArray()
+        arrAct = subList.toArray();
+        arrExp = new Object[] { "b", "c", "d", "e" };
+        Assert.assertArrayEquals(arrExp, arrAct);
+
+        // toArray(String[]) -- three cases to consider
+        arrAct1 = new String[3];
+        arrExp1 = new String[] { "b", "c", "d", "e" };
+
+        arrAct1a = subList.toArray(arrAct1);
+        Assert.assertNotSame(arrAct, arrAct1);
+        Assert.assertArrayEquals(arrExp1, arrAct1a);
+
+        arrAct2 = new String[4];
+        arrAct2a = subList.toArray(arrAct2);
+        Assert.assertSame(arrAct2, arrAct2a);
+        Assert.assertArrayEquals(arrExp1, arrAct2);
+
+        arrAct3 = new String[5];
+        arrExp3 = new String[] { "b", "c", "d", "e", null };
+        arrAct3a = subList.toArray(arrAct3);
+        Assert.assertSame(arrAct3, arrAct3a);
+        Assert.assertArrayEquals(arrExp3, arrAct3);
+
+        // Assert sublists implement equals correctly
         List<String> arrayList2 = arrayList.subList(1, 5);
         Assert.assertTrue(arrayList2.equals(subList));
         Assert.assertTrue(subList.equals(arrayList2));
@@ -163,7 +242,7 @@ public final class TestImmutableHashedArraySet {
 
     @Test
     public void testSetListNull() throws Exception {
-        ImmutableHashedArraySetBuilder<String> builder = new ImmutableHashedArraySetBuilder<String>();
+        ImmutableHashedArraySetBuilder<String> builder = new ImmutableHashedArraySetBuilder<>();
         ImmutableHashedArraySet<String> set = builder
                 .with("a", "b", "b", null, "d", "e")
                 .with("b", "a")
@@ -337,9 +416,10 @@ public final class TestImmutableHashedArraySet {
         Assert.assertEquals(6, result2.indexOf("g"));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testExceptions() throws Exception {
-        ImmutableHashedArraySetBuilder<String> builder = new ImmutableHashedArraySetBuilder<String>();
+        ImmutableHashedArraySetBuilder<String> builder = new ImmutableHashedArraySetBuilder<>();
         ImmutableHashedArraySet<String> set = builder
                 .with("a", "b", "b", "c", "d", "e")
                 .with("f", "g")
@@ -377,6 +457,7 @@ public final class TestImmutableHashedArraySet {
         try {
             List<String> s = Collections.singletonList("g");
             set.removeAll(s);
+            Assert.fail("removeAll operation should fail");
         } catch (UnsupportedOperationException e) {
             Assert.assertNotNull(e);
         }
@@ -384,6 +465,23 @@ public final class TestImmutableHashedArraySet {
         try {
             List<String> s = Collections.singletonList("e");
             set.retainAll(s);
+            Assert.fail("retainAll operation should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            Assert.assertFalse(set.removeIf(e -> e.charAt(0) > 'c'));
+            Assert.fail("removeIf operation should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        // No exception, since no elements to add
+        try {
+            List<String> result = set.asList();
+            Assert.assertFalse(result.removeIf(e -> e.charAt(0) > 'c'));
+            Assert.fail("removeIf operation should fail");
         } catch (UnsupportedOperationException e) {
             Assert.assertNotNull(e);
         }
