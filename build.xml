@@ -55,7 +55,7 @@
 
     <target name="javadoc" depends="init"
             description="javadoc the source files">
-        <javadoc sourcepath="${src}" destdir="${build}/javadoc">
+        <javadoc sourcepath="${src}" destdir="${build}/javadoc" author="false" windowtitle="Java Immutable Collections for Java 1.8">
         </javadoc>
     </target>
 
