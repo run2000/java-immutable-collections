@@ -827,6 +827,13 @@ public final class TestImmutableSortedArrayBiMap {
         Assert.assertEquals("1", map.get("g"));
         Assert.assertFalse(map.containsKey("zz"));
 
+        Assert.assertEquals("5", map.getOrDefault("c", ""));
+        Assert.assertEquals("", map.getOrDefault("z", ""));
+
+        StringBuilder builder = new StringBuilder();
+        map.forEach((k,v) -> builder.append(k));
+        Assert.assertEquals("abcdefg", builder.toString());
+
         ArrayBackedSet<String> keySet = map.keySet();
         Assert.assertFalse(keySet.isEmpty());
         Assert.assertEquals(7, keySet.size());
