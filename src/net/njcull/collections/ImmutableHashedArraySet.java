@@ -306,6 +306,49 @@ public final class ImmutableHashedArraySet<E> extends AbstractSet<E> implements 
     }
 
     /**
+     * Returns an array containing all of the elements in this set
+     * in proper sequence (from first to last element); the runtime type of the
+     * returned array is that of the specified array.  If the set fits
+     * in the specified array, it is returned therein.  Otherwise, a new array
+     * is allocated with the runtime type of the specified array and the size
+     * of this set.
+     *
+     * <p>If the set fits in the specified array with room to spare
+     * (i.e., the array has more elements than the set), the element in
+     * the array immediately following the end of the set is set to
+     * {@code null}.  This is useful in determining the length of the
+     * set <em>only</em> if the caller knows that the set does
+     * not contain any null elements.
+     *
+     * <p>This implementation is handled as a static method rather than a
+     * default method because a default method cannot override any method
+     * of {@code Object}.
+     *
+     * @param a the array into which the elements of this set are to be
+     *        stored, if it is big enough; otherwise, a new array of the same
+     *        runtime type is allocated for this purpose.
+     * @return an array containing all the elements in this set
+     * @throws ArrayStoreException if the runtime type of the specified array
+     *         is not a supertype of the runtime type of every element in this
+     *         set
+     * @throws NullPointerException if the specified array is null
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T[] toArray(T[] a) {
+        final int sz = m_Elements.length;
+        if (a.length < sz) {
+            // Make a new array of a's runtime type, but my contents:
+            return (T[]) Arrays.copyOf(m_Elements, sz, a.getClass());
+        }
+        System.arraycopy(m_Elements, 0, a, 0, sz);
+        if (a.length > sz) {
+            a[sz] = null;
+        }
+        return a;
+    }
+
+    /**
      * Creates a {@code Spliterator} over the elements in this set.
      *
      * <p>The {@code Spliterator} reports {@code Spliterator.DISTINCT},

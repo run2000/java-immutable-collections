@@ -17,6 +17,10 @@ import java.util.function.IntFunction;
  *     <li>{@code Spliterator.SIZED}</li>
  *     <li>{@code Spliterator.SUBSIZED}</li>
  * </ul>
+ *
+ * @param <T> the type of elements returned by the spliterator
+ * @author run2000
+ * @version 2/09/2017.
  */
 final class ImmutableIndexerSpliterator<T> implements Spliterator<T> {
     /**

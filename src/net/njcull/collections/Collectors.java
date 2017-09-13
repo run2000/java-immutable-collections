@@ -6,7 +6,9 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 
 /**
- * Implementations of {@link Collector}s for the maps and sets in this package.
+ * Implementations of stream {@link Collector}s for the maps and sets in this
+ * package. Variations include map versus bimap, and various sorting options
+ * for those sets and maps that are ordered.
  *
  * @author run2000
  * @version 9/01/2016.
@@ -67,7 +69,7 @@ public final class Collectors {
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
      * new {@code ImmutableSortedArraySet}, in the sort order determined by the
-     * supplied Comparator.
+     * supplied {@code Comparator}.
      *
      * @param <E> the type of elements maintained by the resulting set
      * @param cmp the comparator used for determining the order of the resulting
@@ -191,7 +193,7 @@ public final class Collectors {
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
      * new {@code ImmutableSortedArrayMap}, with keys ordered by the given
-     * comparator.
+     * {@code Comparator}.
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
@@ -213,7 +215,7 @@ public final class Collectors {
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
      * new {@code ImmutableSortedArrayMap}, with values ordered by the given
-     * comparator.
+     * {@code Comparator}.
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
@@ -235,7 +237,7 @@ public final class Collectors {
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
      * new {@code ImmutableSortedArrayMap}, with keys and values ordered by
-     * the given comparators.
+     * the given {@code Comparator}s.
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
@@ -260,6 +262,10 @@ public final class Collectors {
      * Returns a {@code Collector} that accumulates the input elements into a
      * new {@code ImmutableSortedArrayMap}, created as a bimap, with elements
      * ordered by their natural order.
+     * <p>
+     * A bimap is a map where both keys and values are unique. Any given key
+     * can be mapped "forwards" to a single value; any given value can be
+     * mapped "backwards" to a single key.
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
@@ -278,7 +284,11 @@ public final class Collectors {
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
      * new {@code ImmutableSortedArrayMap}, created as a bimap, with keys
-     * ordered by the given comparator.
+     * ordered by the given {@code Comparator}.
+     * <p>
+     * A bimap is a map where both keys and values are unique. Any given key
+     * can be mapped "forwards" to a single value; any given value can be
+     * mapped "backwards" to a single key.
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
@@ -300,7 +310,11 @@ public final class Collectors {
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
      * new {@code ImmutableSortedArrayMap}, created as a bimap, with values
-     * ordered by the given comparator.
+     * ordered by the given {@code Comparator}.
+     * <p>
+     * A bimap is a map where both keys and values are unique. Any given key
+     * can be mapped "forwards" to a single value; any given value can be
+     * mapped "backwards" to a single key.
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
@@ -322,7 +336,11 @@ public final class Collectors {
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
      * new {@code ImmutableSortedArrayMap}, created as a bimap, with keys
-     * and values ordered by the given comparators.
+     * and values ordered by the given {@code Comparator}s.
+     * <p>
+     * A bimap is a map where both keys and values are unique. Any given key
+     * can be mapped "forwards" to a single value; any given value can be
+     * mapped "backwards" to a single key.
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
@@ -365,7 +383,7 @@ public final class Collectors {
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
      * new {@code ImmutableUniSortedArrayMap}, with keys ordered by the given
-     * comparator.
+     * {@code Comparator}.
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
@@ -388,6 +406,10 @@ public final class Collectors {
      * Returns a {@code Collector} that accumulates the input elements into a
      * new {@code ImmutableUniSortedArrayMap}, created as a bimap, with keys
      * ordered by their natural order.
+     * <p>
+     * A bimap is a map where both keys and values are unique. Any given key
+     * can be mapped "forwards" to a single value; any given value can be
+     * mapped "backwards" to a single key.
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
@@ -406,7 +428,11 @@ public final class Collectors {
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
      * new {@code ImmutableUniSortedArrayMap}, created as a bimap, with keys
-     * ordered by the given comparator.
+     * ordered by the given {@code Comparator}.
+     * <p>
+     * A bimap is a map where both keys and values are unique. Any given key
+     * can be mapped "forwards" to a single value; any given value can be
+     * mapped "backwards" to a single key.
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
@@ -449,7 +475,7 @@ public final class Collectors {
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
      * new {@code ImmutableSortedArrayPropertyMap}, with keys generated by
-     * the given key supplier, and keys ordered by the given comparator.
+     * the given key supplier, and keys ordered by the given {@code Comparator}.
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map

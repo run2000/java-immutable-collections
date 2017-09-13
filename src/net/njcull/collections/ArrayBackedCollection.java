@@ -125,7 +125,7 @@ public interface ArrayBackedCollection<E> extends Collection<E> {
      * to strings as by {@link String#valueOf(Object)}.
      * <p>
      * This implementation is handled as a static method rather than a
-     * default method because a default method cannot override any methods
+     * default method because a default method cannot override any method
      * of {@code Object}.
      *
      * @param <E> the type of elements in the collection
@@ -148,5 +148,83 @@ public interface ArrayBackedCollection<E> extends Collection<E> {
                 }
             }
             return sb.append(']').toString();
+    }
+
+    /**
+     * Returns an array containing all of the elements in the given collection.
+     * If this collection makes any guarantees as to what order its elements
+     * are returned by its indexer, this method must return the
+     * elements in the same order.
+     *
+     * <p>The returned array will be "safe" in that no references to it
+     * are maintained by this collection.  In other words, this method
+     * allocates a new array even if this collection is backed by an array.
+     * The caller is thus free to modify the returned array.
+     *
+     * <p>This method acts as bridge between array-based and collection-based
+     * APIs.
+     *
+     * <p>This implementation is handled as a static method rather than a
+     * default method because a default method cannot override any method
+     * of {@code Object}.
+     *
+     * @param c the collection from which the elements are copied
+     * @return an array containing all the elements in this set
+     */
+    static Object[] toArray(ArrayBackedCollection<?> c) {
+        final int sz = c.size();
+        Object[] arr = new Object[sz];
+
+        for(int i = 0; i < sz; i++) {
+            arr[i] = c.getAtIndex(i);
+        }
+        return arr;
+    }
+
+    /**
+     * Returns an array containing all of the elements in the given collection
+     * in proper sequence (from first to last element); the runtime type of the
+     * returned array is that of the specified array.  If the collection fits
+     * in the specified array, it is returned therein.  Otherwise, a new array
+     * is allocated with the runtime type of the specified array and the size
+     * of this collection.
+     *
+     * <p>If the collection fits in the specified array with room to spare
+     * (i.e., the array has more elements than the collection), the element in
+     * the array immediately following the end of the collection is set to
+     * {@code null}.  This is useful in determining the length of the
+     * collection <em>only</em> if the caller knows that the collection does
+     * not contain any null elements.
+     *
+     * <p>This implementation is handled as a static method rather than a
+     * default method because a default method cannot override any method
+     * of {@code Object}.
+     *
+     * @param <T> the runtime type of the array to contain the collection
+     * @param c the collection from which the elements are copied
+     * @param a the array into which the elements of the collection are to
+     *          be stored, if it is big enough; otherwise, a new array of the
+     *          same runtime type is allocated for this purpose.
+     * @return an array containing the elements of the collection
+     * @throws ArrayStoreException if the runtime type of the specified array
+     *         is not a supertype of the runtime type of every element in
+     *         the given collection
+     * @throws NullPointerException if the specified array is null
+     */
+    @SuppressWarnings("unchecked")
+    static <T> T[] toArray(ArrayBackedCollection<?> c, T[] a) {
+        final int sz = c.size();
+        if (a.length < sz) {
+            // Make a new array of a's runtime type, but my contents:
+            a = (T[])java.lang.reflect.Array.newInstance(
+                    a.getClass().getComponentType(), sz);
+        }
+        for(int i = 0; i < sz; i++) {
+            a[i] = (T)c.getAtIndex(i);
+        }
+        if (a.length > sz) {
+            a[sz] = null;
+        }
+        return a;
     }
 }

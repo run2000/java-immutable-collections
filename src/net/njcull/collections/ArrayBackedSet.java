@@ -24,7 +24,7 @@ public interface ArrayBackedSet<E> extends ArrayBackedCollection<E>, Set<E> {
      * {@link Object#hashCode}.
      * <p>
      * This implementation is handled as a static method rather than a
-     * default method because a default method cannot override any methods
+     * default method because a default method cannot override any method
      * of {@code Object}.
      *
      * @param <E> the type of elements in the set

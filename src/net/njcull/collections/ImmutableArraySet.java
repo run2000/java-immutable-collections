@@ -212,6 +212,21 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
         return -1;
     }
 
+    /**
+     * Determine the index of the given element, if it exists within the
+     * specified range in this set.
+     *
+     * @param element the element to be found
+     * @param fromIndex the start index, must be zero or greater
+     * @param toIndex the exclusive end index, must be greater than or equal to
+     *                the start index
+     * @return a zero or positive integer if the element is in the specified
+     * range of the backing array, otherwise less than zero to indicate
+     * its absence
+     * @throws IndexOutOfBoundsException if fromIndex or toIndex is out of range
+     *         ({@code index < 0 || index >= size()}), or toIndex
+     *         is less than fromIndex
+     */
     @Override
     public int indexOfRange(E element, int fromIndex, int toIndex) {
         if(fromIndex < 0 || fromIndex >= size()) {
@@ -274,8 +289,8 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
      * elements in the same order.
      *
      * <p>The returned array will be "safe" in that no references to it
-     * are maintained by this set.  (In other words, this method must
-     * allocate a new array even if this set is backed by an array).
+     * are maintained by this set.  In other words, this method must
+     * allocate a new array even if this set is backed by an array.
      * The caller is thus free to modify the returned array.
      *
      * <p>This method acts as bridge between array-based and collection-based
@@ -286,6 +301,49 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
     @Override
     public Object[] toArray() {
         return Arrays.copyOf(m_Elements, m_Elements.length);
+    }
+
+    /**
+     * Returns an array containing all of the elements in this set
+     * in proper sequence (from first to last element); the runtime type of the
+     * returned array is that of the specified array.  If the set fits
+     * in the specified array, it is returned therein.  Otherwise, a new array
+     * is allocated with the runtime type of the specified array and the size
+     * of this set.
+     *
+     * <p>If the set fits in the specified array with room to spare
+     * (i.e., the array has more elements than the set), the element in
+     * the array immediately following the end of the set is set to
+     * {@code null}.  This is useful in determining the length of the
+     * set <em>only</em> if the caller knows that the set does
+     * not contain any null elements.
+     *
+     * <p>This implementation is handled as a static method rather than a
+     * default method because a default method cannot override any method
+     * of {@code Object}.
+     *
+     * @param a the array into which the elements of this set are to be
+     *        stored, if it is big enough; otherwise, a new array of the same
+     *        runtime type is allocated for this purpose.
+     * @return an array containing all the elements in this set
+     * @throws ArrayStoreException if the runtime type of the specified array
+     *         is not a supertype of the runtime type of every element in this
+     *         set
+     * @throws NullPointerException if the specified array is null
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T[] toArray(T[] a) {
+        final int sz = m_Elements.length;
+        if (a.length < sz) {
+            // Make a new array of a's runtime type, but my contents:
+            return (T[]) Arrays.copyOf(m_Elements, sz, a.getClass());
+        }
+        System.arraycopy(m_Elements, 0, a, 0, sz);
+        if (a.length > sz) {
+            a[sz] = null;
+        }
+        return a;
     }
 
     /**

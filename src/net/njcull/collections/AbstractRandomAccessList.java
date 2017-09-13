@@ -17,6 +17,7 @@ import java.util.function.Predicate;
  * be used in preference to this class.
  * </p>
  *
+ * @param <E> the type of elements maintained by this list
  * @author run2000
  * @version 8/01/2016.
  */
@@ -312,6 +313,75 @@ public abstract class AbstractRandomAccessList<E> extends AbstractList<E> implem
             }
         }
         return sb.append(']').toString();
+    }
+
+    /**
+     * Returns an array containing all of the elements in the given collection.
+     * If this collection makes any guarantees as to what order its elements
+     * are returned by its indexer, this method must return the
+     * elements in the same order.
+     *
+     * <p>The returned array will be "safe" in that no references to it
+     * are maintained by this collection.  In other words, this method
+     * allocates a new array even if this collection is backed by an array.
+     * The caller is thus free to modify the returned array.
+     *
+     * <p>This method acts as bridge between array-based and collection-based
+     * APIs.
+     *
+     * @return an array containing all the elements in this set
+     */
+    @Override
+    public Object[] toArray() {
+        final int sz = this.size();
+        Object[] arr = new Object[sz];
+
+        for(int i = 0; i < sz; i++) {
+            arr[i] = this.get(i);
+        }
+        return arr;
+    }
+
+    /**
+     * Returns an array containing all of the elements in this list in proper
+     * sequence (from first to last element); the runtime type of the returned
+     * array is that of the specified array.  If the list fits in the
+     * specified array, it is returned therein.  Otherwise, a new array is
+     * allocated with the runtime type of the specified array and the size of
+     * this list.
+     *
+     * <p>If the list fits in the specified array with room to spare
+     * (i.e., the array has more elements than the list), the element in
+     * the array immediately following the end of the collection is set to
+     * {@code null}.  This is useful in determining the length of the
+     * list <em>only</em> if the caller knows that the list does not contain
+     * any null elements.
+     *
+     * @param a the array into which the elements of the list are to
+     *          be stored, if it is big enough; otherwise, a new array of the
+     *          same runtime type is allocated for this purpose.
+     * @return an array containing the elements of the list
+     * @throws ArrayStoreException if the runtime type of the specified array
+     *         is not a supertype of the runtime type of every element in
+     *         this list
+     * @throws NullPointerException if the specified array is null
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T[] toArray(T[] a) {
+        final int sz = this.size();
+        if (a.length < sz) {
+            // Make a new array of a's runtime type, but my contents:
+            a = (T[])java.lang.reflect.Array.newInstance(
+                    a.getClass().getComponentType(), sz);
+        }
+        for(int i = 0; i < sz; i++) {
+            a[i] = (T)this.get(i);
+        }
+        if (a.length > sz) {
+            a[sz] = null;
+        }
+        return a;
     }
 
     /**

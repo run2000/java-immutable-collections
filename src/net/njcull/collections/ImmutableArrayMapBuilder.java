@@ -5,6 +5,8 @@ import java.util.*;
 /**
  * Builder for the {@link ImmutableArrayMap} class.
  *
+ * @param <K> the type of keys maintained by the resulting map
+ * @param <V> the type of mapped values
  * @author run2000
  * @version 7/01/2016.
  */

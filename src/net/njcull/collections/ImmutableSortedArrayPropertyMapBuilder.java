@@ -10,6 +10,8 @@ import java.util.function.Function;
 /**
  * Builder for the {@link ImmutableSortedArrayPropertyMap} class.
  *
+ * @param <K> the type of keys maintained by the resulting map
+ * @param <V> the type of mapped values
  * @author run2000
  * @version 1/09/2017.
  */
@@ -262,7 +264,8 @@ public final class ImmutableSortedArrayPropertyMapBuilder<K,V> {
      * sorting the keys and values, and checking for duplicate keys and values
      * as necessary.
      *
-     * @return an ImmutableArrayMap containing the elements in the builder
+     * @return an ImmutableSortedArrayPropertyMap containing the elements in
+     * the builder
      * @throws IllegalStateException there was a duplicate key or value
      * specified in the builder
      */

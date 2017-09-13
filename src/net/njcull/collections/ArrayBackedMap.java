@@ -9,6 +9,8 @@ import java.util.function.BiConsumer;
  * and {@link ArrayBackedCollection} views over the data.</p>
  * {@inheritDoc}
  *
+ * @param <K> the type of keys maintained by this map
+ * @param <V> the type of values maintained by this map
  * @author run2000
  * @version 11/01/2016.
  */
@@ -131,7 +133,7 @@ public interface ArrayBackedMap<K, V> extends Map<K, V> {
      * {@link Object#hashCode}.
      * <p>
      * This implementation is handled as a static method rather than a
-     * default method because a default method cannot override any methods
+     * default method because a default method cannot override any method
      * of {@code Object}.
      *
      * @param <K> the type of keys in the map
@@ -159,7 +161,7 @@ public interface ArrayBackedMap<K, V> extends Map<K, V> {
      * {@link String#valueOf(Object)}.
      * <p>
      * This implementation is handled as a static method rather than a
-     * default method because a default method cannot override any methods
+     * default method because a default method cannot override any method
      * of {@code Object}.
      *
      * @param <K> the type of keys in the map

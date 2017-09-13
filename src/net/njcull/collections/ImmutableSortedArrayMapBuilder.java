@@ -5,6 +5,8 @@ import java.util.*;
 /**
  * Builder for the {@link ImmutableSortedArrayMap} class.
  *
+ * @param <K> the type of keys maintained by the resulting map
+ * @param <V> the type of mapped values
  * @author run2000
  * @version 7/01/2016.
  */
@@ -396,7 +398,7 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
      * sorting the keys and values, and checking for duplicate keys and values
      * as necessary.
      *
-     * @return an ImmutableArrayMap containing the elements in the builder
+     * @return an ImmutableSortedArrayMap containing the elements in the builder
      * @throws IllegalStateException there was a duplicate key or value
      * specified in the builder
      */

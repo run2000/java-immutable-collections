@@ -10,6 +10,8 @@ import java.util.Set;
 /**
  * Builder for the {@link ImmutableHashedArrayMap} class.
  *
+ * @param <K> the type of keys maintained by the resulting map
+ * @param <V> the type of mapped values
  * @author run2000
  * @version 3/07/2016.
  */
@@ -265,7 +267,7 @@ public final class ImmutableHashedArrayMapBuilder<K,V> {
      * Build the immutable map. Validates all keys and values added, including
      * checking for duplicate keys and values as necessary.
      *
-     * @return an ImmutableArrayMap containing the elements in the builder
+     * @return an ImmutableHashedArrayMap containing the elements in the builder
      * @throws IllegalStateException there was a duplicate key or value
      * specified in the builder
      */

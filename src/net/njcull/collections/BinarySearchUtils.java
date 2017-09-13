@@ -25,9 +25,9 @@ public final class BinarySearchUtils {
      * If the list contains multiple elements equal to the specified object,
      * there is no guarantee which one will be found.
      * <p>
-     * Flogged from Collections#binarySearch(), and adjusted to take an
-     * IntFunction as the indexer. This allows the search to operate over
-     * arrays, lists, and other objects that have an indexer method.
+     * Based on {@code Collections.binarySearch()}, and adjusted to take
+     * an {@code IntFunction} as the indexer. This allows the search to operate
+     * over arrays, lists, and other objects that have an indexer method.
      * </p>
      *
      * @param  <T> the class of the objects in the list
@@ -58,9 +58,9 @@ public final class BinarySearchUtils {
      * {@code java.util.Arrays.sort(Object[], int, int} method)
      * prior to making this call. If it is not sorted, the results are undefined.
      * <p>
-     * Flogged from Arrays#binarySearch(), and adjusted to take an
-     * IntFunction as the indexer. This allows the search to operate over
-     * arrays, lists, and other objects that have an indexer method.
+     * Based on {@code Collections.binarySearch()}, and adjusted to take
+     * an {@code IntFunction} as the indexer. This allows the search to operate
+     * over arrays, lists, and other objects that have an indexer method.
      * </p>
      *
      * @param  <T> the class of the objects in the list
@@ -122,9 +122,9 @@ public final class BinarySearchUtils {
      * elements equal to the specified object, there is no guarantee which one
      * will be found.
      * <p>
-     * Flogged from Collections#binarySearch(), and adjusted to take an
-     * IntFunction as the indexer. This allows the search to operate over
-     * arrays, lists, and other objects that have an indexer method.
+     * Based on {@code Collections.binarySearch()}, and adjusted to take
+     * an {@code IntFunction} as the indexer. This allows the search to operate
+     * over arrays, lists, and other objects that have an indexer method.
      * </p>
      *
      * @param  <T> the class of the objects in the list
@@ -161,9 +161,9 @@ public final class BinarySearchUtils {
      * elements equal to the specified object, there is no guarantee which one
      * will be found.
      * <p>
-     * Flogged from Arrays#binarySearch(), and adjusted to take an
-     * IntFunction as the indexer. This allows the search to operate over
-     * arrays, lists, and other objects that have an indexer method.
+     * Based on {@code Collections.binarySearch()}, and adjusted to take
+     * an {@code IntFunction} as the indexer. This allows the search to operate
+     * over arrays, lists, and other objects that have an indexer method.
      * </p>
      *
      * @param  <T> the class of the objects in the list

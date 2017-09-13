@@ -7,6 +7,7 @@ import java.util.Objects;
 /**
  * An immutable iterator for an ArrayBackedCollection.
  *
+ * @param <E> the type of elements returned by this iterator
  * @author run2000
  * @version 10/01/2016.
  */

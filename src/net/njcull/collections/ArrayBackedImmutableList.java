@@ -10,6 +10,7 @@ import java.util.function.IntFunction;
  * An immutable list for a list-like structure, where values may be
  * characterised as distinct.
  *
+ * @param <E> the type of elements maintained by this list
  * @author run2000
  * @version 5/09/2017 9:52 AM.
  */
