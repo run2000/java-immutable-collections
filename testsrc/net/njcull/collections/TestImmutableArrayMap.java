@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Tests for ImmutableArrayMap.
@@ -444,6 +445,66 @@ public final class TestImmutableArrayMap {
         Assert.assertFalse(keySet.isEmpty());
         Assert.assertEquals(7, keySet.size());
         Assert.assertEquals("[c, d, e, a, b, f, g]", keySet.toString());
+
+        Assert.assertTrue(keySet.contains("a"));
+        Assert.assertFalse(keySet.contains("p"));
+
+        List<String> elements = Arrays.asList("a", "b", "c");
+        Assert.assertTrue(keySet.containsAll(elements));
+
+        Assert.assertEquals("c", keySet.getAtIndex(0));
+        Assert.assertEquals("d", keySet.getAtIndex(1));
+        Assert.assertEquals("e", keySet.getAtIndex(2));
+        Assert.assertEquals("a", keySet.getAtIndex(3));
+        Assert.assertEquals("b", keySet.getAtIndex(4));
+        Assert.assertEquals("f", keySet.getAtIndex(5));
+        Assert.assertEquals("g", keySet.getAtIndex(6));
+
+        Assert.assertEquals(0, keySet.indexOf("c"));
+        Assert.assertEquals(1, keySet.indexOf("d"));
+        Assert.assertEquals(2, keySet.indexOf("e"));
+        Assert.assertEquals(3, keySet.indexOf("a"));
+        Assert.assertEquals(4, keySet.indexOf("b"));
+        Assert.assertEquals(5, keySet.indexOf("f"));
+        Assert.assertEquals(6, keySet.indexOf("g"));
+
+        Assert.assertEquals(-1, keySet.indexOfRange("c", 2, 7));
+        Assert.assertEquals(-1, keySet.indexOfRange("d", 2, 7));
+        Assert.assertEquals(2, keySet.indexOfRange("e", 2, 7));
+        Assert.assertEquals(3, keySet.indexOfRange("a", 2, 7));
+        Assert.assertEquals(4, keySet.indexOfRange("b", 2, 7));
+        Assert.assertEquals(5, keySet.indexOfRange("f", 2, 7));
+        Assert.assertEquals(6, keySet.indexOfRange("g", 2, 7));
+        Assert.assertEquals(-1, keySet.indexOfRange(null, 2, 7));
+
+        // toArray()
+        Object[] arrAct = keySet.toArray();
+        Object[] arrExp = new Object[] { "c", "d", "e", "a", "b", "f", "g" };
+        Assert.assertArrayEquals(arrExp, arrAct);
+
+        // toArray(String[]) -- three cases to consider
+        String[] arrAct1 = new String[6];
+        String[] arrExp1 = new String[] { "c", "d", "e", "a", "b", "f", "g" };
+
+        String[] arrAct1a = keySet.toArray(arrAct1);
+        Assert.assertNotSame(arrAct, arrAct1);
+        Assert.assertArrayEquals(arrExp1, arrAct1a);
+
+        String[] arrAct2 = new String[7];
+        String[] arrAct2a = keySet.toArray(arrAct2);
+        Assert.assertSame(arrAct2, arrAct2a);
+        Assert.assertArrayEquals(arrExp1, arrAct2);
+
+        String[] arrAct3 = new String[8];
+        String[] arrExp3 = new String[] { "c", "d", "e", "a", "b", "f", "g", null };
+        String[] arrAct3a = keySet.toArray(arrAct3);
+        Assert.assertSame(arrAct3, arrAct3a);
+        Assert.assertArrayEquals(arrExp3, arrAct3);
+
+        // New methods in 1.8 - forEach, removeIf
+        Assert.assertFalse(keySet.removeIf(e -> e.length() > 1));
+
+        // Key set as list
         List<String> keyList = keySet.asList();
         Assert.assertFalse(keyList.isEmpty());
         Assert.assertEquals(7, keyList.size());
@@ -481,6 +542,77 @@ public final class TestImmutableArrayMap {
         Assert.assertFalse(values.isEmpty());
         Assert.assertEquals(7, values.size());
         Assert.assertEquals("[5, 4, 3, 7, 96, 2, 1]", values.toString());
+
+        Assert.assertTrue(values.contains("5"));
+        Assert.assertFalse(values.contains("21"));
+
+        elements = Arrays.asList("7", "5", "2");
+        Assert.assertTrue(values.containsAll(elements));
+
+        Assert.assertEquals("5", values.getAtIndex(0));
+        Assert.assertEquals("4", values.getAtIndex(1));
+        Assert.assertEquals("3", values.getAtIndex(2));
+        Assert.assertEquals("7", values.getAtIndex(3));
+        Assert.assertEquals("96", values.getAtIndex(4));
+        Assert.assertEquals("2", values.getAtIndex(5));
+        Assert.assertEquals("1", values.getAtIndex(6));
+
+        Assert.assertEquals(0, values.indexOf("5"));
+        Assert.assertEquals(1, values.indexOf("4"));
+        Assert.assertEquals(2, values.indexOf("3"));
+        Assert.assertEquals(3, values.indexOf("7"));
+        Assert.assertEquals(4, values.indexOf("96"));
+        Assert.assertEquals(5, values.indexOf("2"));
+        Assert.assertEquals(6, values.indexOf("1"));
+
+        Assert.assertEquals(-1, values.indexOfRange("5", 2, 7));
+        Assert.assertEquals(-1, values.indexOfRange("4", 2, 7));
+        Assert.assertEquals(2, values.indexOfRange("3", 2, 7));
+        Assert.assertEquals(3, values.indexOfRange("7", 2, 7));
+        Assert.assertEquals(4, values.indexOfRange("96", 2, 7));
+        Assert.assertEquals(5, values.indexOfRange("2", 2, 7));
+        Assert.assertEquals(6, values.indexOfRange("1", 2, 7));
+        Assert.assertEquals(-1, values.indexOfRange(null, 2, 7));
+
+        // toArray()
+        arrAct = values.toArray();
+        arrExp = new Object[] { "5", "4", "3", "7", "96", "2", "1" };
+        Assert.assertArrayEquals(arrExp, arrAct);
+
+        // toArray(String[]) -- three cases to consider
+        arrAct1 = new String[6];
+        arrExp1 = new String[] { "5", "4", "3", "7", "96", "2", "1" };
+
+        arrAct1a = values.toArray(arrAct1);
+        Assert.assertNotSame(arrAct, arrAct1);
+        Assert.assertArrayEquals(arrExp1, arrAct1a);
+
+        arrAct2 = new String[7];
+        arrAct2a = values.toArray(arrAct2);
+        Assert.assertSame(arrAct2, arrAct2a);
+        Assert.assertArrayEquals(arrExp1, arrAct2);
+
+        arrAct3 = new String[8];
+        arrExp3 = new String[] { "5", "4", "3", "7", "96", "2", "1", null };
+        arrAct3a = values.toArray(arrAct3);
+        Assert.assertSame(arrAct3, arrAct3a);
+        Assert.assertArrayEquals(arrExp3, arrAct3);
+
+        Iterator<String> valIt = values.iterator();
+        StringBuilder builder1 = new StringBuilder();
+
+        while(valIt.hasNext()) {
+            builder1.append(valIt.next());
+            if(valIt.hasNext()) {
+                builder1.append(':');
+            }
+        }
+        Assert.assertEquals("5:4:3:7:96:2:1", builder1.toString());
+
+        // New methods in 1.8 - forEach, removeIf
+        Assert.assertFalse(values.removeIf(e -> e.length() > 2));
+
+        // Values as list
         List<String> valueList = values.asList();
         Assert.assertFalse(valueList.isEmpty());
         Assert.assertEquals(7, valueList.size());
@@ -561,8 +693,38 @@ public final class TestImmutableArrayMap {
         }
 
         try {
+            Assert.assertTrue(map.keySet().add("k"));
+            Assert.fail("Add operation for new item should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            Assert.assertTrue(map.keySet().add("c"));
+            Assert.fail("Add operation for existing item should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            Set<String> s = Collections.singleton("j");
+            map.keySet().addAll(s);
+            Assert.fail("addAll operation should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            Assert.assertTrue(map.keySet().remove("c"));
+            Assert.fail("Remove of existing item should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
             List<String> s = Collections.singletonList("g");
             map.keySet().removeAll(s);
+            Assert.fail("Remove of existing item should fail");
         } catch (UnsupportedOperationException e) {
             Assert.assertNotNull(e);
         }
@@ -570,6 +732,59 @@ public final class TestImmutableArrayMap {
         try {
             List<String> s = Collections.singletonList("e");
             map.keySet().retainAll(s);
+            Assert.fail("Retain of existing item should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            Assert.assertTrue(map.values().remove("5"));
+            Assert.fail("Remove of existing item should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            List<String> s = Collections.singletonList("4");
+            map.values().removeAll(s);
+            Assert.fail("Remove of existing item should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            List<String> s = Collections.singletonList("3");
+            map.values().retainAll(s);
+            Assert.fail("Retain of existing item should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            Assert.assertTrue(map.values().add("8"));
+            Assert.fail("Add operation for new item should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            Assert.assertTrue(map.values().add("3"));
+            Assert.fail("Add operation for existing item should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            Set<String> s = Collections.singleton("12");
+            map.values().addAll(s);
+            Assert.fail("addAll operation should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            map.values().clear();
+            Assert.fail("Clear operation should fail");
         } catch (UnsupportedOperationException e) {
             Assert.assertNotNull(e);
         }
@@ -581,6 +796,14 @@ public final class TestImmutableArrayMap {
         // No exception, since all elements retained
         s = Arrays.<String>asList("a", "b", "c", "d", "e", "f", "g");
         Assert.assertFalse(map.keySet().retainAll(s));
+
+        // No exception, since no elements removed
+        s = Collections.singletonList("9");
+        Assert.assertFalse(map.values().removeAll(s));
+
+        // No exception, since all elements retained
+        s = Arrays.<String>asList("1", "2", "3", "4", "5", "7", "96");
+        Assert.assertFalse(map.values().retainAll(s));
 
         // No exception, since clearing an empty collection does nothing
         ImmutableArrayMap.emptyMap().clear();

@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Tests for ImmutableSortedArrayPropertyMap.
@@ -1205,6 +1206,66 @@ public class TestImmutableSortedArrayPropertyMap {
         Assert.assertFalse(keySet.isEmpty());
         Assert.assertEquals(7, keySet.size());
         Assert.assertEquals("[a, b, c, d, e, f, g]", keySet.toString());
+
+        Assert.assertTrue(keySet.contains("a"));
+        Assert.assertFalse(keySet.contains("p"));
+
+        List<String> elements = Arrays.asList("a", "b", "c");
+        Assert.assertTrue(keySet.containsAll(elements));
+
+        Assert.assertEquals("c", keySet.getAtIndex(2));
+        Assert.assertEquals("d", keySet.getAtIndex(3));
+        Assert.assertEquals("e", keySet.getAtIndex(4));
+        Assert.assertEquals("a", keySet.getAtIndex(0));
+        Assert.assertEquals("b", keySet.getAtIndex(1));
+        Assert.assertEquals("f", keySet.getAtIndex(5));
+        Assert.assertEquals("g", keySet.getAtIndex(6));
+
+        Assert.assertEquals(2, keySet.indexOf("c"));
+        Assert.assertEquals(3, keySet.indexOf("d"));
+        Assert.assertEquals(4, keySet.indexOf("e"));
+        Assert.assertEquals(0, keySet.indexOf("a"));
+        Assert.assertEquals(1, keySet.indexOf("b"));
+        Assert.assertEquals(5, keySet.indexOf("f"));
+        Assert.assertEquals(6, keySet.indexOf("g"));
+
+        Assert.assertEquals(2, keySet.indexOfRange("c", 2, 7));
+        Assert.assertEquals(3, keySet.indexOfRange("d", 2, 7));
+        Assert.assertEquals(4, keySet.indexOfRange("e", 2, 7));
+        Assert.assertEquals(-1, keySet.indexOfRange("a", 2, 7));
+        Assert.assertEquals(-1, keySet.indexOfRange("b", 2, 7));
+        Assert.assertEquals(5, keySet.indexOfRange("f", 2, 7));
+        Assert.assertEquals(6, keySet.indexOfRange("g", 2, 7));
+        Assert.assertEquals(-1, keySet.indexOfRange(null, 2, 7));
+
+        // toArray()
+        Object[] arrAct = keySet.toArray();
+        Object[] arrExp = new Object[] { "a", "b", "c", "d", "e", "f", "g" };
+        Assert.assertArrayEquals(arrExp, arrAct);
+
+        // toArray(String[]) -- three cases to consider
+        String[] arrAct1 = new String[6];
+        String[] arrExp1 = new String[] { "a", "b", "c", "d", "e", "f", "g" };
+
+        String[] arrAct1a = keySet.toArray(arrAct1);
+        Assert.assertNotSame(arrAct, arrAct1);
+        Assert.assertArrayEquals(arrExp1, arrAct1a);
+
+        String[] arrAct2 = new String[7];
+        String[] arrAct2a = keySet.toArray(arrAct2);
+        Assert.assertSame(arrAct2, arrAct2a);
+        Assert.assertArrayEquals(arrExp1, arrAct2);
+
+        String[] arrAct3 = new String[8];
+        String[] arrExp3 = new String[] { "a", "b", "c", "d", "e", "f", "g", null };
+        String[] arrAct3a = keySet.toArray(arrAct3);
+        Assert.assertSame(arrAct3, arrAct3a);
+        Assert.assertArrayEquals(arrExp3, arrAct3);
+
+        // New methods in 1.8 - forEach, removeIf
+        Assert.assertFalse(keySet.removeIf(e -> e.length() > 1));
+
+        // Key set as list
         List<String> keyList = keySet.asList();
         Assert.assertFalse(keyList.isEmpty());
         Assert.assertEquals(7, keyList.size());
@@ -1337,8 +1398,38 @@ public class TestImmutableSortedArrayPropertyMap {
         }
 
         try {
+            Assert.assertTrue(map.keySet().add("k"));
+            Assert.fail("Add operation for new item should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            Assert.assertTrue(map.keySet().add("c"));
+            Assert.fail("Add operation for existing item should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            Set<String> s = Collections.singleton("j");
+            map.keySet().addAll(s);
+            Assert.fail("addAll operation should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
+            Assert.assertTrue(map.keySet().remove("c"));
+            Assert.fail("Remove of existing item should fail");
+        } catch (UnsupportedOperationException e) {
+            Assert.assertNotNull(e);
+        }
+
+        try {
             List<String> s = Collections.singletonList("g");
             map.keySet().removeAll(s);
+            Assert.fail("Remove of existing item should fail");
         } catch (UnsupportedOperationException e) {
             Assert.assertNotNull(e);
         }
@@ -1346,6 +1437,7 @@ public class TestImmutableSortedArrayPropertyMap {
         try {
             List<String> s = Collections.singletonList("e");
             map.keySet().retainAll(s);
+            Assert.fail("Retain of existing item should fail");
         } catch (UnsupportedOperationException e) {
             Assert.assertNotNull(e);
         }
