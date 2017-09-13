@@ -1192,6 +1192,15 @@ public class TestImmutableSortedArrayPropertyMap {
         Assert.assertEquals(new TestClassWithProperty<>("g","1"), map.get("g"));
         Assert.assertFalse(map.containsKey("zz"));
 
+        TestClassWithProperty<String> defaultValue = new TestClassWithProperty<>("", "");
+
+        Assert.assertEquals(new TestClassWithProperty<>("c", "5"), map.getOrDefault("c", defaultValue));
+        Assert.assertEquals(defaultValue, map.getOrDefault("z", defaultValue));
+
+        StringBuilder builder = new StringBuilder();
+        map.forEach((k,v) -> builder.append(k));
+        Assert.assertEquals("abcdefg", builder.toString());
+
         ArrayBackedSet<String> keySet = map.keySet();
         Assert.assertFalse(keySet.isEmpty());
         Assert.assertEquals(7, keySet.size());
