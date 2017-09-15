@@ -1,5 +1,9 @@
 package net.njcull.collections;
 
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.Comparator;
 import java.util.List;
@@ -26,14 +30,19 @@ import java.util.function.Function;
  * @author run2000
  * @version 1/09/2017.
  */
-public final class ImmutableSortedArrayPropertyMap<K,V> extends AbstractMap<K,V> implements ArrayBackedMap<K,V>, SortedMap<K,V> {
+public final class ImmutableSortedArrayPropertyMap<K,V> extends AbstractMap<K,V>
+        implements ArrayBackedMap<K,V>, SortedMap<K,V>, Serializable {
 
     private final Object[] m_Map;
     private final Comparator<? super K> m_KeyComparator;
-    private final Comparator m_NullsKeyComparator;
+    private transient Comparator m_NullsKeyComparator;
     private final Function<? super V, ? extends K> m_KeySupplier;
 
+    // Singleton, as an optimization only
     private static final ImmutableSortedArrayPropertyMap<?,?> EMPTY = new ImmutableSortedArrayPropertyMap<>(new Object[0], null, null);
+
+    // Serialization
+    private static final long serialVersionUID = -3952070973008751043L;
 
     /**
      * Returns an immutable empty sorted array property map. Each call to
@@ -500,5 +509,54 @@ public final class ImmutableSortedArrayPropertyMap<K,V> extends AbstractMap<K,V>
      */
     public static <K,V> ImmutableSortedArrayPropertyMapBuilder<K,V> builder() {
         return new ImmutableSortedArrayPropertyMapBuilder<K,V>();
+    }
+
+    /**
+     * Deserialization.
+     */
+    @SuppressWarnings("unchecked")
+    private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
+        stream.defaultReadObject();
+
+        // Perform validation
+        if (m_Map == null) {
+            throw new InvalidObjectException("map must have elements");
+        }
+
+        // Scan keys to ensure ordering is consistent, using the key comparator
+        final int sz = m_Map.length;
+
+        if ((m_KeySupplier == null) && (sz > 0)) {
+            throw new InvalidObjectException("key supplier must be present");
+        }
+
+        // Regenerate the nulls comparator
+        this.m_NullsKeyComparator = (m_KeyComparator == null) ?
+                Comparator.nullsFirst(Comparator.naturalOrder()) :
+                Comparator.nullsFirst(m_KeyComparator);
+
+        if(sz > 0) {
+            Object prev = m_KeySupplier.apply((V)m_Map[0]);
+
+            for (int i = 1; i < sz; i++) {
+                Object o = m_KeySupplier.apply((V)m_Map[i]);
+                int cmp = m_NullsKeyComparator.compare(o, prev);
+                if (cmp < 0) {
+                    throw new InvalidObjectException("map is not ordered by the comparator");
+                }
+                prev = o;
+            }
+        }
+    }
+
+    /**
+     * Deserialization.
+     */
+    private Object readResolve() {
+        if(m_Map.length == 0) {
+            // optimization only
+            return EMPTY;
+        }
+        return this;
     }
 }

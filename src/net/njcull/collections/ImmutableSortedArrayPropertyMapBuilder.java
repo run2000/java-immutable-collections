@@ -296,12 +296,12 @@ public final class ImmutableSortedArrayPropertyMapBuilder<K,V> {
             elements[i] = m_Values[sortedKeys[i]];
         }
 
-        Object prev = elements[0];
+        Object prev = keySupplier.apply((V)elements[0]);
         for (int i = 1; i < m_Size; i++) {
-            Object o = elements[i];
-            int cmp = nullsKeyComparator.compare(keySupplier.apply((V)o), keySupplier.apply((V)prev));
+            Object o = keySupplier.apply((V)elements[i]);
+            int cmp = nullsKeyComparator.compare(o, prev);
             if(cmp == 0) {
-                throw new IllegalStateException("duplicate key " + keySupplier.apply((V)o));
+                throw new IllegalStateException("duplicate key " + o);
             }
             prev = o;
         }

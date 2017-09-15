@@ -1,5 +1,9 @@
 package net.njcull.collections;
 
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -14,12 +18,17 @@ import java.util.function.Predicate;
  * @author run2000
  * @version 4/01/2016.
  */
-public final class ImmutableSortedArraySet<E> extends AbstractSet<E> implements SortedSet<E>, ArrayBackedSet<E> {
+public final class ImmutableSortedArraySet<E> extends AbstractSet<E>
+        implements SortedSet<E>, ArrayBackedSet<E>, Serializable {
     private final Object[] m_Elements;
     private final Comparator<? super E> m_Comparator;
-    private final Comparator m_NullsComparator;
+    private transient Comparator m_NullsComparator;
 
+    // Singleton, as an optimization only
     private static final ImmutableSortedArraySet<?> EMPTY = new ImmutableSortedArraySet<>(new Object[0], null);
+
+    // Serializable
+    private static final long serialVersionUID = 6563747607599090064L;
 
     @SuppressWarnings("unchecked")
     public static <E> ImmutableSortedArraySet<E> emptySet() {
@@ -568,4 +577,49 @@ public final class ImmutableSortedArraySet<E> extends AbstractSet<E> implements 
     public static <E> ImmutableSortedArraySetBuilder<E> builder() {
         return new ImmutableSortedArraySetBuilder<E>();
     }
+
+    /**
+     * Deserialization.
+     */
+    @SuppressWarnings("unchecked")
+    private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
+        stream.defaultReadObject();
+
+        // Perform validation
+        if (m_Elements == null) {
+            throw new InvalidObjectException("set must have elements");
+        }
+
+        // Regenerate the nulls comparator
+        this.m_NullsComparator = (m_Comparator == null) ?
+                Comparator.nullsFirst(Comparator.naturalOrder()) :
+                Comparator.nullsFirst(m_Comparator);
+
+        final int sz = m_Elements.length;
+
+        // Scan to ensure ordering is consistent, using the given comparator.
+        if(sz > 0) {
+            Object prevElem = m_Elements[0];
+            for (int i = 1; i < sz; i++) {
+                Object currElem = m_Elements[i];
+                int cmp = m_NullsComparator.compare(currElem, prevElem);
+                if (cmp < 0) {
+                    throw new InvalidObjectException("set is not ordered by the comparator");
+                }
+                prevElem = currElem;
+            }
+        }
+    }
+
+    /**
+     * Deserialization.
+     */
+    private Object readResolve() {
+        if(m_Elements.length == 0) {
+            // optimization only
+            return EMPTY;
+        }
+        return this;
+    }
+
 }

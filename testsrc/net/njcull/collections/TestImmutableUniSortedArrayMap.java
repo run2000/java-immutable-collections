@@ -3,6 +3,10 @@ package net.njcull.collections;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1050,6 +1054,53 @@ public final class TestImmutableUniSortedArrayMap {
         ArrayBackedCollection<String> keys1 = (ArrayBackedCollection<String>)map.keySet().asList();
         List<String> keys2 = keys1.asList();
         Assert.assertSame(keys1, keys2);
+
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSerialization() throws Exception {
+        ImmutableUniSortedArrayMapBuilder<String, String> builder =
+                new ImmutableUniSortedArrayMapBuilder<>();
+        builder.with("a", "ac");
+        builder.with("b", "bc");
+        builder.with("c", "cc");
+        builder.with("d", "dx");
+        builder.with("e", "ec");
+        builder.with("f", "fc");
+        builder.with("g", "gc");
+
+        ImmutableUniSortedArrayMap<String, String> map = builder.build();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+
+        oos.writeObject(map);
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        ObjectInputStream ois = new ObjectInputStream(bais);
+
+        ImmutableUniSortedArrayMap<String, String> map2 =
+                (ImmutableUniSortedArrayMap<String, String>) ois.readObject();
+
+        Assert.assertEquals(7, map2.size());
+        Assert.assertEquals("{a=ac, b=bc, c=cc, d=dx, e=ec, f=fc, g=gc}", map2.toString());
+
+        Assert.assertEquals("bc", map2.get("b"));
+        Assert.assertEquals("gc", map2.get("g"));
+
+        baos = new ByteArrayOutputStream();
+        oos = new ObjectOutputStream(baos);
+
+        oos.writeObject(ImmutableUniSortedArrayMap.emptyMap());
+
+        bais = new ByteArrayInputStream(baos.toByteArray());
+        ois = new ObjectInputStream(bais);
+
+        map2 = (ImmutableUniSortedArrayMap<String, String>) ois.readObject();
+        Assert.assertEquals("{}", map2.toString());
+        Assert.assertEquals(0, map2.size());
+        Assert.assertSame(ImmutableUniSortedArrayMap.emptyMap(), map2);
 
     }
 }

@@ -1,5 +1,9 @@
 package net.njcull.collections;
 
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.BiConsumer;
 
@@ -20,17 +24,22 @@ import java.util.function.BiConsumer;
  * @author run2000
  * @version 7/01/2016.
  */
-public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> implements ArrayBackedMap<K,V>, SortedMap<K,V> {
+public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V>
+        implements ArrayBackedMap<K,V>, SortedMap<K,V>, Serializable {
 
     private final Object[] m_Map;
-    private final Integer[] m_SortedValues;
+    private final int[] m_SortedValues;
     private final Comparator<? super K> m_KeyComparator;
-    private final Comparator m_NullsKeyComparator;
+    private transient Comparator m_NullsKeyComparator;
     private final Comparator<? super V> m_ValueComparator;
-    private final Comparator m_NullsValueComparator;
+    private transient Comparator m_NullsValueComparator;
     private final boolean m_BiMap;
 
-    private static final ImmutableSortedArrayMap<?,?> EMPTY = new ImmutableSortedArrayMap<>(new Object[0], new Integer[0], null, null, true);
+    // Singleton, as an optimization only
+    private static final ImmutableSortedArrayMap<?,?> EMPTY = new ImmutableSortedArrayMap<>(new Object[0], new int[0], null, null, true);
+
+    // Serialization
+    private static final long serialVersionUID = -484980422677271120L;
 
     /**
      * Returns an immutable empty sorted array map. Each call to this method
@@ -45,7 +54,7 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> impleme
         return (ImmutableSortedArrayMap<K,V>) EMPTY;
     }
 
-    ImmutableSortedArrayMap(Object[] map, Integer[] sortedValues,
+    ImmutableSortedArrayMap(Object[] map, int[] sortedValues,
                 Comparator<? super K> keyComparator, Comparator<? super V> valueComparator,
                 boolean biMap) {
         this.m_Map = Objects.requireNonNull(map, "map must not be null");
@@ -473,7 +482,7 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> impleme
 
         int subSize = toIndex - fromIndex;
         Object[] subMap = new Object[subSize * 2];
-        Integer[] subSortedValues = new Integer[subSize];
+        int[] subSortedValues = new int[subSize];
 
         // copy keys
         System.arraycopy(m_Map, fromIndex, subMap, 0, subSize);
@@ -608,5 +617,69 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V> impleme
      */
     public static <K,V> ImmutableSortedArrayMapBuilder<K,V> builder() {
         return new ImmutableSortedArrayMapBuilder<K,V>();
+    }
+
+    /**
+     * Deserialization.
+     */
+    @SuppressWarnings("unchecked")
+    private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
+        stream.defaultReadObject();
+
+        // Perform validation
+        if (m_Map == null) {
+            throw new InvalidObjectException("map must have elements");
+        }
+        if (m_SortedValues == null) {
+            throw new InvalidObjectException("sorted values must be present");
+        }
+        if(m_SortedValues.length != (m_Map.length / 2)) {
+            throw new InvalidObjectException("sorted values must be of value length");
+        }
+
+        // Regenerate the nulls comparator
+        this.m_NullsKeyComparator = (m_KeyComparator == null) ?
+                Comparator.nullsFirst(Comparator.naturalOrder()) :
+                Comparator.nullsFirst(m_KeyComparator);
+        this.m_NullsValueComparator = (m_ValueComparator == null) ?
+                Comparator.nullsFirst(Comparator.naturalOrder()) :
+                Comparator.nullsFirst(m_ValueComparator);
+
+        final int sz = m_Map.length / 2;
+
+        if(sz > 0) {
+            // Scan keys to ensure ordering is consistent, using the key comparator
+            Object prev = m_Map[0];
+            for (int i = 1; i < sz; i++) {
+                Object o = m_Map[i];
+                int cmp = m_NullsKeyComparator.compare(o, prev);
+                if (cmp < 0) {
+                    throw new InvalidObjectException("map keys not ordered by the comparator");
+                }
+                prev = o;
+            }
+
+            // Scan values to ensure ordering is consistent, using the value comparator
+            prev = m_Map[sz + m_SortedValues[0]];
+            for (int i = 1; i < sz; i++) {
+                Object o = m_Map[sz + m_SortedValues[i]];
+                int cmp = m_NullsValueComparator.compare(o, prev);
+                if (cmp < 0) {
+                    throw new InvalidObjectException("map values not ordered by the comparator");
+                }
+                prev = o;
+            }
+        }
+    }
+
+    /**
+     * Deserialization.
+     */
+    private Object readResolve() {
+        if(m_Map.length == 0) {
+            // optimization only
+            return EMPTY;
+        }
+        return this;
     }
 }

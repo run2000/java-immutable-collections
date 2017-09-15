@@ -1,5 +1,9 @@
 package net.njcull.collections;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.*;
 
 import org.junit.Assert;
@@ -444,5 +448,44 @@ public final class TestImmutableSortedArraySet {
         List<String> list2 = list1.asList();
         Assert.assertSame(list1, list2);
 
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSerialization() throws Exception {
+        ImmutableSortedArraySetBuilder<String> builder = new ImmutableSortedArraySetBuilder<>();
+        ImmutableSortedArraySet<String> set = builder
+                .with("a", "b", "c", "d")
+                .with( "e", "f", "g")
+                .build();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+
+        oos.writeObject(set);
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        ObjectInputStream ois = new ObjectInputStream(bais);
+
+        ImmutableSortedArraySet<String> set2 = (ImmutableSortedArraySet<String>) ois.readObject();
+        Assert.assertEquals("[a, b, c, d, e, f, g]", set2.toString());
+        Assert.assertEquals(7, set2.size());
+        Assert.assertNotSame(set, set2);
+
+        Assert.assertEquals(2, set2.indexOf("c"));
+        Assert.assertEquals(6, set2.indexOf("g"));
+
+        baos = new ByteArrayOutputStream();
+        oos = new ObjectOutputStream(baos);
+
+        oos.writeObject(ImmutableSortedArraySet.emptySet());
+
+        bais = new ByteArrayInputStream(baos.toByteArray());
+        ois = new ObjectInputStream(bais);
+
+        set2 = (ImmutableSortedArraySet<String>) ois.readObject();
+        Assert.assertEquals("[]", set2.toString());
+        Assert.assertEquals(0, set2.size());
+        Assert.assertSame(ImmutableSortedArraySet.emptySet(), set2);
     }
 }

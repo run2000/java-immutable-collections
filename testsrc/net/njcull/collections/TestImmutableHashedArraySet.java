@@ -3,6 +3,10 @@ package net.njcull.collections;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -505,5 +509,44 @@ public final class TestImmutableHashedArraySet {
         List<String> list2 = list1.asList();
         Assert.assertSame(list1, list2);
 
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSerialization() throws Exception {
+        ImmutableHashedArraySetBuilder<String> builder = new ImmutableHashedArraySetBuilder<>();
+        ImmutableHashedArraySet<String> set = builder
+                .with("a", "b", "c", "d")
+                .with( "e", "f", "g")
+                .build();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+
+        oos.writeObject(set);
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        ObjectInputStream ois = new ObjectInputStream(bais);
+
+        ImmutableHashedArraySet<String> set2 = (ImmutableHashedArraySet<String>) ois.readObject();
+        Assert.assertEquals("[a, b, c, d, e, f, g]", set2.toString());
+        Assert.assertEquals(7, set2.size());
+        Assert.assertNotSame(set, set2);
+
+        Assert.assertEquals(2, set2.indexOf("c"));
+        Assert.assertEquals(6, set2.indexOf("g"));
+
+        baos = new ByteArrayOutputStream();
+        oos = new ObjectOutputStream(baos);
+
+        oos.writeObject(ImmutableHashedArraySet.emptySet());
+
+        bais = new ByteArrayInputStream(baos.toByteArray());
+        ois = new ObjectInputStream(bais);
+
+        set2 = (ImmutableHashedArraySet<String>) ois.readObject();
+        Assert.assertEquals("[]", set2.toString());
+        Assert.assertEquals(0, set2.size());
+        Assert.assertSame(ImmutableHashedArraySet.emptySet(), set2);
     }
 }

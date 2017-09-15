@@ -1,5 +1,9 @@
 package net.njcull.collections;
 
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -7,7 +11,7 @@ import java.util.Spliterator;
 import java.util.function.IntFunction;
 
 /**
- * An immutable list for a list-like structure, where values may be
+ * An immutable list for an array-like structure, where values may be
  * characterised as distinct.
  *
  * @param <E> the type of elements maintained by this list
@@ -15,13 +19,16 @@ import java.util.function.IntFunction;
  * @version 5/09/2017 9:52 AM.
  */
 final class ArrayBackedImmutableList<E> extends AbstractRandomAccessList<E>
-        implements ArrayBackedCollection<E> {
+        implements ArrayBackedCollection<E>, Serializable {
     private final IntFunction<E> m_Indexer;
     private final Comparator<? super E> m_Comparator;
     private final int m_Size;
     private final int m_Characteristics;
 
     private static final int DEFAULT_FLAGS = 0;
+
+    // Serializable
+    private static final long serialVersionUID = -7835105825733153656L;
 
     /**
      * Create a new list view for the given fixed size indexer. The indexer
@@ -205,5 +212,20 @@ final class ArrayBackedImmutableList<E> extends AbstractRandomAccessList<E>
     @Override
     public List<E> asList() {
         return this;
+    }
+
+    /**
+     * Deserialization.
+     */
+    private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
+        stream.defaultReadObject();
+
+        // Perform validation
+        if(m_Indexer == null) {
+            throw new InvalidObjectException("indexer must not be null");
+        }
+        if(m_Size < 0) {
+            throw new InvalidObjectException("size must be 0 or greater");
+        }
     }
 }

@@ -1,5 +1,9 @@
 package net.njcull.collections;
 
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
@@ -28,13 +32,18 @@ import java.util.function.BiConsumer;
  * @author run2000
  * @version 3/07/2016.
  */
-public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> implements ArrayBackedMap<K,V> {
+public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V>
+        implements ArrayBackedMap<K,V>, Serializable {
 
     private final Object[] m_Map;
-    private final int[] m_HashCodes;
+    private transient int[] m_HashCodes;
     private final boolean m_BiMap;
 
+    // Singleton, as an optimization only
     private static final ImmutableHashedArrayMap<?,?> EMPTY = new ImmutableHashedArrayMap<>(new Object[0], new int[0], true);
+
+    // Serializable
+    private static final long serialVersionUID = -964316096581791217L;
 
     /**
      * Returns an immutable empty hashed array map. Each call to this method
@@ -400,5 +409,35 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V> impleme
      */
     public static <K,V> ImmutableHashedArrayMapBuilder<K,V> builder() {
         return new ImmutableHashedArrayMapBuilder<K,V>();
+    }
+
+    /**
+     * Deserialization.
+     */
+    private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
+        stream.defaultReadObject();
+
+        // Perform validation
+        if ((m_Map == null) || ((m_Map.length % 2) != 0)) {
+            throw new InvalidObjectException("map must be an equal number of keys and values");
+        }
+        final int sz = m_Map.length;
+
+        // Regenerate hashcodes
+        m_HashCodes = new int[sz];
+        for(int i = 0; i < sz; i++) {
+            m_HashCodes[i] = Objects.hashCode(m_Map[i]);
+        }
+    }
+
+    /**
+     * Deserialization.
+     */
+    private Object readResolve() {
+        if(m_Map.length == 0) {
+            // optimization only
+            return EMPTY;
+        }
+        return this;
     }
 }

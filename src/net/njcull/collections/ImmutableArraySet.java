@@ -1,5 +1,9 @@
 package net.njcull.collections;
 
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -14,11 +18,16 @@ import java.util.function.Predicate;
  * @author run2000
  * @version 9/01/2016.
  */
-public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayBackedSet<E> {
+public final class ImmutableArraySet<E> extends AbstractSet<E>
+        implements ArrayBackedSet<E>, Serializable {
 
     private final Object[] m_Elements;
 
+    // Singleton, as an optimization only
     private static final ImmutableArraySet<?> EMPTY = new ImmutableArraySet<>(new Object[0]);
+
+    // Serializable
+    private static final long serialVersionUID = -5342255745609505486L;
 
     /**
      * Returns an immutable empty array set. Each call to this method will return
@@ -413,5 +422,28 @@ public final class ImmutableArraySet<E> extends AbstractSet<E> implements ArrayB
      */
     public static <E> ImmutableArraySetBuilder<E> builder() {
         return new ImmutableArraySetBuilder<E>();
+    }
+
+    /**
+     * Deserialization.
+     */
+    private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
+        stream.defaultReadObject();
+
+        // Perform validation
+        if (m_Elements == null) {
+            throw new InvalidObjectException("set must have elements");
+        }
+    }
+
+    /**
+     * Deserialization
+     */
+    private Object readResolve() {
+        if(m_Elements.length == 0) {
+            // An optimization only
+            return EMPTY;
+        }
+        return this;
     }
 }

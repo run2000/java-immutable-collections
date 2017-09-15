@@ -3,6 +3,11 @@ package net.njcull.collections;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * Tests for ImmutableSortedArrayPropertyMap.
@@ -1460,6 +1466,62 @@ public class TestImmutableSortedArrayPropertyMap {
 
     }
 
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSerialization() throws Exception {
+        ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>> map =
+                ImmutableSortedArrayPropertyMap.<String, TestClassWithProperty<String>>builder()
+                        .with(new TestClassWithProperty<>("a", "ac"))
+                        .with(new TestClassWithProperty<>("b", "bc"))
+                        .with(new TestClassWithProperty<>("c", "cc"))
+                        .with(new TestClassWithProperty<>("d", "dx"))
+                        .with(new TestClassWithProperty<>("e", "ec"))
+                        .with(new TestClassWithProperty<>("f", "fc"))
+                        .with(new TestClassWithProperty<>("g", "gc"))
+                        .byKeyMethod(new KeyExtractor())
+                        .build();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+
+        oos.writeObject(map);
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        ObjectInputStream ois = new ObjectInputStream(bais);
+
+        ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>> map2 =
+                (ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>>) ois.readObject();
+
+        Assert.assertEquals(7, map2.size());
+        Assert.assertEquals("{a=ac, b=bc, c=cc, d=dx, e=ec, f=fc, g=gc}", map2.toString());
+
+        Assert.assertEquals("bc", map2.get("b").toString());
+        Assert.assertEquals("gc", map2.get("g").toString());
+
+        baos = new ByteArrayOutputStream();
+        oos = new ObjectOutputStream(baos);
+
+        oos.writeObject(ImmutableSortedArrayPropertyMap.emptyMap());
+
+        bais = new ByteArrayInputStream(baos.toByteArray());
+        ois = new ObjectInputStream(bais);
+
+        map2 = (ImmutableSortedArrayPropertyMap<String, TestClassWithProperty<String>>) ois.readObject();
+        Assert.assertEquals("{}", map2.toString());
+        Assert.assertEquals(0, map2.size());
+        Assert.assertSame(ImmutableSortedArrayPropertyMap.emptyMap(), map2);
+
+    }
+
+    private static final class KeyExtractor implements Function<TestClassWithProperty<String>, String>,
+            Serializable {
+
+        @Override
+        public String apply(TestClassWithProperty<String> stringTestClassWithProperty) {
+            return stringTestClassWithProperty.getName();
+        }
+    }
+
     /**
      * A static method that fits the Function definition for extracting a
      * key from the given test class.
@@ -1477,7 +1539,7 @@ public class TestImmutableSortedArrayPropertyMap {
      *
      * @param <T> the value type
      */
-    private static final class TestClassWithProperty<T> {
+    private static final class TestClassWithProperty<T> implements Serializable {
         private final String name;
         private final T value;
 
@@ -1519,4 +1581,5 @@ public class TestImmutableSortedArrayPropertyMap {
             return result;
         }
     }
+
 }

@@ -3,6 +3,10 @@ package net.njcull.collections;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -512,5 +516,63 @@ public final class TestImmutableArraySet {
         List<String> list2 = list1.asList();
         Assert.assertSame(list1, list2);
 
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSerialization() throws Exception {
+        ImmutableArraySetBuilder<String> builder = new ImmutableArraySetBuilder<>();
+        ImmutableArraySet<String> set = builder
+                .with("a", "b", "c", "d")
+                .with( "e", "f", "g")
+                .build();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+
+        oos.writeObject(set);
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        ObjectInputStream ois = new ObjectInputStream(bais);
+
+        ImmutableArraySet<String> set2 = (ImmutableArraySet<String>) ois.readObject();
+        Assert.assertEquals("[a, b, c, d, e, f, g]", set2.toString());
+        Assert.assertEquals(7, set2.size());
+        Assert.assertNotSame(set, set2);
+
+        Assert.assertEquals(2, set2.indexOf("c"));
+        Assert.assertEquals(6, set2.indexOf("g"));
+
+        // Serialize the list view
+        baos = new ByteArrayOutputStream();
+        oos = new ObjectOutputStream(baos);
+
+        List<String> listView = set.asList();
+
+        oos.writeObject(listView);
+
+        bais = new ByteArrayInputStream(baos.toByteArray());
+        ois = new ObjectInputStream(bais);
+
+        List<String> listView2 = (List<String>) ois.readObject();
+
+        Assert.assertEquals(listView, listView2);
+        Assert.assertEquals("[a, b, c, d, e, f, g]", listView2.toString());
+        Assert.assertEquals(7, listView2.size());
+        Assert.assertNotSame(listView, listView2);
+
+        // Empty set
+        baos = new ByteArrayOutputStream();
+        oos = new ObjectOutputStream(baos);
+
+        oos.writeObject(ImmutableArraySet.emptySet());
+
+        bais = new ByteArrayInputStream(baos.toByteArray());
+        ois = new ObjectInputStream(bais);
+
+        set2 = (ImmutableArraySet<String>) ois.readObject();
+        Assert.assertEquals("[]", set2.toString());
+        Assert.assertEquals(0, set2.size());
+        Assert.assertSame(ImmutableArraySet.emptySet(), set2);
     }
 }

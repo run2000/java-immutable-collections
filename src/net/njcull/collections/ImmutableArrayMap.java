@@ -1,5 +1,9 @@
 package net.njcull.collections;
 
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.BiConsumer;
 
@@ -17,12 +21,17 @@ import java.util.function.BiConsumer;
  * @author run2000
  * @version 7/01/2016.
  */
-public final class ImmutableArrayMap<K,V> extends AbstractMap<K,V> implements ArrayBackedMap<K,V> {
+public final class ImmutableArrayMap<K,V> extends AbstractMap<K,V>
+        implements ArrayBackedMap<K,V>, Serializable {
 
     private final Object[] m_Map;
     private final boolean m_BiMap;
 
+    // Singleton, as an optimization only
     private static final ImmutableArrayMap<?,?> EMPTY = new ImmutableArrayMap<>(new Object[0], true);
+
+    // Serialization
+    private static final long serialVersionUID = -5819054629517775844L;
 
     /**
      * Returns an immutable empty array map. Each call to this method will return
@@ -407,5 +416,28 @@ public final class ImmutableArrayMap<K,V> extends AbstractMap<K,V> implements Ar
      */
     public static <K,V> ImmutableArrayMapBuilder<K,V> builder() {
         return new ImmutableArrayMapBuilder<K,V>();
+    }
+
+    /**
+     * Deserialization.
+     */
+    private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
+        stream.defaultReadObject();
+
+        // Perform validation
+        if ((m_Map == null) || ((m_Map.length % 2) != 0)) {
+            throw new InvalidObjectException("map must have same number of keys and values");
+        }
+    }
+
+    /**
+     * Deserialization.
+     */
+    private Object readResolve() {
+        if(m_Map.length == 0) {
+            // optimization only
+            return EMPTY;
+        }
+        return this;
     }
 }

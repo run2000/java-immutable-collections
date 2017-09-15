@@ -1,5 +1,9 @@
 package net.njcull.collections;
 
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -26,8 +30,11 @@ public final class Views {
         return new CollectionView<>(list);
     }
 
-    private static final class SetView<E> extends AbstractSet<E> implements ArrayBackedSet<E> {
+    private static final class SetView<E> extends AbstractSet<E>
+            implements ArrayBackedSet<E>, Serializable {
         private final List<E> m_List;
+
+        private static final long serialVersionUID = -5508753976144187934L;
 
         SetView(List<E> list) {
             this.m_List = Objects.requireNonNull(list, "list must be non-null");
@@ -154,13 +161,28 @@ public final class Views {
         public List<E> asList() {
             return m_List;
         }
+
+        /**
+         * Deserialization.
+         */
+        private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
+            stream.defaultReadObject();
+
+            // Perform validation
+            if (m_List == null) {
+                throw new InvalidObjectException("backing list must not be null");
+            }
+        }
     }
 
     private static final class ListView<E> extends AbstractRandomAccessList<E>
-            implements ArrayBackedCollection<E> {
+            implements ArrayBackedCollection<E>, Serializable {
         private final ArrayBackedSet<E> m_Coll;
         private final int m_StartIndex;
         private final int m_EndIndex;
+
+        // Serialization
+        private static final long serialVersionUID = -8124463789970217417L;
 
         ListView(ArrayBackedSet<E> coll) {
             this.m_Coll = Objects.requireNonNull(coll);
@@ -266,10 +288,32 @@ public final class Views {
         public List<E> asList() {
             return this;
         }
+
+        /**
+         * Deserialization.
+         */
+        private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
+            stream.defaultReadObject();
+
+            // Perform validation
+            if (m_Coll == null) {
+                throw new InvalidObjectException("collection must not be null");
+            }
+            if((m_StartIndex < 0) || (m_StartIndex >= m_Coll.size())) {
+                throw new InvalidObjectException("start index is out of bounds: " + m_StartIndex);
+            }
+            if((m_EndIndex < m_StartIndex) || (m_EndIndex > m_Coll.size())) {
+                throw new IllegalArgumentException("end index is out of bounds: " + m_EndIndex);
+            }
+        }
     }
 
-    private static final class CollectionView<E> extends AbstractCollection<E> implements ArrayBackedCollection<E> {
+    private static final class CollectionView<E> extends AbstractCollection<E>
+            implements ArrayBackedCollection<E>, Serializable {
         private final List<E> m_List;
+
+        // Serialization
+        private static final long serialVersionUID = -5876575847029641360L;
 
         CollectionView(List<E> list) {
             this.m_List = Objects.requireNonNull(list, "list must be non-null");
@@ -393,6 +437,18 @@ public final class Views {
         @Override
         public List<E> asList() {
             return m_List;
+        }
+
+        /**
+         * Deserialization.
+         */
+        private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
+            stream.defaultReadObject();
+
+            // Perform validation
+            if (m_List == null) {
+                throw new InvalidObjectException("list cannot be null");
+            }
         }
     }
 }

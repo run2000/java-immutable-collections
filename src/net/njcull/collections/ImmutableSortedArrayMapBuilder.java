@@ -444,10 +444,15 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
         Comparator nullsValueComparator = (valueComparator == null) ? naturalOrder : Comparator.nullsFirst(valueComparator);
         Arrays.sort(sortedValues, 0, m_Size, new ArrayComparator(elements, m_Size, nullsValueComparator));
 
+        int[] intSortedValues = new int[sortedValues.length];
+        for(int i = 0; i < sortedValues.length; i++) {
+            intSortedValues[i] = sortedValues[i].intValue();
+        }
+
         if(m_Bimap) {
-            prev = elements[m_Size + sortedValues[0]];
+            prev = elements[m_Size + intSortedValues[0]];
             for(int i = 1; i < m_Size; i++) {
-                Object o = elements[m_Size + sortedValues[i]];
+                Object o = elements[m_Size + intSortedValues[i]];
                 int cmp = nullsValueComparator.compare(o, prev);
                 if(cmp == 0) {
                     throw new IllegalStateException("duplicate value");
@@ -456,7 +461,7 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
             }
         }
 
-        return new ImmutableSortedArrayMap<>(elements, sortedValues, keyComparator, valueComparator, m_Bimap);
+        return new ImmutableSortedArrayMap<>(elements, intSortedValues, keyComparator, valueComparator, m_Bimap);
     }
 
     /**

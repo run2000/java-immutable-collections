@@ -3,6 +3,10 @@ package net.njcull.collections;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -586,6 +590,46 @@ public final class TestImmutableHashedArrayBiMap {
         ArrayBackedCollection<String> keys1 = (ArrayBackedCollection<String>)map.keySet().asList();
         List<String> keys2 = keys1.asList();
         Assert.assertSame(keys1, keys2);
+
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testSerialization() throws Exception {
+        ImmutableHashedArrayMap<String, String> map =
+                ImmutableHashedArrayMap.<String, String>builder().asBiMap()
+                        .with("c", "5", "d", "4", "e", "3")
+                        .with("a", "7", "b", "96")
+                        .with("f", "2", "g", "1").build();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+
+        oos.writeObject(map);
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        ObjectInputStream ois = new ObjectInputStream(bais);
+
+        ImmutableHashedArrayMap<String, String> map2 = (ImmutableHashedArrayMap<String, String>) ois.readObject();
+
+        Assert.assertEquals(7, map2.size());
+        Assert.assertEquals("{c=5, d=4, e=3, a=7, b=96, f=2, g=1}", map2.toString());
+
+        Assert.assertEquals("4", map2.get("d"));
+        Assert.assertEquals("1", map2.get("g"));
+
+        baos = new ByteArrayOutputStream();
+        oos = new ObjectOutputStream(baos);
+
+        oos.writeObject(ImmutableHashedArrayMap.emptyMap());
+
+        bais = new ByteArrayInputStream(baos.toByteArray());
+        ois = new ObjectInputStream(bais);
+
+        map2 = (ImmutableHashedArrayMap<String, String>) ois.readObject();
+        Assert.assertEquals("{}", map2.toString());
+        Assert.assertEquals(0, map2.size());
+        Assert.assertSame(ImmutableHashedArrayMap.emptyMap(), map2);
 
     }
 }
