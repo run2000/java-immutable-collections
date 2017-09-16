@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.IntFunction;
 
 /**
  * A {@link SortedMap} backed by an array of elements. The array is the
@@ -309,7 +310,8 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V>
     @Override
     public ArrayBackedSet<Entry<K, V>> entrySet() {
         return Views.setView(
-                new ArrayBackedImmutableList<>(this::entryAt, size(),
+                new ArrayBackedImmutableList<>(
+                        Views.mapEntryIndexer(this), size(),
                         Spliterator.DISTINCT | Spliterator.NONNULL));
     }
 
@@ -322,7 +324,8 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V>
      */
     public ArrayBackedSet<Entry<K,V>> entrySetByValue() {
         return Views.setView(
-                new ArrayBackedImmutableList<>(this::sortedValueEntryAt, size(),
+                new ArrayBackedImmutableList<>(
+                        new MapSortedEntryIndexer<>(this), size(),
                         Spliterator.DISTINCT | Spliterator.NONNULL));
     }
 
@@ -336,7 +339,8 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V>
     @Override
     public ArrayBackedSet<K> keySet() {
         return Views.setView(
-                new ArrayBackedImmutableList<K>(this::keyAt, size(),
+                new ArrayBackedImmutableList<K>(
+                        Views.mapKeyIndexer(this), size(),
                         Spliterator.DISTINCT | Spliterator.SORTED,
                         m_NullsKeyComparator));
     }
@@ -353,12 +357,14 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V>
     public ArrayBackedCollection<V> values() {
         if(m_BiMap) {
             return Views.setView(
-                    new ArrayBackedImmutableList<V>(this::sortedValueAt, size(),
+                    new ArrayBackedImmutableList<V>(
+                            new MapSortedValueIndexer<>(this), size(),
                             Spliterator.DISTINCT | Spliterator.SORTED,
                             m_NullsValueComparator));
         } else {
             return Views.collectionView(
-                    new ArrayBackedImmutableList<V>(this::sortedValueAt, size(),
+                    new ArrayBackedImmutableList<V>(
+                            new MapSortedValueIndexer<>(this), size(),
                             Spliterator.SORTED, m_NullsValueComparator));
         }
     }
@@ -681,5 +687,60 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V>
             return EMPTY;
         }
         return this;
+    }
+
+    private static final class MapSortedValueIndexer<V> implements IntFunction<V>, Serializable {
+        private final ImmutableSortedArrayMap<?,V> m_Map;
+
+        // Serializable
+        private static final long serialVersionUID = 6830446434607465304L;
+
+        public MapSortedValueIndexer(ImmutableSortedArrayMap<?, V> map) {
+            this.m_Map = Objects.requireNonNull(map);
+        }
+
+        @Override
+        public V apply(int idx) {
+            return m_Map.sortedValueAt(idx);
+        }
+
+        /**
+         * Deserialization.
+         */
+        private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
+            stream.defaultReadObject();
+
+            // Perform validation
+            if (m_Map == null) {
+                throw new InvalidObjectException("Map must not be null");
+            }
+        }
+    }
+
+    private static final class MapSortedEntryIndexer<K,V> implements IntFunction<Map.Entry<K,V>>, Serializable {
+        private final ImmutableSortedArrayMap<K,V> m_Map;
+
+        private static final long serialVersionUID = -7242877910333756268L;
+
+        public MapSortedEntryIndexer(ImmutableSortedArrayMap<K, V> map) {
+            this.m_Map = Objects.requireNonNull(map);
+        }
+
+        @Override
+        public Map.Entry<K, V> apply(int idx) {
+            return m_Map.sortedValueEntryAt(idx);
+        }
+
+        /**
+         * Deserialization.
+         */
+        private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
+            stream.defaultReadObject();
+
+            // Perform validation
+            if (m_Map == null) {
+                throw new InvalidObjectException("Map must not be null");
+            }
+        }
     }
 }

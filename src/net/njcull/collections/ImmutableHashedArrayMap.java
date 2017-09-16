@@ -305,7 +305,8 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V>
     @Override
     public ArrayBackedSet<Entry<K, V>> entrySet() {
         return Views.setView(
-                new ArrayBackedImmutableList<>(this::entryAt, size(),
+                new ArrayBackedImmutableList<>(
+                        Views.mapEntryIndexer(this), size(),
                         Spliterator.DISTINCT | Spliterator.NONNULL));
     }
 
@@ -318,7 +319,8 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V>
     @Override
     public ArrayBackedSet<K> keySet() {
         return Views.setView(
-                new ArrayBackedImmutableList<>(this::keyAt, size(), Spliterator.DISTINCT));
+                new ArrayBackedImmutableList<>(
+                        Views.mapKeyIndexer(this), size(), Spliterator.DISTINCT));
     }
 
     /**
@@ -332,10 +334,12 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V>
     public ArrayBackedCollection<V> values() {
         if(m_BiMap) {
             return Views.setView(
-                    new ArrayBackedImmutableList<>(this::valueAt, size(), Spliterator.DISTINCT));
+                    new ArrayBackedImmutableList<>(
+                            Views.mapValueIndexer(this), size(), Spliterator.DISTINCT));
         } else {
             return Views.collectionView(
-                    new ArrayBackedImmutableList<>(this::valueAt, size()));
+                    new ArrayBackedImmutableList<>(
+                            Views.mapValueIndexer(this), size()));
         }
     }
 

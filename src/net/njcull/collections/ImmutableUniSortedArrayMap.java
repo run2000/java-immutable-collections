@@ -257,7 +257,8 @@ public final class ImmutableUniSortedArrayMap<K,V> extends AbstractMap<K,V>
     @Override
     public ArrayBackedSet<Entry<K, V>> entrySet() {
         return Views.setView(
-                new ArrayBackedImmutableList<>(this::entryAt, size(),
+                new ArrayBackedImmutableList<>(
+                        Views.mapEntryIndexer(this), size(),
                         Spliterator.DISTINCT | Spliterator.NONNULL));
     }
 
@@ -271,7 +272,8 @@ public final class ImmutableUniSortedArrayMap<K,V> extends AbstractMap<K,V>
     @Override
     public ArrayBackedSet<K> keySet() {
         return Views.setView(
-                new ArrayBackedImmutableList<K>(this::keyAt, size(),
+                new ArrayBackedImmutableList<K>(
+                        Views.mapKeyIndexer(this), size(),
                         Spliterator.DISTINCT | Spliterator.SORTED,
                         m_NullsKeyComparator));
     }
@@ -287,11 +289,13 @@ public final class ImmutableUniSortedArrayMap<K,V> extends AbstractMap<K,V>
     public ArrayBackedCollection<V> values() {
         if(m_BiMap) {
             return Views.setView(
-                    new ArrayBackedImmutableList<V>(this::valueAt, size(),
+                    new ArrayBackedImmutableList<V>(
+                            Views.mapValueIndexer(this), size(),
                             Spliterator.DISTINCT));
         } else {
             return Views.collectionView(
-                    new ArrayBackedImmutableList<>(this::valueAt, size()));
+                    new ArrayBackedImmutableList<>(
+                            Views.mapValueIndexer(this), size()));
         }
     }
 

@@ -252,7 +252,8 @@ public final class ImmutableSortedArrayPropertyMap<K,V> extends AbstractMap<K,V>
     @Override
     public ArrayBackedSet<Entry<K, V>> entrySet() {
         return Views.setView(
-                new ArrayBackedImmutableList<>(this::entryAt, size(),
+                new ArrayBackedImmutableList<>(
+                        Views.mapEntryIndexer(this), size(),
                         Spliterator.DISTINCT | Spliterator.NONNULL));
     }
 
@@ -266,7 +267,8 @@ public final class ImmutableSortedArrayPropertyMap<K,V> extends AbstractMap<K,V>
     @Override
     public ArrayBackedSet<K> keySet() {
         return Views.setView(
-                new ArrayBackedImmutableList<K>(this::keyAt, size(),
+                new ArrayBackedImmutableList<K>(
+                        Views.mapKeyIndexer(this), size(),
                         Spliterator.DISTINCT | Spliterator.SORTED,
                         m_NullsKeyComparator));
     }
@@ -281,7 +283,8 @@ public final class ImmutableSortedArrayPropertyMap<K,V> extends AbstractMap<K,V>
     @Override
     public ArrayBackedCollection<V> values() {
         return Views.collectionView(
-                new ArrayBackedImmutableList<>(this::valueAt, size()));
+                new ArrayBackedImmutableList<>(
+                        Views.mapValueIndexer(this), size()));
     }
 
     // Implement SortedMap

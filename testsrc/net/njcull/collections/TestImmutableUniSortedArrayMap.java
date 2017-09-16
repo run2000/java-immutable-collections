@@ -1089,6 +1089,58 @@ public final class TestImmutableUniSortedArrayMap {
         Assert.assertEquals("bc", map2.get("b"));
         Assert.assertEquals("gc", map2.get("g"));
 
+        // Keysets
+        baos = new ByteArrayOutputStream();
+        oos = new ObjectOutputStream(baos);
+
+        ArrayBackedSet<String> keySet = map.keySet();
+
+        oos.writeObject(keySet);
+
+        bais = new ByteArrayInputStream(baos.toByteArray());
+        ois = new ObjectInputStream(bais);
+
+        ArrayBackedSet<String> keySet2 = (ArrayBackedSet<String>) ois.readObject();
+
+        Assert.assertEquals(keySet, keySet2);
+        Assert.assertEquals(7, keySet2.size());
+        Assert.assertEquals("[a, b, c, d, e, f, g]", keySet2.toString());
+
+        // Values
+        baos = new ByteArrayOutputStream();
+        oos = new ObjectOutputStream(baos);
+
+        ArrayBackedCollection<String> values = map.values();
+        oos.writeObject(values);
+
+        bais = new ByteArrayInputStream(baos.toByteArray());
+        ois = new ObjectInputStream(bais);
+
+        ArrayBackedCollection<String> values2 = (ArrayBackedCollection<String>) ois.readObject();
+
+        Assert.assertEquals(values, values2);
+        Assert.assertEquals(7, values2.size());
+        Assert.assertEquals("[ac, bc, cc, dx, ec, fc, gc]", values2.toString());
+
+        // Entrysets
+        baos = new ByteArrayOutputStream();
+        oos = new ObjectOutputStream(baos);
+
+        ArrayBackedSet<Map.Entry<String,String>> entrySet = map.entrySet();
+
+        oos.writeObject(entrySet);
+
+        bais = new ByteArrayInputStream(baos.toByteArray());
+        ois = new ObjectInputStream(bais);
+
+        ArrayBackedSet<Map.Entry<String,String>> entrySet2 =
+                (ArrayBackedSet<Map.Entry<String,String>>) ois.readObject();
+
+        Assert.assertEquals(entrySet, entrySet2);
+        Assert.assertEquals(7, entrySet2.size());
+        Assert.assertEquals("[a=ac, b=bc, c=cc, d=dx, e=ec, f=fc, g=gc]", entrySet2.toString());
+
+        // Test empty map
         baos = new ByteArrayOutputStream();
         oos = new ObjectOutputStream(baos);
 
