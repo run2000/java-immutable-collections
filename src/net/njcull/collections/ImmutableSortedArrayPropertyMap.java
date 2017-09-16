@@ -539,15 +539,15 @@ public final class ImmutableSortedArrayPropertyMap<K,V> extends AbstractMap<K,V>
                 Comparator.nullsFirst(m_KeyComparator);
 
         if(sz > 0) {
-            Object prev = m_KeySupplier.apply((V)m_Map[0]);
+            K prev = m_KeySupplier.apply((V) m_Map[0]);
 
             for (int i = 1; i < sz; i++) {
-                Object o = m_KeySupplier.apply((V)m_Map[i]);
-                int cmp = m_NullsKeyComparator.compare(o, prev);
+                K key = m_KeySupplier.apply((V) m_Map[i]);
+                int cmp = m_NullsKeyComparator.compare(key, prev);
                 if (cmp < 0) {
                     throw new InvalidObjectException("map is not ordered by the comparator");
                 }
-                prev = o;
+                prev = key;
             }
         }
     }

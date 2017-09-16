@@ -439,10 +439,16 @@ public final class ImmutableArraySet<E> extends AbstractSet<E>
     /**
      * Deserialization
      */
+    @SuppressWarnings("unchecked")
     private Object readResolve() {
         if(m_Elements.length == 0) {
             // An optimization only
             return EMPTY;
+        }
+
+        final int sz = m_Elements.length;
+        for(int i = 0; i < sz; i++) {
+            E elem = (E) m_Elements[i];
         }
         return this;
     }

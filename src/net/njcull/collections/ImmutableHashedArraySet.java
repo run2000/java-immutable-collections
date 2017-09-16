@@ -426,6 +426,7 @@ public final class ImmutableHashedArraySet<E> extends AbstractSet<E>
     /**
      * Deserialization.
      */
+    @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
         stream.defaultReadObject();
 
@@ -438,7 +439,7 @@ public final class ImmutableHashedArraySet<E> extends AbstractSet<E>
         // Regenerate hashcodes
         m_HashCodes = new int[sz];
         for(int i = 0; i < sz; i++) {
-            m_HashCodes[i] = Objects.hashCode(m_Elements[i]);
+            m_HashCodes[i] = Objects.hashCode((E) m_Elements[i]);
         }
     }
 

@@ -425,12 +425,19 @@ public final class ImmutableArrayMap<K,V> extends AbstractMap<K,V>
     /**
      * Deserialization.
      */
+    @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
         stream.defaultReadObject();
 
         // Perform validation
         if ((m_Map == null) || ((m_Map.length % 2) != 0)) {
             throw new InvalidObjectException("map must have same number of keys and values");
+        }
+        final int sz = m_Map.length / 2;
+
+        for(int i = 0; i < sz; i++) {
+            K key = (K)m_Map[i];
+            V val = (V)m_Map[sz + i];
         }
     }
 

@@ -550,15 +550,19 @@ public final class ImmutableUniSortedArrayMap<K,V> extends AbstractMap<K,V>
         final int sz = m_Map.length / 2;
 
         if(sz > 0) {
-            Object prevElem = m_Map[0];
+            K prevElem = (K) m_Map[0];
 
             for (int i = 1; i < sz; i++) {
-                Object currElem = m_Map[i];
+                K currElem = (K) m_Map[i];
                 int cmp = m_NullsKeyComparator.compare(currElem, prevElem);
                 if (cmp < 0) {
                     throw new InvalidObjectException("map is not ordered by the comparator");
                 }
                 prevElem = currElem;
+            }
+
+            for (int i = 0; i < sz; i++) {
+                V val = (V) m_Map[sz + i];
             }
         }
     }

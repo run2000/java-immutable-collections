@@ -599,9 +599,9 @@ public final class ImmutableSortedArraySet<E> extends AbstractSet<E>
 
         // Scan to ensure ordering is consistent, using the given comparator.
         if(sz > 0) {
-            Object prevElem = m_Elements[0];
+            E prevElem = (E) m_Elements[0];
             for (int i = 1; i < sz; i++) {
-                Object currElem = m_Elements[i];
+                E currElem = (E) m_Elements[i];
                 int cmp = m_NullsComparator.compare(currElem, prevElem);
                 if (cmp < 0) {
                     throw new InvalidObjectException("set is not ordered by the comparator");

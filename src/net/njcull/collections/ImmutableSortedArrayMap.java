@@ -654,26 +654,30 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V>
         final int sz = m_Map.length / 2;
 
         if(sz > 0) {
-            // Scan keys to ensure ordering is consistent, using the key comparator
-            Object prev = m_Map[0];
-            for (int i = 1; i < sz; i++) {
-                Object o = m_Map[i];
-                int cmp = m_NullsKeyComparator.compare(o, prev);
-                if (cmp < 0) {
-                    throw new InvalidObjectException("map keys not ordered by the comparator");
+            {
+                // Scan keys to ensure ordering is consistent, using the key comparator
+                K prev = (K) m_Map[0];
+                for (int i = 1; i < sz; i++) {
+                    K o = (K) m_Map[i];
+                    int cmp = m_NullsKeyComparator.compare(o, prev);
+                    if (cmp < 0) {
+                        throw new InvalidObjectException("map keys not ordered by the comparator");
+                    }
+                    prev = o;
                 }
-                prev = o;
             }
 
-            // Scan values to ensure ordering is consistent, using the value comparator
-            prev = m_Map[sz + m_SortedValues[0]];
-            for (int i = 1; i < sz; i++) {
-                Object o = m_Map[sz + m_SortedValues[i]];
-                int cmp = m_NullsValueComparator.compare(o, prev);
-                if (cmp < 0) {
-                    throw new InvalidObjectException("map values not ordered by the comparator");
+            {
+                // Scan values to ensure ordering is consistent, using the value comparator
+                V prev = (V) m_Map[sz + m_SortedValues[0]];
+                for (int i = 1; i < sz; i++) {
+                    V o = (V) m_Map[sz + m_SortedValues[i]];
+                    int cmp = m_NullsValueComparator.compare(o, prev);
+                    if (cmp < 0) {
+                        throw new InvalidObjectException("map values not ordered by the comparator");
+                    }
+                    prev = o;
                 }
-                prev = o;
             }
         }
     }

@@ -418,6 +418,7 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V>
     /**
      * Deserialization.
      */
+    @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
         stream.defaultReadObject();
 
@@ -425,12 +426,14 @@ public final class ImmutableHashedArrayMap<K,V> extends AbstractMap<K,V>
         if ((m_Map == null) || ((m_Map.length % 2) != 0)) {
             throw new InvalidObjectException("map must be an equal number of keys and values");
         }
-        final int sz = m_Map.length;
 
         // Regenerate hashcodes
-        m_HashCodes = new int[sz];
+        m_HashCodes = new int[m_Map.length];
+        final int sz = m_Map.length / 2;
+
         for(int i = 0; i < sz; i++) {
-            m_HashCodes[i] = Objects.hashCode(m_Map[i]);
+            m_HashCodes[i] = Objects.hashCode((K)m_Map[i]);
+            m_HashCodes[sz + i] = Objects.hashCode((V)m_Map[sz + i]);
         }
     }
 
