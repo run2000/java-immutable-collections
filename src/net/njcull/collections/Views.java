@@ -5,6 +5,7 @@ import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.*;
+import java.util.function.IntFunction;
 import java.util.function.Predicate;
 
 /**
@@ -28,6 +29,18 @@ public final class Views {
 
     public static <E> ArrayBackedCollection<E> collectionView(List<E> list) {
         return new CollectionView<>(list);
+    }
+
+    public static <K> IntFunction<K> mapKeyIndexer(ArrayBackedMap<K,?> map) {
+        return new MapKeyIndexer<>(map);
+    }
+
+    public static <V> IntFunction<V> mapValueIndexer(ArrayBackedMap<?,V> map) {
+        return new MapValueIndexer<>(map);
+    }
+
+    public static <K,V> IntFunction<Map.Entry<K,V>> mapEntryIndexer(ArrayBackedMap<K,V> map) {
+        return new MapEntryIndexer<>(map);
     }
 
     private static final class SetView<E> extends AbstractSet<E>
@@ -439,6 +452,23 @@ public final class Views {
             return m_List;
         }
 
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            CollectionView<?> that = (CollectionView<?>) o;
+            return m_List.equals(that.m_List);
+        }
+
+        @Override
+        public int hashCode() {
+            return m_List.hashCode();
+        }
+
         /**
          * Deserialization.
          */
@@ -448,6 +478,90 @@ public final class Views {
             // Perform validation
             if (m_List == null) {
                 throw new InvalidObjectException("list cannot be null");
+            }
+        }
+    }
+
+    private static final class MapKeyIndexer<K> implements IntFunction<K>, Serializable {
+        private final ArrayBackedMap<K,?> m_Map;
+
+        // Serialization
+        private static final long serialVersionUID = 7331773358299958723L;
+
+        public MapKeyIndexer(ArrayBackedMap<K, ?> m_Map) {
+            this.m_Map = Objects.requireNonNull(m_Map);
+        }
+
+        @Override
+        public K apply(int idx) {
+            return m_Map.keyAt(idx);
+        }
+
+        /**
+         * Deserialization.
+         */
+        private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
+            stream.defaultReadObject();
+
+            // Perform validation
+            if (m_Map == null) {
+                throw new InvalidObjectException("Map must not be null");
+            }
+        }
+    }
+
+    private static final class MapValueIndexer<V> implements IntFunction<V>, Serializable {
+        private final ArrayBackedMap<?,V> m_Map;
+
+        // Serialization
+        private static final long serialVersionUID = -1122132774299031635L;
+
+        public MapValueIndexer(ArrayBackedMap<?, V> map) {
+            this.m_Map = Objects.requireNonNull(map);
+        }
+
+        @Override
+        public V apply(int idx) {
+            return m_Map.valueAt(idx);
+        }
+
+        /**
+         * Deserialization.
+         */
+        private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
+            stream.defaultReadObject();
+
+            // Perform validation
+            if (m_Map == null) {
+                throw new InvalidObjectException("Map must not be null");
+            }
+        }
+    }
+
+    private static final class MapEntryIndexer<K,V> implements IntFunction<Map.Entry<K,V>>, Serializable {
+        private final ArrayBackedMap<K,V> m_Map;
+
+        // Serialization
+        private static final long serialVersionUID = -5868536772477786390L;
+
+        public MapEntryIndexer(ArrayBackedMap<K, V> map) {
+            this.m_Map = Objects.requireNonNull(map);
+        }
+
+        @Override
+        public Map.Entry<K, V> apply(int idx) {
+            return m_Map.entryAt(idx);
+        }
+
+        /**
+         * Deserialization.
+         */
+        private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
+            stream.defaultReadObject();
+
+            // Perform validation
+            if (m_Map == null) {
+                throw new InvalidObjectException("Map must not be null");
             }
         }
     }
