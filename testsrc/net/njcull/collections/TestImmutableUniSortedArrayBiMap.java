@@ -836,18 +836,18 @@ public final class TestImmutableUniSortedArrayBiMap {
     @SuppressWarnings("unchecked")
     @Test
     public void testSerialization() throws Exception {
-        ImmutableUniSortedArrayMapBuilder<String, String> builder =
+        ImmutableUniSortedArrayMapBuilder<String, Integer> builder =
                 new ImmutableUniSortedArrayMapBuilder<>();
         builder.asBiMap();
-        builder.with("a", "ac");
-        builder.with("b", "bc");
-        builder.with("c", "cc");
-        builder.with("d", "dx");
-        builder.with("e", "ec");
-        builder.with("f", "fc");
-        builder.with("g", "gc");
+        builder.with("a", 13);
+        builder.with("b", 23);
+        builder.with("c", 33);
+        builder.with("d", 48);
+        builder.with("e", 53);
+        builder.with("f", 63);
+        builder.with("g", 73);
 
-        ImmutableUniSortedArrayMap<String, String> map = builder.build();
+        ImmutableUniSortedArrayMap<String, Integer> map = builder.build();
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -857,14 +857,14 @@ public final class TestImmutableUniSortedArrayBiMap {
         ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
         ObjectInputStream ois = new ObjectInputStream(bais);
 
-        ImmutableUniSortedArrayMap<String, String> map2 =
-                (ImmutableUniSortedArrayMap<String, String>) ois.readObject();
+        ImmutableUniSortedArrayMap<String, Integer> map2 =
+                (ImmutableUniSortedArrayMap<String, Integer>) ois.readObject();
 
         Assert.assertEquals(7, map2.size());
-        Assert.assertEquals("{a=ac, b=bc, c=cc, d=dx, e=ec, f=fc, g=gc}", map2.toString());
+        Assert.assertEquals("{a=13, b=23, c=33, d=48, e=53, f=63, g=73}", map2.toString());
 
-        Assert.assertEquals("bc", map2.get("b"));
-        Assert.assertEquals("gc", map2.get("g"));
+        Assert.assertEquals(Integer.valueOf(23), map2.get("b"));
+        Assert.assertEquals(Integer.valueOf(73), map2.get("g"));
 
         // Keysets
         baos = new ByteArrayOutputStream();
@@ -887,35 +887,35 @@ public final class TestImmutableUniSortedArrayBiMap {
         baos = new ByteArrayOutputStream();
         oos = new ObjectOutputStream(baos);
 
-        ArrayBackedCollection<String> values = map.values();
+        ArrayBackedCollection<Integer> values = map.values();
         oos.writeObject(values);
 
         bais = new ByteArrayInputStream(baos.toByteArray());
         ois = new ObjectInputStream(bais);
 
-        ArrayBackedCollection<String> values2 = (ArrayBackedCollection<String>) ois.readObject();
+        ArrayBackedCollection<Integer> values2 = (ArrayBackedCollection<Integer>) ois.readObject();
 
         Assert.assertEquals(values, values2);
         Assert.assertEquals(7, values2.size());
-        Assert.assertEquals("[ac, bc, cc, dx, ec, fc, gc]", values2.toString());
+        Assert.assertEquals("[13, 23, 33, 48, 53, 63, 73]", values2.toString());
 
         // Entrysets
         baos = new ByteArrayOutputStream();
         oos = new ObjectOutputStream(baos);
 
-        ArrayBackedSet<Map.Entry<String,String>> entrySet = map.entrySet();
+        ArrayBackedSet<Map.Entry<String,Integer>> entrySet = map.entrySet();
 
         oos.writeObject(entrySet);
 
         bais = new ByteArrayInputStream(baos.toByteArray());
         ois = new ObjectInputStream(bais);
 
-        ArrayBackedSet<Map.Entry<String,String>> entrySet2 =
-                (ArrayBackedSet<Map.Entry<String,String>>) ois.readObject();
+        ArrayBackedSet<Map.Entry<String,Integer>> entrySet2 =
+                (ArrayBackedSet<Map.Entry<String,Integer>>) ois.readObject();
 
         Assert.assertEquals(entrySet, entrySet2);
         Assert.assertEquals(7, entrySet2.size());
-        Assert.assertEquals("[a=ac, b=bc, c=cc, d=dx, e=ec, f=fc, g=gc]", entrySet2.toString());
+        Assert.assertEquals("[a=13, b=23, c=33, d=48, e=53, f=63, g=73]", entrySet2.toString());
 
         // Test empty map
         baos = new ByteArrayOutputStream();
@@ -926,7 +926,7 @@ public final class TestImmutableUniSortedArrayBiMap {
         bais = new ByteArrayInputStream(baos.toByteArray());
         ois = new ObjectInputStream(bais);
 
-        map2 = (ImmutableUniSortedArrayMap<String, String>) ois.readObject();
+        map2 = (ImmutableUniSortedArrayMap<String, Integer>) ois.readObject();
         Assert.assertEquals("{}", map2.toString());
         Assert.assertEquals(0, map2.size());
         Assert.assertSame(ImmutableUniSortedArrayMap.emptyMap(), map2);

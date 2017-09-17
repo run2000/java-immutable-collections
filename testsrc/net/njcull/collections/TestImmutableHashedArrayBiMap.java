@@ -596,11 +596,11 @@ public final class TestImmutableHashedArrayBiMap {
     @SuppressWarnings("unchecked")
     @Test
     public void testSerialization() throws Exception {
-        ImmutableHashedArrayMap<String, String> map =
-                ImmutableHashedArrayMap.<String, String>builder().asBiMap()
-                        .with("c", "5", "d", "4", "e", "3")
-                        .with("a", "7", "b", "96")
-                        .with("f", "2", "g", "1").build();
+        ImmutableHashedArrayMap<String, Integer> map =
+                ImmutableHashedArrayMap.<String, Integer>builder().asBiMap()
+                        .with("c", 5, "d", 4, "e", 3)
+                        .with("a", 7, "b", 96)
+                        .with("f", 2, "g", 1).build();
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
@@ -610,13 +610,13 @@ public final class TestImmutableHashedArrayBiMap {
         ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
         ObjectInputStream ois = new ObjectInputStream(bais);
 
-        ImmutableHashedArrayMap<String, String> map2 = (ImmutableHashedArrayMap<String, String>) ois.readObject();
+        ImmutableHashedArrayMap<String, Integer> map2 = (ImmutableHashedArrayMap<String, Integer>) ois.readObject();
 
         Assert.assertEquals(7, map2.size());
         Assert.assertEquals("{c=5, d=4, e=3, a=7, b=96, f=2, g=1}", map2.toString());
 
-        Assert.assertEquals("4", map2.get("d"));
-        Assert.assertEquals("1", map2.get("g"));
+        Assert.assertEquals(Integer.valueOf(4), map2.get("d"));
+        Assert.assertEquals(Integer.valueOf(1), map2.get("g"));
 
         // Keysets
         baos = new ByteArrayOutputStream();
@@ -639,13 +639,13 @@ public final class TestImmutableHashedArrayBiMap {
         baos = new ByteArrayOutputStream();
         oos = new ObjectOutputStream(baos);
 
-        ArrayBackedCollection<String> values = map.values();
+        ArrayBackedCollection<Integer> values = map.values();
         oos.writeObject(values);
 
         bais = new ByteArrayInputStream(baos.toByteArray());
         ois = new ObjectInputStream(bais);
 
-        ArrayBackedCollection<String> values2 = (ArrayBackedCollection<String>) ois.readObject();
+        ArrayBackedCollection<Integer> values2 = (ArrayBackedCollection<Integer>) ois.readObject();
 
         Assert.assertEquals(values, values2);
         Assert.assertEquals(7, values2.size());
@@ -655,15 +655,15 @@ public final class TestImmutableHashedArrayBiMap {
         baos = new ByteArrayOutputStream();
         oos = new ObjectOutputStream(baos);
 
-        ArrayBackedSet<Map.Entry<String,String>> entrySet = map.entrySet();
+        ArrayBackedSet<Map.Entry<String,Integer>> entrySet = map.entrySet();
 
         oos.writeObject(entrySet);
 
         bais = new ByteArrayInputStream(baos.toByteArray());
         ois = new ObjectInputStream(bais);
 
-        ArrayBackedSet<Map.Entry<String,String>> entrySet2 =
-                (ArrayBackedSet<Map.Entry<String,String>>) ois.readObject();
+        ArrayBackedSet<Map.Entry<String,Integer>> entrySet2 =
+                (ArrayBackedSet<Map.Entry<String,Integer>>) ois.readObject();
 
         Assert.assertEquals(entrySet, entrySet2);
         Assert.assertEquals(7, entrySet2.size());
@@ -678,7 +678,7 @@ public final class TestImmutableHashedArrayBiMap {
         bais = new ByteArrayInputStream(baos.toByteArray());
         ois = new ObjectInputStream(bais);
 
-        map2 = (ImmutableHashedArrayMap<String, String>) ois.readObject();
+        map2 = (ImmutableHashedArrayMap<String, Integer>) ois.readObject();
         Assert.assertEquals("{}", map2.toString());
         Assert.assertEquals(0, map2.size());
         Assert.assertSame(ImmutableHashedArrayMap.emptyMap(), map2);
