@@ -452,6 +452,16 @@ public final class Views {
             return m_List;
         }
 
+        /**
+         * Implement an equals() method that test equality against other
+         * {@code CollectionView} objects only. Note that there is no general
+         * contract for Collection equals() directly, only for subclasses like
+         * Set or List.
+         *
+         * @param o the object to be compared
+         * @return {@code true} if the given object is equal to this object,
+         * otherwise {@code false}
+         */
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -464,6 +474,12 @@ public final class Views {
             return m_List.equals(that.m_List);
         }
 
+        /**
+         * Implement hashCode() sufficient to be consistent with the
+         * equals() method. Delegates to the underlying list.
+         *
+         * @return the hashcode from the backing list
+         */
         @Override
         public int hashCode() {
             return m_List.hashCode();
