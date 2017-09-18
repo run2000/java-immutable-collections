@@ -19,30 +19,92 @@ public final class Views {
     private Views() {
     }
 
+    /**
+     * Return a {@code Set} implementation backed by the supplied {@code List}.
+     * The implementation assumes that elements in the list are unique. The
+     * resulting view is serializable.
+     *
+     * @param <E> the type of elements in the set
+     * @param list the list to be viewed as if it was a set
+     * @return a {@code Set} backed by the supplied list
+     */
     public static <E> ArrayBackedSet<E> setView(List<E> list) {
         return new SetView<>(list);
     }
 
+    /**
+     * Return a {@code List} implementation backed by the supplied
+     * {@code Collection}. The resulting view is serializable.
+     *
+     * @param <E> the type of elements in the set
+     * @param coll the collection to be viewed as if it was a list
+     * @return a {@code List} backed by the supplied collection
+     */
     public static <E> List<E> listView(ArrayBackedSet<E> coll) {
         return new ListView<E>(coll);
     }
 
+    /**
+     * Return a {@code Collection} implementation backed by the supplied
+     * {@code List}. The resulting view is serializable.
+     *
+     * @param <E> the type of elements in the set
+     * @param list the list to be viewed as if it was a collection
+     * @return a {@code Collection} backed by the supplied list
+     */
     public static <E> ArrayBackedCollection<E> collectionView(List<E> list) {
         return new CollectionView<>(list);
     }
 
+    /**
+     * Returns a functional instance for mapping indexes onto keys of the
+     * supplied {@code ArrayBackedMap}. The instance is serializable, to
+     * allow map views to be serialized.
+     *
+     * @param map the array-backed map from which keys will be indexed
+     * @param <K> the key type
+     * @return an IntFunction suitable for passing to an
+     * {@link ArrayBackedImmutableList}
+     */
     public static <K> IntFunction<K> mapKeyIndexer(ArrayBackedMap<K,?> map) {
         return new MapKeyIndexer<>(map);
     }
 
+    /**
+     * Returns a functional instance for mapping indexes onto values of the
+     * supplied {@code ArrayBackedMap}. The instance is serializable, to
+     * allow map views to be serialized.
+     *
+     * @param map the array-backed map from which values will be indexed
+     * @param <V> the value type
+     * @return an IntFunction suitable for passing to an
+     * {@link ArrayBackedImmutableList}
+     */
     public static <V> IntFunction<V> mapValueIndexer(ArrayBackedMap<?,V> map) {
         return new MapValueIndexer<>(map);
     }
 
+    /**
+     * Returns a functional instance for mapping indexes onto entries of the
+     * supplied {@code ArrayBackedMap}. The instance is serializable, to
+     * allow map views to be serialized.
+     *
+     * @param map the array-backed map from which entries will be indexed
+     * @param <K> the key type of the entry
+     * @param <V> the value type of the entry
+     * @return an IntFunction suitable for passing to an
+     * {@link ArrayBackedImmutableList}
+     */
     public static <K,V> IntFunction<Map.Entry<K,V>> mapEntryIndexer(ArrayBackedMap<K,V> map) {
         return new MapEntryIndexer<>(map);
     }
 
+    /**
+     * Provides a {@code Set} view onto the supplied {@code List}. The elements
+     * are assumed to be unique. The set view can return the backing list.
+     *
+     * @param <E> the type of elements in the set
+     */
     private static final class SetView<E> extends AbstractSet<E>
             implements ArrayBackedSet<E>, Serializable {
         private final List<E> m_List;
@@ -188,6 +250,12 @@ public final class Views {
         }
     }
 
+    /**
+     * Provides a {@code List} view onto the supplied {@code Set}. The list
+     * view can be used to create sub-list views.
+     *
+     * @param <E> the type of elements in the list
+     */
     private static final class ListView<E> extends AbstractRandomAccessList<E>
             implements ArrayBackedCollection<E>, Serializable {
         private final ArrayBackedSet<E> m_Coll;
@@ -321,6 +389,13 @@ public final class Views {
         }
     }
 
+    /**
+     * Provides a {@code Collection} view onto the supplied {@code List}. The
+     * elements are assumed to be unique. The collection view can return
+     * the backing list
+     *
+     * @param <E> the type of elements in the collection
+     */
     private static final class CollectionView<E> extends AbstractCollection<E>
             implements ArrayBackedCollection<E>, Serializable {
         private final List<E> m_List;
