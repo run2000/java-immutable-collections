@@ -425,6 +425,10 @@ public final class ImmutableHashedArraySet<E> extends AbstractSet<E>
 
     /**
      * Deserialization.
+     *
+     * @param stream the object stream to be deserialized
+     * @throws ClassNotFoundException the class or descendants could not be found
+     * @throws IOException there was a problem reading the object stream
      */
     @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
@@ -445,6 +449,8 @@ public final class ImmutableHashedArraySet<E> extends AbstractSet<E>
 
     /**
      * Deserialization.
+     *
+     * @return the resolved object
      */
     private Object readResolve() {
         if(m_Elements.length == 0) {

@@ -531,6 +531,10 @@ public final class ImmutableUniSortedArrayMap<K,V> extends AbstractMap<K,V>
 
     /**
      * Deserialization.
+     *
+     * @param stream the object stream to be deserialized
+     * @throws ClassNotFoundException the class or descendants could not be found
+     * @throws IOException there was a problem reading the object stream
      */
     @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream stream) throws ClassNotFoundException, IOException {
@@ -569,6 +573,8 @@ public final class ImmutableUniSortedArrayMap<K,V> extends AbstractMap<K,V>
 
     /**
      * Deserialization.
+     *
+     * @return the resolved object
      */
     private Object readResolve() {
         if(m_Map.length == 0) {
