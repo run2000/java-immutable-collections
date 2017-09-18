@@ -92,7 +92,7 @@ public interface ArrayBackedCollection<E> extends Collection<E> {
     }
 
     /**
-     * Performs the given action for each element of the {@code Iterable}
+     * Performs the given action for each element of the {@code Collection}
      * until all elements have been processed or the action throws an
      * exception. Actions are performed in the order of iteration.
      * Exceptions thrown by the action are relayed to the caller.

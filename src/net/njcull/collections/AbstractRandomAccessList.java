@@ -31,8 +31,8 @@ public abstract class AbstractRandomAccessList<E> extends AbstractList<E> implem
     }
 
     /**
-     * Returns {@code true} if this collection contains the specified element.
-     * More formally, returns {@code true} if and only if this collection
+     * Returns {@code true} if this list contains the specified element.
+     * More formally, returns {@code true} if and only if this list
      * contains at least one element {@code e} such that
      * {@code (o==null ? e==null : o.equals(e))}.
      *
@@ -97,7 +97,7 @@ public abstract class AbstractRandomAccessList<E> extends AbstractList<E> implem
 
     /**
      * Removes a single instance of the specified element from this
-     * collection, if it is present.
+     * list, if it is present.
      *
      * @param o element to search for
      * @return the index of the first occurrence of the specified element in
@@ -162,7 +162,7 @@ public abstract class AbstractRandomAccessList<E> extends AbstractList<E> implem
     }
 
     /**
-     * Removes all of the elements of this collection that satisfy the given
+     * Removes all of the elements of this list that satisfy the given
      * predicate.  Errors or runtime exceptions thrown during iteration or by
      * the predicate are relayed to the caller.
      *
@@ -171,7 +171,7 @@ public abstract class AbstractRandomAccessList<E> extends AbstractList<E> implem
      * @return {@code true} if any elements were removed, otherwise {@code false}
      * @throws NullPointerException if the specified filter is null
      * @throws UnsupportedOperationException elements cannot be removed
-     *         from this collection.
+     *         from this list.
      */
     @Override
     public boolean removeIf(Predicate<? super E> filter) {
@@ -188,7 +188,7 @@ public abstract class AbstractRandomAccessList<E> extends AbstractList<E> implem
     }
 
     /**
-     * Performs the given action for each element of the {@code Iterable}
+     * Performs the given action for each element of the {@code List}
      * until all elements have been processed or the action throws an
      * exception. Actions are performed in the order of iteration.
      * Exceptions thrown by the action are relayed to the caller.
@@ -317,13 +317,11 @@ public abstract class AbstractRandomAccessList<E> extends AbstractList<E> implem
 
     /**
      * Returns an array containing all of the elements in the given collection.
-     * If this collection makes any guarantees as to what order its elements
-     * are returned by its indexer, this method must return the
-     * elements in the same order.
+     * This method returns the elements in the same order as this list.
      *
      * <p>The returned array will be "safe" in that no references to it
-     * are maintained by this collection.  In other words, this method
-     * allocates a new array even if this collection is backed by an array.
+     * are maintained by this list.  In other words, this method
+     * allocates a new array even if this list is backed by an array.
      * The caller is thus free to modify the returned array.
      *
      * <p>This method acts as bridge between array-based and collection-based
@@ -352,7 +350,7 @@ public abstract class AbstractRandomAccessList<E> extends AbstractList<E> implem
      *
      * <p>If the list fits in the specified array with room to spare
      * (i.e., the array has more elements than the list), the element in
-     * the array immediately following the end of the collection is set to
+     * the array immediately following the end of the list is set to
      * {@code null}.  This is useful in determining the length of the
      * list <em>only</em> if the caller knows that the list does not contain
      * any null elements.
@@ -433,7 +431,7 @@ public abstract class AbstractRandomAccessList<E> extends AbstractList<E> implem
         }
 
         /**
-         * Removes from the underlying collection the last element returned
+         * Removes from the underlying list the last element returned
          * by this iterator (optional operation).
          *
          * @throws UnsupportedOperationException if the {@code remove}
