@@ -229,7 +229,8 @@ public final class ImmutableHashedArrayMapBuilder<K,V> {
 
     /**
      * For the stream combiner, merge the entries from the supplied builder
-     * to this builder.
+     * to this builder. The elements from the supplied builder are appended
+     * to the end of the elements in this builder.
      *
      * @param entries the builder containing the entries to be merged into
      * this builder

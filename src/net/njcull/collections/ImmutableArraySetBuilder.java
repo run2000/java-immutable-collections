@@ -144,7 +144,8 @@ public final class ImmutableArraySetBuilder<E> {
 
     /**
      * For the stream combiner, merge the elements from the supplied builder
-     * to this builder.
+     * to this builder. The elements from the supplied builder are appended
+     * to the end of the elements in this builder.
      *
      * @param elements the builder containing the elements to be merged into
      * this builder

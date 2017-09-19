@@ -91,7 +91,7 @@ public final class ImmutableSortedArrayPropertyMap<K,V> extends AbstractMap<K,V>
      * key.  More formally, returns {@code true} if and only if
      * this map contains a mapping for a key {@code k} such that
      * {@code (key==null ? k==null : key.equals(k))}.  This operation
-     * requires time linear in the map size for this implementation.
+     * requires time log(n) in the map size for this implementation.
      *
      * @param key key whose presence in this map is to be tested
      * @return {@code true} if this map contains a mapping for the specified

@@ -30,6 +30,13 @@ public final class ImmutableSortedArraySet<E> extends AbstractSet<E>
     // Serializable
     private static final long serialVersionUID = 6563747607599090064L;
 
+    /**
+     * Returns an immutable sorted empty array set. Each call to this method
+     * will return the same empty set.
+     *
+     * @param <E> the type of elements maintained by this set and backing list
+     * @return an immutable empty hashed array set
+     */
     @SuppressWarnings("unchecked")
     public static <E> ImmutableSortedArraySet<E> emptySet() {
         return (ImmutableSortedArraySet<E>) EMPTY;
@@ -66,12 +73,12 @@ public final class ImmutableSortedArraySet<E> extends AbstractSet<E>
     }
 
     /**
-     * Adds all of the elements in the specified collection to this collection.
+     * Adds all of the elements in the specified collection to this set.
      *
-     * @param c collection containing elements to be added to this collection
-     * @return {@code false} this collection is not changed as a result of the call
+     * @param c collection containing elements to be added to this set
+     * @return {@code false} this set is not changed as a result of the call
      * @throws UnsupportedOperationException the {@code addAll} operation
-     *         is not supported by this collection
+     *         is not supported by this set
      */
     @Override
     public boolean addAll(Collection<? extends E> c) {
@@ -128,7 +135,7 @@ public final class ImmutableSortedArraySet<E> extends AbstractSet<E>
     }
 
     /**
-     * Removes all of the elements of this collection that satisfy the given
+     * Removes all of the elements of this set that satisfy the given
      * predicate.  Errors or runtime exceptions thrown during iteration or by
      * the predicate are relayed to the caller.
      *
@@ -137,7 +144,7 @@ public final class ImmutableSortedArraySet<E> extends AbstractSet<E>
      * @return {@code false} no elements were removed
      * @throws NullPointerException if the specified filter is null
      * @throws UnsupportedOperationException elements cannot be removed
-     *         from this collection.
+     *         from this set.
      */
     @Override
     public boolean removeIf(Predicate<? super E> filter) {
@@ -220,7 +227,7 @@ public final class ImmutableSortedArraySet<E> extends AbstractSet<E>
 
     /**
      * Determine the index of the given element, if it exists in this
-     * collection.
+     * set.
      *
      * @param element the element to be found
      * @return a zero or positive integer if the element is in the
@@ -271,9 +278,9 @@ public final class ImmutableSortedArraySet<E> extends AbstractSet<E>
     }
 
     /**
-     * Returns an iterator over the elements contained in this collection.
+     * Returns an iterator over the elements contained in this set.
      *
-     * @return an iterator over the elements contained in this collection
+     * @return an iterator over the elements contained in this set
      */
     @Override
     public Iterator<E> iterator() {
@@ -560,7 +567,7 @@ public final class ImmutableSortedArraySet<E> extends AbstractSet<E>
     }
 
     /**
-     * Return a backing list view for this collection.
+     * Return a backing list view for this set.
      *
      * @return a list view containing all the elements of this {@code Set}
      */

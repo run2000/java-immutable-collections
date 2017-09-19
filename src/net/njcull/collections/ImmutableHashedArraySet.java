@@ -86,12 +86,12 @@ public final class ImmutableHashedArraySet<E> extends AbstractSet<E>
     }
 
     /**
-     * Adds all of the elements in the specified collection to this collection.
+     * Adds all of the elements in the specified collection to this set.
      *
-     * @param c collection containing elements to be added to this collection
-     * @return {@code false} this collection is not changed as a result of the call
+     * @param c collection containing elements to be added to this set
+     * @return {@code false} this set is not changed as a result of the call
      * @throws UnsupportedOperationException the {@code addAll} operation
-     *         is not supported by this collection
+     *         is not supported by this set
      */
     @Override
     public boolean addAll(Collection<? extends E> c) {
@@ -148,7 +148,7 @@ public final class ImmutableHashedArraySet<E> extends AbstractSet<E>
     }
 
     /**
-     * Removes all of the elements of this collection that satisfy the given
+     * Removes all of the elements of this set that satisfy the given
      * predicate.  Errors or runtime exceptions thrown during iteration or by
      * the predicate are relayed to the caller.
      *
@@ -157,7 +157,7 @@ public final class ImmutableHashedArraySet<E> extends AbstractSet<E>
      * @return {@code false} no elements were removed
      * @throws NullPointerException if the specified filter is null
      * @throws UnsupportedOperationException elements cannot be removed
-     *         from this collection.
+     *         from this set.
      */
     @Override
     public boolean removeIf(Predicate<? super E> filter) {
@@ -218,7 +218,7 @@ public final class ImmutableHashedArraySet<E> extends AbstractSet<E>
 
     /**
      * Determine the index of the given element, if it exists in this
-     * collection.
+     * set.
      *
      * @param element the element to be found
      * @return a zero or positive integer if the element is in the
@@ -260,9 +260,10 @@ public final class ImmutableHashedArraySet<E> extends AbstractSet<E>
     }
 
     /**
-     * Returns an iterator over the elements contained in this collection.
+     * Returns an iterator over the elements contained in this set. The
+     * elements are returned in the order in which they were added.
      *
-     * @return an iterator over the elements contained in this collection
+     * @return an iterator over the elements contained in this set
      */
     @Override
     public Iterator<E> iterator() {
@@ -270,10 +271,10 @@ public final class ImmutableHashedArraySet<E> extends AbstractSet<E>
     }
 
     /**
-     * Returns an iterator over the elements in this set.  The elements are
-     * returned in the order in which they were added.
+     * Returns {@code true} if this set contains no elements.
      *
-     * @return an iterator over the elements in this set
+     * @return {@code true} if this set contains no elements, otherwise
+     * {@code false}
      */
     @Override
     public boolean isEmpty() {
@@ -325,10 +326,6 @@ public final class ImmutableHashedArraySet<E> extends AbstractSet<E>
      * {@code null}.  This is useful in determining the length of the
      * set <em>only</em> if the caller knows that the set does
      * not contain any null elements.
-     *
-     * <p>This implementation is handled as a static method rather than a
-     * default method because a default method cannot override any method
-     * of {@code Object}.
      *
      * @param a the array into which the elements of this set are to be
      *        stored, if it is big enough; otherwise, a new array of the same
@@ -404,7 +401,7 @@ public final class ImmutableHashedArraySet<E> extends AbstractSet<E>
     }
 
     /**
-     * Return a backing list view for this collection.
+     * Return a backing list view for this set.
      *
      * @return a list view containing all the elements of this {@code Set}
      */
