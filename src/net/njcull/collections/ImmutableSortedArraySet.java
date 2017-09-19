@@ -183,10 +183,10 @@ public final class ImmutableSortedArraySet<E> extends AbstractSet<E>
     }
 
     /**
-     * Returns an iterator over the elements in this set.  The elements are
-     * returned in the order in which they were added.
+     * Returns {@code true} if this set contains no elements.
      *
-     * @return an iterator over the elements in this set
+     * @return {@code true} if this set contains no elements, otherwise
+     * {@code false}
      */
     @Override
     public boolean isEmpty() {
