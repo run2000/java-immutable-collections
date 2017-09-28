@@ -1,4 +1,1 @@
-out/
-build/
-dist/
-testlib/*.jar
+*.bak
