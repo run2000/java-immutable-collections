@@ -89,14 +89,12 @@ public final class Collectors {
 
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
-     * new {@code ImmutableArrayMap}, with elements ordered by the insertion
-     * order.
+     * new {@code ImmutableArrayMap}, in encounter order.
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
      * @return a {@code Collector} which collects all the input keys and values
-     * into a {@code ImmutableArrayMap}, with elements ordered by the insertion
-     * order
+     * into a {@code ImmutableArrayMap}, in encounter order
      */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableArrayMap<K,V>> toImmutableArrayMap() {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableArrayMapBuilder<K,V>, ImmutableArrayMap<K,V>>of(
@@ -108,8 +106,7 @@ public final class Collectors {
 
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
-     * new {@code ImmutableArrayMap}, created as a bimap, with elements
-     * ordered by the insertion order.
+     * new {@code ImmutableArrayMap}, created as a bimap, in encounter order.
      * <p>
      * A bimap is a map where both keys and values are unique. Any given key
      * can be mapped "forwards" to a single value; any given value can be
@@ -118,8 +115,7 @@ public final class Collectors {
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
      * @return a {@code Collector} which collects all the input keys and values
-     * into a {@code ImmutableArrayMap}, created as a bimap, with elements
-     * ordered by the insertion order
+     * into a {@code ImmutableArrayMap}, created as a bimap, in encounter order
      */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableArrayMap<K,V>> toImmutableArrayBiMap() {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableArrayMapBuilder<K,V>, ImmutableArrayMap<K,V>>of(
@@ -131,14 +127,12 @@ public final class Collectors {
 
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
-     * new {@code ImmutableHashedArrayMap}, with elements ordered by the
-     * insertion order.
+     * new {@code ImmutableHashedArrayMap}, in encounter order.
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
      * @return a {@code Collector} which collects all the input keys and values
-     * into a {@code ImmutableHashedArrayMap}, with elements ordered by the
-     * insertion order
+     * into a {@code ImmutableHashedArrayMap}, in encounter order
      */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableHashedArrayMap<K,V>> toImmutableHashedArrayMap() {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableHashedArrayMapBuilder<K,V>, ImmutableHashedArrayMap<K,V>>of(
@@ -150,8 +144,8 @@ public final class Collectors {
 
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
-     * new {@code ImmutableHashedArrayMap}, created as a bimap, with elements
-     * ordered by the insertion order.
+     * new {@code ImmutableHashedArrayMap}, created as a bimap, in
+     * encounter order.
      * <p>
      * A bimap is a map where both keys and values are unique. Any given key
      * can be mapped "forwards" to a single value; any given value can be
@@ -160,8 +154,8 @@ public final class Collectors {
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
      * @return a {@code Collector} which collects all the input keys and values
-     * into a {@code ImmutableHashedArrayMap}, created as a bimap, with elements
-     * ordered by the insertion order
+     * into a {@code ImmutableHashedArrayMap}, created as a bimap, in
+     * encounter order
      */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableHashedArrayMap<K,V>> toImmutableHashedArrayBiMap() {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableHashedArrayMapBuilder<K,V>, ImmutableHashedArrayMap<K,V>>of(

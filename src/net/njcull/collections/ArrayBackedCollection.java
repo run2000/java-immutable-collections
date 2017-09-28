@@ -94,8 +94,8 @@ public interface ArrayBackedCollection<E> extends Collection<E> {
     /**
      * Performs the given action for each element of the {@code Collection}
      * until all elements have been processed or the action throws an
-     * exception. Actions are performed in the order of iteration.
-     * Exceptions thrown by the action are relayed to the caller.
+     * exception. Actions are performed in the order of its {@code getAtIndex(int)}
+     * method. Exceptions thrown by the action are relayed to the caller.
      *
      * @param action The action to be performed for each element
      * @throws NullPointerException if the specified action is null
@@ -119,8 +119,8 @@ public interface ArrayBackedCollection<E> extends Collection<E> {
     /**
      * Returns a string representation of this collection.  The string
      * representation consists of a sequence of the collection's elements in the
-     * order they are returned by its {@code get(int)} method, enclosed in
-     * square brackets ({@code "[]"}).  Adjacent elements are separated by
+     * order they are returned by its {@code getAtIndex(int)} method, enclosed
+     * in square brackets ({@code "[]"}).  Adjacent elements are separated by
      * the characters {@code ", "} (comma and space).  Elements are converted
      * to strings as by {@link String#valueOf(Object)}.
      * <p>
@@ -152,9 +152,8 @@ public interface ArrayBackedCollection<E> extends Collection<E> {
 
     /**
      * Returns an array containing all of the elements in the given collection.
-     * If this collection makes any guarantees as to what order its elements
-     * are returned by its indexer, this method must return the
-     * elements in the same order.
+     * This method returns the elements in the same order as the
+     * {@code getAtIndex(int)} method.
      *
      * <p>The returned array will be "safe" in that no references to it
      * are maintained by this collection.  In other words, this method

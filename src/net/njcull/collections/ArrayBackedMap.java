@@ -215,7 +215,7 @@ public interface ArrayBackedMap<K, V> extends Map<K, V> {
     /**
      * Performs the given action for each entry in this map until all entries
      * have been processed or the action throws an exception. Actions are
-     * performed in the order of entry set iteration.
+     * performed in the order of its {@code entryAt(int)} method.
      * Exceptions thrown by the action are relayed to the caller.
      * <p>
      * This implementation is handled as a static method rather than a

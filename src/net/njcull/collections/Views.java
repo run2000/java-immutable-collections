@@ -34,11 +34,11 @@ public final class Views {
 
     /**
      * Return a {@code List} implementation backed by the supplied
-     * {@code Collection}. The resulting view is serializable.
+     * {@code ArrayBackedSet}. The resulting view is serializable.
      *
      * @param <E> the type of elements in the set
-     * @param coll the collection to be viewed as if it was a list
-     * @return a {@code List} backed by the supplied collection
+     * @param coll the set to be viewed as if it was a list
+     * @return a {@code List} backed by the supplied set
      */
     public static <E> List<E> listView(ArrayBackedSet<E> coll) {
         return new ListView<E>(coll);

@@ -215,9 +215,9 @@ public abstract class AbstractRandomAccessList<E> extends AbstractList<E> implem
      * e1.equals(e2))}.)  In other words, two lists are defined to be
      * equal if they contain the same elements in the same order.</p>
      *
-     * <p>This implementation takes advantage of the fact this is a superclass
+     * <p>This implementation takes advantage of the fact this is a subclass
      * of a {@code RandomAccess} list. If the other list is a random access
-     * list, it walker both lists using the index method rather than a
+     * list, it walks both lists using the index method rather than a
      * list iterator. It also checks whether the size of each list is
      * identical before checking each element.</p>
      *
