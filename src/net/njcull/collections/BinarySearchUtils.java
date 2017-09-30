@@ -55,7 +55,7 @@ public final class BinarySearchUtils {
      * using the binary search algorithm.
      * The range must be sorted into ascending order according to the
      * {@linkplain Comparable natural ordering} of its elements (as by the
-     * {@code java.util.Arrays.sort(Object[], int, int} method)
+     * {@code java.util.Arrays.sort(Object[], int, int)} method)
      * prior to making this call. If it is not sorted, the results are undefined.
      * <p>
      * Based on {@code Collections.binarySearch()}, and adjusted to take

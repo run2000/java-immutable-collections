@@ -48,6 +48,10 @@ public final class TestImmutableArraySet {
 
         ImmutableArraySet<String> set = builder.build();
 
+        Assert.assertEquals(4, builder2.size());
+        builder2.clear();
+        Assert.assertEquals(0, builder2.size());
+
         Assert.assertEquals(7, set.size());
         Assert.assertEquals("[a, b, c, d, e, f, g]", set.toString());
     }

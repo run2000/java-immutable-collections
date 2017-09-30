@@ -650,6 +650,10 @@ public final class TestImmutableUniSortedArrayMap {
 
         builder1.merge(builder2);
 
+        Assert.assertEquals(4, builder2.size());
+        builder2.clear();
+        Assert.assertEquals(0, builder2.size());
+
         ArrayBackedMap<String, String> result = builder1.build();
         Assert.assertEquals(11, result.size());
     }
@@ -869,6 +873,7 @@ public final class TestImmutableUniSortedArrayMap {
         builder.with("e", "ec");
         builder.with("f", "fc");
         builder.with("g", "gc");
+        builder.byNaturalOrder();
 
         ImmutableUniSortedArrayMap<String, String> map = builder.build();
         ImmutableUniSortedArrayMap<String, String> headMap = map.headMap("d");
@@ -892,8 +897,8 @@ public final class TestImmutableUniSortedArrayMap {
     public void testExceptions() throws Exception {
         ImmutableUniSortedArrayMap<String, String> map =
                 ImmutableUniSortedArrayMap.<String, String>builder()
-                        .with("c", "5", "d", "4", "e", "3")
-                        .with("a", "7", "b", "96")
+                        .with("c", "5", "d", "4", "e", "3", "a", "7")
+                        .with("b", "96")
                         .with("f", "2", "g", "1").build();
 
         Assert.assertEquals(7, map.size());

@@ -156,10 +156,11 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V>
     }
 
     /**
-     * Returns an Entry object for the map entry at the given array index.
+     * Returns an {@code Entry} object for the map entry at the given array
+     * index.
      *
      * @param index the index in the array of the entry to be retrieved
-     * @return an Entry object corresponding to the given array index
+     * @return an {@code Entry} object corresponding to the given array index
      * @throws IndexOutOfBoundsException if the index is less than zero or
      * index is greater than or equal to the map size
      */
@@ -264,7 +265,7 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V>
 
     /**
      * Returns the array index of the given value in the map. If the Map is
-     * not a BiMap, and there are multiple values that match the given value,
+     * not a bi-map, and there are multiple values that match the given value,
      * there is no guarantee which index is returned.
      *
      * @param value the value to be found in the map
@@ -280,7 +281,7 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V>
 
     /**
      * Returns the array index of the given value in the map,where items are
-     * ordered by value. If the Map is not a BiMap, and there are multiple
+     * ordered by value. If the Map is not a bi-map, and there are multiple
      * values that match the given value, there is no guarantee which index
      * is returned.
      *
@@ -563,7 +564,7 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V>
     /**
      * Performs the given action for each entry in this map until all entries
      * have been processed or the action throws an exception. Actions are
-     * performed in the order of entry set iteration.
+     * performed in the order of its {@code entryAt(int)} method.
      * Exceptions thrown by the action are relayed to the caller.
      *
      * @param action The action to be performed for each entry
@@ -577,7 +578,7 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V>
     /**
      * Returns a string representation of this map.  The string representation
      * consists of a list of key-value mappings in the order returned by the
-     * map's {@code entryAt} indexer, enclosed in braces ({@code "{}"}).
+     * map's {@code entryAt(int)} method, enclosed in braces ({@code "{}"}).
      * Adjacent mappings are separated by the characters
      * {@code ", "} (comma and space).  Each key-value mapping is rendered as
      * the key followed by an equals sign ({@code "="}) followed by the

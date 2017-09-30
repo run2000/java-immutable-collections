@@ -649,6 +649,10 @@ public final class TestImmutableUniSortedArrayBiMap {
 
         builder1.merge(builder2);
 
+        Assert.assertEquals(4, builder2.size());
+        builder2.clear();
+        Assert.assertEquals(0, builder2.size());
+
         ArrayBackedMap<String, String> result = builder1.asBiMap().build();
         Assert.assertEquals(11, result.size());
     }
@@ -736,6 +740,7 @@ public final class TestImmutableUniSortedArrayBiMap {
         builder.with("e", "ec");
         builder.with("f", "fc");
         builder.with("g", "gc");
+        builder.byNaturalOrder();
 
         ImmutableUniSortedArrayMap<String, String> map = builder.asBiMap().build();
         ImmutableUniSortedArrayMap<String, String> headMap = map.headMap("d");

@@ -811,6 +811,10 @@ public final class TestImmutableSortedArrayMap {
 
         builder1.merge(builder2);
 
+        Assert.assertEquals(4, builder2.size());
+        builder2.clear();
+        Assert.assertEquals(0, builder2.size());
+
         ArrayBackedMap<String, String> result = builder1.build();
         Assert.assertEquals(11, result.size());
     }
@@ -1042,6 +1046,8 @@ public final class TestImmutableSortedArrayMap {
         builder.with("f", "fc");
         builder.with("g", "gc");
 
+        builder.byNaturalKeyOrder().byNaturalValueOrder();
+
         ImmutableSortedArrayMap<String, String> map = builder.build();
         ImmutableSortedArrayMap<String, String> headMap = map.headMap("d");
         ImmutableSortedArrayMap<String, String> tailMap = map.tailMap("e");
@@ -1064,8 +1070,8 @@ public final class TestImmutableSortedArrayMap {
     public void testExceptions() throws Exception {
         ImmutableSortedArrayMap<String, String> map =
                 ImmutableSortedArrayMap.<String, String>builder()
-                        .with("c", "5", "d", "4", "e", "3")
-                        .with("a", "7", "b", "96")
+                        .with("c", "5", "d", "4", "e", "3", "a", "7")
+                        .with("b", "96")
                         .with("f", "2", "g", "1").build();
 
         Assert.assertEquals(7, map.size());

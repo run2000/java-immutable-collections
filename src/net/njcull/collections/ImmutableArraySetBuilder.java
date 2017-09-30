@@ -179,11 +179,12 @@ public final class ImmutableArraySetBuilder<E> {
 
     /**
      * Build the immutable set. Validates all elements added, including
-     * checking for duplicate elements as necessary.
+     * checking and removing duplicate elements as necessary.
+     * <p>
+     * Repeated calls to a builder containing a non-zero number of elements
+     * will return distinct set instances.
      *
      * @return an ImmutableArraySet containing the elements in the builder
-     * @throws IllegalStateException there was a duplicate key or value
-     * specified in the builder
      */
     @SuppressWarnings("unchecked")
     public ImmutableArraySet<E> build() {

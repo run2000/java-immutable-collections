@@ -44,10 +44,11 @@ public interface ArrayBackedMap<K, V> extends Map<K, V> {
     ArrayBackedCollection<V> values();
 
     /**
-     * Returns an Entry object for the map entry at the given array index.
+     * Returns an {@code Entry} object for the map entry at the given array
+     * index.
      *
      * @param index the index in the array of the entry to be retrieved
-     * @return an Entry object corresponding to the given array index
+     * @return an {@code Entry} object corresponding to the given array index
      * @throws IndexOutOfBoundsException if the index is less than zero or
      * index is greater than or equal to the map size
      */
@@ -153,7 +154,7 @@ public interface ArrayBackedMap<K, V> extends Map<K, V> {
     /**
      * Returns a string representation of this map.  The string representation
      * consists of a list of key-value mappings in the order returned by the
-     * map's {@code entryAt} indexer, enclosed in braces ({@code "{}"}).
+     * map's {@code entryAt(int)} method, enclosed in braces ({@code "{}"}).
      * Adjacent mappings are separated by the characters
      * {@code ", "} (comma and space).  Each key-value mapping is rendered as
      * the key followed by an equals sign ({@code "="}) followed by the

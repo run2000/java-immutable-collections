@@ -190,8 +190,8 @@ public abstract class AbstractRandomAccessList<E> extends AbstractList<E> implem
     /**
      * Performs the given action for each element of the {@code List}
      * until all elements have been processed or the action throws an
-     * exception. Actions are performed in the order of iteration.
-     * Exceptions thrown by the action are relayed to the caller.
+     * exception. Actions are performed in the order of the {@code get(int)}
+     * method. Exceptions thrown by the action are relayed to the caller.
      *
      * @param action The action to be performed for each element
      * @throws NullPointerException if the specified action is null

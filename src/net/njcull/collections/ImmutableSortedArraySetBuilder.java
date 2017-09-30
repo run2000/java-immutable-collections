@@ -215,12 +215,13 @@ public final class ImmutableSortedArraySetBuilder<E> {
 
     /**
      * Build the immutable set. Validates all elements added, including
-     * sorting the elements, and checking for duplicate elements as
+     * sorting the elements, and checking and removing duplicate elements as
      * necessary.
+     * <p>
+     * Repeated calls to a builder containing a non-zero number of elements
+     * will return distinct set instances.
      *
      * @return an ImmutableSortedArraySet containing the elements in the builder
-     * @throws IllegalStateException there was a duplicate key or value
-     * specified in the builder
      */
     @SuppressWarnings("unchecked")
     public ImmutableSortedArraySet<E> build() {

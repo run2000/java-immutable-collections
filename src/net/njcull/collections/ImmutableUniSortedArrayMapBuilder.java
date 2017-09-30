@@ -319,6 +319,9 @@ public final class ImmutableUniSortedArrayMapBuilder<K,V> {
      * Build the immutable map. Validates all keys and values added, including
      * sorting the keys and values, and checking for duplicate keys and values
      * as necessary.
+     * <p>
+     * Repeated calls to a builder containing a non-zero number of entries
+     * will return distinct map instances.
      *
      * @return an ImmutableUniSortedArrayMap containing the elements in the
      * builder

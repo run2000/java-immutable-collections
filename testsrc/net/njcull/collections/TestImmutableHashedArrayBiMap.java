@@ -277,6 +277,10 @@ public final class TestImmutableHashedArrayBiMap {
 
         ImmutableHashedArrayMap<String, String> result1 = builder.build();
 
+        Assert.assertEquals(10, builder.size());
+        builder.clear();
+        Assert.assertEquals(0, builder.size());
+
         Assert.assertEquals(10, result1.size());
         Assert.assertEquals("{a=ac, b=bc, c=cc, e=ec, f=fc, g=gc, m=0ma, n=0na, o=Zoa, p=Zpa}", result1.toString());
 
@@ -331,6 +335,10 @@ public final class TestImmutableHashedArrayBiMap {
         builder.with("p", "Zpa");
 
         ImmutableHashedArrayMap<String, String> result1 = builder.build();
+
+        Assert.assertEquals(10, builder.size());
+        builder.clear();
+        Assert.assertEquals(0, builder.size());
 
         Assert.assertEquals(10, result1.size());
         Assert.assertEquals("{a=ac, b=bc, c=cc, e=ec, f=fc, g=gc, m=0ma, n=0na, o=Zoa, p=Zpa}", result1.toString());
@@ -411,6 +419,10 @@ public final class TestImmutableHashedArrayBiMap {
         map2.entrySet().forEach(builder2::with);
 
         builder1.merge(builder2);
+
+        Assert.assertEquals(4, builder2.size());
+        builder2.clear();
+        Assert.assertEquals(0, builder2.size());
 
         ArrayBackedMap<String, String> result = builder1.asBiMap().build();
         Assert.assertEquals(11, result.size());

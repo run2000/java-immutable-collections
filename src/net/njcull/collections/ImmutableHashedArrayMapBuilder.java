@@ -267,6 +267,9 @@ public final class ImmutableHashedArrayMapBuilder<K,V> {
     /**
      * Build the immutable map. Validates all keys and values added, including
      * checking for duplicate keys and values as necessary.
+     * <p>
+     * Repeated calls to a builder containing a non-zero number of entries
+     * will return distinct map instances.
      *
      * @return an ImmutableHashedArrayMap containing the elements in the builder
      * @throws IllegalStateException there was a duplicate key or value

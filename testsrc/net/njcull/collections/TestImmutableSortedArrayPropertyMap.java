@@ -1177,6 +1177,10 @@ public class TestImmutableSortedArrayPropertyMap {
         builder1.byNaturalKeyOrder();
         builder1.merge(builder2);
 
+        Assert.assertEquals(4, builder2.size());
+        builder2.clear();
+        Assert.assertEquals(0, builder2.size());
+
         ArrayBackedMap<String, TestClassWithProperty<String>> result = builder1.build();
         Assert.assertEquals(11, result.size());
     }
