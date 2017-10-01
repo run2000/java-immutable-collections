@@ -304,7 +304,7 @@ public final class ImmutableUniSortedArrayMap<K,V> extends AbstractMap<K,V>
 
     /**
      * Returns the comparator used to order the keys in this map, or
-     * {@code null} if this map uses the Comparable natural ordering
+     * {@code null} if this map uses the {@code Comparable} natural ordering
      * of its keys.
      *
      * @return the comparator used to order the keys in this map,

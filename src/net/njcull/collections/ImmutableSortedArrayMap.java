@@ -374,7 +374,7 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V>
 
     /**
      * Returns the comparator used to order the keys in this map, or
-     * {@code null} if this map uses the Comparable natural ordering
+     * {@code null} if this map uses the {@code Comparable} natural ordering
      * of its keys.
      *
      * @return the comparator used to order the keys in this map,
@@ -387,7 +387,7 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V>
 
     /**
      * Returns the comparator used to order the values in this map, or
-     * {@code null} if this map uses the Comparable natural ordering
+     * {@code null} if this map uses the {@code Comparable} natural ordering
      * of its values.
      *
      * @return the comparator used to order the values in this map,
