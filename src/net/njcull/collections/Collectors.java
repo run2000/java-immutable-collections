@@ -7,7 +7,7 @@ import java.util.stream.Collector;
 
 /**
  * Implementations of stream {@link Collector}s for the maps and sets in this
- * package. Variations include map versus bimap, and various sorting options
+ * package. Variations include map versus bi-map, and various sorting options
  * for those sets and maps that are ordered.
  *
  * @author run2000
@@ -106,16 +106,16 @@ public final class Collectors {
 
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
-     * new {@code ImmutableArrayMap}, created as a bimap, in encounter order.
+     * new {@code ImmutableArrayMap}, created as a bi-map, in encounter order.
      * <p>
-     * A bimap is a map where both keys and values are unique. Any given key
+     * A bi-map is a map where both keys and values are unique. Any given key
      * can be mapped "forwards" to a single value; any given value can be
      * mapped "backwards" to a single key.
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
      * @return a {@code Collector} which collects all the input keys and values
-     * into a {@code ImmutableArrayMap}, created as a bimap, in encounter order
+     * into a {@code ImmutableArrayMap}, created as a bi-map, in encounter order
      */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableArrayMap<K,V>> toImmutableArrayBiMap() {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableArrayMapBuilder<K,V>, ImmutableArrayMap<K,V>>of(
@@ -144,17 +144,17 @@ public final class Collectors {
 
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
-     * new {@code ImmutableHashedArrayMap}, created as a bimap, in
+     * new {@code ImmutableHashedArrayMap}, created as a bi-map, in
      * encounter order.
      * <p>
-     * A bimap is a map where both keys and values are unique. Any given key
+     * A bi-map is a map where both keys and values are unique. Any given key
      * can be mapped "forwards" to a single value; any given value can be
      * mapped "backwards" to a single key.
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
      * @return a {@code Collector} which collects all the input keys and values
-     * into a {@code ImmutableHashedArrayMap}, created as a bimap, in
+     * into a {@code ImmutableHashedArrayMap}, created as a bi-map, in
      * encounter order
      */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableHashedArrayMap<K,V>> toImmutableHashedArrayBiMap() {
@@ -254,18 +254,18 @@ public final class Collectors {
 
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
-     * new {@code ImmutableSortedArrayMap}, created as a bimap, with elements
+     * new {@code ImmutableSortedArrayMap}, created as a bi-map, with elements
      * ordered by their natural order.
      * <p>
-     * A bimap is a map where both keys and values are unique. Any given key
+     * A bi-map is a map where both keys and values are unique. Any given key
      * can be mapped "forwards" to a single value; any given value can be
      * mapped "backwards" to a single key.
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
      * @return a {@code Collector} which collects all the input keys and values
-     * into a {@code ImmutableSortedArrayMap}, with elements ordered by their
-     * natural order
+     * into a {@code ImmutableSortedArrayMap}, created as a bi-map, with
+     * elements ordered by their natural order
      */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableSortedArrayMap<K,V>> toImmutableSortedArrayBiMap() {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableSortedArrayMapBuilder<K,V>, ImmutableSortedArrayMap<K,V>>of(
@@ -277,10 +277,10 @@ public final class Collectors {
 
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
-     * new {@code ImmutableSortedArrayMap}, created as a bimap, with keys
+     * new {@code ImmutableSortedArrayMap}, created as a bi-map, with keys
      * ordered by the given {@code Comparator}.
      * <p>
-     * A bimap is a map where both keys and values are unique. Any given key
+     * A bi-map is a map where both keys and values are unique. Any given key
      * can be mapped "forwards" to a single value; any given value can be
      * mapped "backwards" to a single key.
      *
@@ -289,8 +289,8 @@ public final class Collectors {
      * @param keyCmp a comparator for ordering keys, or {@code null} to indicate
      * natural key ordering
      * @return a {@code Collector} which collects all the input keys and values
-     * into a {@code ImmutableSortedArrayMap}, with keys ordered by the given
-     * comparator
+     * into a {@code ImmutableSortedArrayMap}, created as a bi-map, with keys
+     * ordered by the given comparator
      */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableSortedArrayMap<K,V>> toImmutableSortedArrayBiMapComparingKeys(
             final Comparator<? super K> keyCmp) {
@@ -303,10 +303,10 @@ public final class Collectors {
 
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
-     * new {@code ImmutableSortedArrayMap}, created as a bimap, with values
+     * new {@code ImmutableSortedArrayMap}, created as a bi-map, with values
      * ordered by the given {@code Comparator}.
      * <p>
-     * A bimap is a map where both keys and values are unique. Any given key
+     * A bi-map is a map where both keys and values are unique. Any given key
      * can be mapped "forwards" to a single value; any given value can be
      * mapped "backwards" to a single key.
      *
@@ -315,8 +315,8 @@ public final class Collectors {
      * @param valCmp a comparator for ordering values, or {@code null}
      * to indicate natural value ordering
      * @return a {@code Collector} which collects all the input keys and values
-     * into a {@code ImmutableSortedArrayMap}, with values ordered by the given
-     * comparator
+     * into a {@code ImmutableSortedArrayMap}, created as a bi-map, with values
+     * ordered by the given comparator
      */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableSortedArrayMap<K,V>> toImmutableSortedArrayBiMapComparingValues(
             final Comparator<? super V> valCmp) {
@@ -329,10 +329,10 @@ public final class Collectors {
 
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
-     * new {@code ImmutableSortedArrayMap}, created as a bimap, with keys
+     * new {@code ImmutableSortedArrayMap}, created as a bi-map, with keys
      * and values ordered by the given {@code Comparator}s.
      * <p>
-     * A bimap is a map where both keys and values are unique. Any given key
+     * A bi-map is a map where both keys and values are unique. Any given key
      * can be mapped "forwards" to a single value; any given value can be
      * mapped "backwards" to a single key.
      *
@@ -343,8 +343,8 @@ public final class Collectors {
      * @param valCmp a comparator for ordering values, or {@code null}
      * to indicate natural value ordering
      * @return a {@code Collector} which collects all the input keys and values
-     * into a {@code ImmutableSortedArrayMap}, with keys and values ordered by
-     * the given comparators
+     * into a {@code ImmutableSortedArrayMap}, created as a bi-map, with keys
+     * and values ordered by the given comparators
      */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableSortedArrayMap<K,V>> toImmutableSortedArrayBiMapComparingKeysAndValues(
             final Comparator<? super K> keyCmp, final Comparator<? super V> valCmp) {
@@ -398,18 +398,18 @@ public final class Collectors {
 
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
-     * new {@code ImmutableUniSortedArrayMap}, created as a bimap, with keys
+     * new {@code ImmutableUniSortedArrayMap}, created as a bi-map, with keys
      * ordered by their natural order.
      * <p>
-     * A bimap is a map where both keys and values are unique. Any given key
+     * A bi-map is a map where both keys and values are unique. Any given key
      * can be mapped "forwards" to a single value; any given value can be
      * mapped "backwards" to a single key.
      *
      * @param <K> the type of keys in the resulting map
      * @param <V> the type of values in the resulting map
      * @return a {@code Collector} which collects all the input keys and values
-     * into a {@code ImmutableSortedArrayMap}, with keys ordered by their
-     * natural order
+     * into a {@code ImmutableSortedArrayMap}, created as a bi-map, with keys
+     * ordered by their natural order
      */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableUniSortedArrayMap<K,V>> toImmutableUniSortedArrayBiMap() {
         return Collector.<Map.Entry<? extends K,? extends V>, ImmutableUniSortedArrayMapBuilder<K,V>, ImmutableUniSortedArrayMap<K,V>>of(
@@ -421,10 +421,10 @@ public final class Collectors {
 
     /**
      * Returns a {@code Collector} that accumulates the input elements into a
-     * new {@code ImmutableUniSortedArrayMap}, created as a bimap, with keys
+     * new {@code ImmutableUniSortedArrayMap}, created as a bi-map, with keys
      * ordered by the given {@code Comparator}.
      * <p>
-     * A bimap is a map where both keys and values are unique. Any given key
+     * A bi-map is a map where both keys and values are unique. Any given key
      * can be mapped "forwards" to a single value; any given value can be
      * mapped "backwards" to a single key.
      *
@@ -433,8 +433,8 @@ public final class Collectors {
      * @param keyCmp a comparator for ordering keys, or {@code null} to indicate
      * natural key ordering
      * @return a {@code Collector} which collects all the input keys and values
-     * into a {@code ImmutableSortedArrayMap}, with keys ordered by the given
-     * comparator
+     * into a {@code ImmutableSortedArrayMap}, created as a bi-map, with keys
+     * ordered by the given comparator
      */
     public static <K,V> Collector<Map.Entry<? extends K,? extends V>, ?, ImmutableUniSortedArrayMap<K,V>> toImmutableUniSortedArrayBiMapComparing(
             final Comparator<? super K> keyCmp) {

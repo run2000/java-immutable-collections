@@ -35,11 +35,11 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
     }
 
     /**
-     * Create a new builder instance that builds a new immutable sorted bimap.
+     * Create a new builder instance that builds a new immutable sorted bi-map.
      *
      * @param <K> the key type of the map
      * @param <V> the value type of the map
-     * @return a new builder for building a new bimap
+     * @return a new builder for building a new bi-map
      */
     public static <K,V> ImmutableSortedArrayMapBuilder<K,V> newBiMap() {
         ImmutableSortedArrayMapBuilder<K,V> builder = new ImmutableSortedArrayMapBuilder<>();
@@ -61,13 +61,13 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
     }
 
     /**
-     * Create a new builder instance that builds a new immutable sorted bimap
+     * Create a new builder instance that builds a new immutable sorted bi-map
      * using the supplied comparator for sorting the keys.
      *
      * @param <K> the key type of the map
      * @param <V> the value type of the map
      * @param cmp the key comparator for sorting the map
-     * @return a new builder for building a new map
+     * @return a new builder for building a new bi-map
      */
     public static <K,V> ImmutableSortedArrayMapBuilder<K,V> newBiMapComparingKeys(Comparator<? super K> cmp) {
         ImmutableSortedArrayMapBuilder<K,V> builder = new ImmutableSortedArrayMapBuilder<>();
@@ -89,13 +89,13 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
     }
 
     /**
-     * Create a new builder instance that builds a new immutable sorted bimap
+     * Create a new builder instance that builds a new immutable sorted bi-map
      * using the supplied comparator for sorting the values.
      *
      * @param <K> the key type of the map
      * @param <V> the value type of the map
      * @param cmp the values comparator for sorting the map
-     * @return a new builder for building a new map
+     * @return a new builder for building a new bi-map
      */
     public static <K,V> ImmutableSortedArrayMapBuilder<K,V> newBiMapComparingValues(Comparator<? super V> cmp) {
         ImmutableSortedArrayMapBuilder<K,V> builder = new ImmutableSortedArrayMapBuilder<>();
@@ -119,14 +119,14 @@ public final class ImmutableSortedArrayMapBuilder<K,V> {
     }
 
     /**
-     * Create a new builder instance that builds a new immutable sorted bimap
+     * Create a new builder instance that builds a new immutable sorted bi-map
      * using the supplied comparators for sorting the keys and values.
      *
      * @param <K> the key type of the map
      * @param <V> the value type of the map
      * @param keyCmp the keys comparator for sorting the map
      * @param valCmp the values comparator for sorting the map
-     * @return a new builder for building a new map
+     * @return a new builder for building a new bi-map
      */
     public static <K,V> ImmutableSortedArrayMapBuilder<K,V> newBiMapComparing(Comparator<? super K> keyCmp, Comparator<? super V> valCmp) {
         ImmutableSortedArrayMapBuilder<K,V> builder = new ImmutableSortedArrayMapBuilder<>();

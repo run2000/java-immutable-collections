@@ -36,11 +36,11 @@ public final class ImmutableHashedArrayMapBuilder<K,V> {
     }
 
     /**
-     * Create a new builder instance that builds a new immutable hashed bimap.
+     * Create a new builder instance that builds a new immutable hashed bi-map.
      *
      * @param <K> the key type of the map
      * @param <V> the value type of the map
-     * @return a new builder for building a new bimap
+     * @return a new builder for building a new bi-map
      */
     public static <K,V> ImmutableHashedArrayMapBuilder<K,V> newBiMap() {
         ImmutableHashedArrayMapBuilder<K,V> builder = new ImmutableHashedArrayMapBuilder<>();

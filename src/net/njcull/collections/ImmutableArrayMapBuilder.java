@@ -31,11 +31,11 @@ public final class ImmutableArrayMapBuilder<K,V> {
     }
 
     /**
-     * Create a new builder instance that builds a new immutable bimap.
+     * Create a new builder instance that builds a new immutable bi-map.
      *
      * @param <K> the key type of the map
      * @param <V> the value type of the map
-     * @return a new builder for building a new bimap
+     * @return a new builder for building a new bi-map
      */
     public static <K,V> ImmutableArrayMapBuilder<K,V> newBiMap() {
         ImmutableArrayMapBuilder<K,V> builder = new ImmutableArrayMapBuilder<>();

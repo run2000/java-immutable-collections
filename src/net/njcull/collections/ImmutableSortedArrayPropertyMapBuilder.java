@@ -45,7 +45,7 @@ public final class ImmutableSortedArrayPropertyMapBuilder<K,V> {
      * @param <K> the key type of the map
      * @param <V> the value type of the map
      * @param supplier the key supplier
-     * @return a new builder for building a new bimap
+     * @return a new builder for building a new map
      */
     public static <K,V> ImmutableSortedArrayPropertyMapBuilder<K,V> newMapWithKeys(Function<? super V, ? extends K> supplier) {
         ImmutableSortedArrayPropertyMapBuilder<K,V> builder = new ImmutableSortedArrayPropertyMapBuilder<>();
@@ -61,7 +61,7 @@ public final class ImmutableSortedArrayPropertyMapBuilder<K,V> {
      * @param <V> the value type of the map
      * @param supplier the key supplier
      * @param keyCmp the key comparator
-     * @return a new builder for building a new bimap
+     * @return a new builder for building a new map
      */
     public static <K,V> ImmutableSortedArrayPropertyMapBuilder<K,V> newMapWithKeysComparing(Function<? super V, ? extends K> supplier, Comparator<? super K> keyCmp) {
         ImmutableSortedArrayPropertyMapBuilder<K,V> builder = new ImmutableSortedArrayPropertyMapBuilder<>();

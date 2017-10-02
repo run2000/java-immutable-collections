@@ -39,11 +39,11 @@ public final class ImmutableUniSortedArrayMapBuilder<K,V> {
     }
 
     /**
-     * Create a new builder instance that builds a new immutable uni-sorted bimap.
+     * Create a new builder instance that builds a new immutable uni-sorted bi-map.
      *
      * @param <K> the key type of the map
      * @param <V> the value type of the map
-     * @return a new builder for building a new bimap
+     * @return a new builder for building a new bi-map
      */
     public static <K,V> ImmutableUniSortedArrayMapBuilder<K,V> newBiMap() {
         ImmutableUniSortedArrayMapBuilder<K,V> builder = new ImmutableUniSortedArrayMapBuilder<>();
@@ -65,13 +65,13 @@ public final class ImmutableUniSortedArrayMapBuilder<K,V> {
     }
 
     /**
-     * Create a new builder instance that builds a new immutable uni-sorted bimap
+     * Create a new builder instance that builds a new immutable uni-sorted bi-map
      * using the supplied comparator for sorting the keys.
      *
      * @param <K> the key type of the map
      * @param <V> the value type of the map
      * @param cmp the key comparator for sorting the map
-     * @return a new builder for building a new map
+     * @return a new builder for building a new bi-map
      */
     public static <K,V> ImmutableUniSortedArrayMapBuilder<K,V> newBiMapComparing(Comparator<? super K> cmp) {
         ImmutableUniSortedArrayMapBuilder<K,V> builder = new ImmutableUniSortedArrayMapBuilder<>();
