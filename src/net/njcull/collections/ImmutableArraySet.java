@@ -294,9 +294,8 @@ public final class ImmutableArraySet<E> extends AbstractSet<E>
 
     /**
      * Returns an array containing all of the elements in this set.
-     * If this set makes any guarantees as to what order its elements
-     * are returned by its iterator, this method must return the
-     * elements in the same order.
+     * This method returns the elements in the same order as the
+     * {@code getAtIndex(int)} method.
      *
      * <p>The returned array will be "safe" in that no references to it
      * are maintained by this set.  In other words, this method must
@@ -375,10 +374,6 @@ public final class ImmutableArraySet<E> extends AbstractSet<E>
      * {@code s1.hashCode()==s2.hashCode()} for any two sets {@code s1}
      * and {@code s2}, as required by the general contract of
      * {@link Object#hashCode}.
-     * <p>
-     * This implementation is handled as a static method rather than a
-     * default method because a default method cannot override any methods
-     * of {@code Object}.
      *
      * @return the hash code value for the given set
      */

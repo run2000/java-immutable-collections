@@ -584,10 +584,6 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V>
      * the key followed by an equals sign ({@code "="}) followed by the
      * associated value.  Keys and values are converted to strings as by
      * {@link String#valueOf(Object)}.
-     * <p>
-     * This implementation is handled as a static method rather than a
-     * default method because a default method cannot override any methods
-     * of {@code Object}.
      *
      * @return a string representation of this map
      */
@@ -603,10 +599,6 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V>
      * implies that {@code m1.hashCode()==m2.hashCode()} for any two maps
      * {@code m1} and {@code m2}, as required by the general contract of
      * {@link Object#hashCode}.
-     * <p>
-     * This implementation is handled as a static method rather than a
-     * default method because a default method cannot override any methods
-     * of {@code Object}.
      *
      * @return the hash code value for this map
      */
