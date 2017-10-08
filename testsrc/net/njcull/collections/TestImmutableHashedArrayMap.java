@@ -15,6 +15,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * Tests for ImmutableHashedArrayMap.
@@ -660,6 +662,101 @@ public final class TestImmutableHashedArrayMap {
         Assert.assertTrue(emptySubMap.isEmpty());
         Assert.assertEquals(7, fullSubMap.size());
 
+    }
+
+    @Test
+    public void testCopyOf() throws Exception {
+        HashMap<String, String> map1 = new HashMap<>();
+        map1.put("a", "ac");
+        map1.put("b", "bc");
+        map1.put("c", "cc");
+        map1.put("d", "dx");
+        map1.put("e", "ec");
+        map1.put("f", "fc");
+        map1.put("g", "gc");
+        map1.put("m", "0ma");
+        map1.put("n", "0na");
+        map1.put("o", "Zoa");
+        map1.put("p", "Zpa");
+
+        ImmutableHashedArrayMap<String,String> result = ImmutableHashedArrayMap.copyOf(map1);
+
+        Assert.assertTrue(result.indexOfKey("a") >= 0);
+        Assert.assertTrue(result.indexOfKey("b") >= 0);
+        Assert.assertTrue(result.indexOfKey("c") >= 0);
+        Assert.assertTrue(result.indexOfKey("e") >= 0);
+        Assert.assertTrue(result.indexOfKey("f") >= 0);
+        Assert.assertTrue(result.indexOfKey("g") >= 0);
+        Assert.assertTrue(result.indexOfKey("m") >= 0);
+        Assert.assertTrue(result.indexOfKey("n") >= 0);
+        Assert.assertTrue(result.indexOfKey("o") >= 0);
+        Assert.assertTrue(result.indexOfKey("p") >= 0);
+        Assert.assertFalse(result.indexOfKey("0") >= 0);
+
+        Assert.assertTrue(result.containsValue("ac"));
+        Assert.assertTrue(result.containsValue("bc"));
+        Assert.assertTrue(result.containsValue("cc"));
+        Assert.assertTrue(result.containsValue("dx"));
+        Assert.assertTrue(result.containsValue("ec"));
+        Assert.assertTrue(result.containsValue("fc"));
+        Assert.assertTrue(result.containsValue("gc"));
+        Assert.assertTrue(result.containsValue("0ma"));
+        Assert.assertTrue(result.containsValue("0na"));
+        Assert.assertTrue(result.containsValue("Zoa"));
+        Assert.assertTrue(result.containsValue("Zpa"));
+        Assert.assertFalse(result.containsValue("0"));
+
+        ImmutableHashedArrayMap<String,String> result2 = ImmutableHashedArrayMap.copyOf(result);
+
+        Assert.assertSame(result, result2);
+
+        SortedMap<String, String> map2 = new TreeMap<>();
+        map2.put("a", "ac");
+        map2.put("b", "bc");
+        map2.put("c", "cc");
+        map2.put("d", "dx");
+        map2.put("e", "ec");
+        map2.put("f", "fc");
+        map2.put("g", "gc");
+        map2.put("m", "0ma");
+        map2.put("n", "0na");
+        map2.put("o", "Zoa");
+        map2.put("p", "Zpa");
+
+        ImmutableHashedArrayMap<String,String> result3 = ImmutableHashedArrayMap.copyOfBiMap(map2);
+
+        Assert.assertTrue(result3.indexOfKey("a") >= 0);
+        Assert.assertTrue(result3.indexOfKey("b") >= 0);
+        Assert.assertTrue(result3.indexOfKey("c") >= 0);
+        Assert.assertTrue(result3.indexOfKey("e") >= 0);
+        Assert.assertTrue(result3.indexOfKey("f") >= 0);
+        Assert.assertTrue(result3.indexOfKey("g") >= 0);
+        Assert.assertTrue(result3.indexOfKey("m") >= 0);
+        Assert.assertTrue(result3.indexOfKey("n") >= 0);
+        Assert.assertTrue(result3.indexOfKey("o") >= 0);
+        Assert.assertTrue(result3.indexOfKey("p") >= 0);
+        Assert.assertFalse(result3.indexOfKey("0") >= 0);
+
+        Assert.assertTrue(result3.containsValue("ac"));
+        Assert.assertTrue(result3.containsValue("bc"));
+        Assert.assertTrue(result3.containsValue("cc"));
+        Assert.assertTrue(result3.containsValue("dx"));
+        Assert.assertTrue(result3.containsValue("ec"));
+        Assert.assertTrue(result3.containsValue("fc"));
+        Assert.assertTrue(result3.containsValue("gc"));
+        Assert.assertTrue(result3.containsValue("0ma"));
+        Assert.assertTrue(result3.containsValue("0na"));
+        Assert.assertTrue(result3.containsValue("Zoa"));
+        Assert.assertTrue(result3.containsValue("Zpa"));
+        Assert.assertFalse(result3.containsValue("0"));
+
+        ImmutableHashedArrayMap<String,String> result4 = ImmutableHashedArrayMap.copyOfBiMap(result3);
+
+        Assert.assertSame(result3, result4);
+
+        ImmutableHashedArrayMap<String,String> result5 = ImmutableHashedArrayMap.copyOfBiMap(result2);
+
+        Assert.assertNotSame(result2, result5);
     }
 
     @Test

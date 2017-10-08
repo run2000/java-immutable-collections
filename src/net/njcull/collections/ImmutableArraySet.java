@@ -417,6 +417,26 @@ public final class ImmutableArraySet<E> extends AbstractSet<E>
     }
 
     /**
+     * Returns an {@code ImmutableArraySet} that contains the elements
+     * supplied by the given {@code Iterable}.
+     * <p>
+     * If the given iterable is itself an immutable array set, then it will
+     * be returned.
+     *
+     * @param it the elements to be copied
+     * @param <E> the element type of the set
+     * @return an {@code ImmutableArraySet} containing the elements from the
+     * given {@code Iterable}
+     */
+    @SuppressWarnings("unchecked")
+    public static <E> ImmutableArraySet<E> copyOf(Iterable<E> it) {
+        if(it instanceof ImmutableArraySet) {
+            return (ImmutableArraySet<E>) it;
+        }
+        return new ImmutableArraySetBuilder<E>().with(it).build();
+    }
+
+    /**
      * Deserialization.
      *
      * @param stream the object stream to be deserialized

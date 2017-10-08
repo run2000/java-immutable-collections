@@ -577,6 +577,62 @@ public final class ImmutableSortedArraySet<E> extends AbstractSet<E>
     }
 
     /**
+     * Returns an {@code ImmutableSortedArraySet} that contains the elements
+     * supplied by the given {@code Iterable}.
+     * <p>
+     * If the given iterable is itself an immutable sorted array set, then
+     * it will be returned.
+     * <p>
+     * If the given set is itself a sorted set, the returned set will be
+     * sorted by the same comparator.
+     * <p>
+     * Otherwise, the returned set will have both elements sorted by their
+     * natural order.
+     *
+     * @param it the elements to be copied
+     * @param <E> the element type of the set
+     * @return an {@code ImmutableSortedArraySet} containing the elements from
+     * the given {@code Iterable}
+     */
+    @SuppressWarnings("unchecked")
+    public static <E> ImmutableSortedArraySet<E> copyOf(Iterable<E> it) {
+        if(it instanceof ImmutableSortedArraySet) {
+            return (ImmutableSortedArraySet<E>) it;
+        } else if(it instanceof SortedSet) {
+            SortedSet<E> set = (SortedSet<E>) it;
+            return new ImmutableSortedArraySetBuilder<E>().with(it).byComparing(set.comparator()).build();
+        }
+        return new ImmutableSortedArraySetBuilder<E>().with(it).build();
+    }
+
+    /**
+     * Returns an {@code ImmutableSortedArraySet} that contains the elements
+     * supplied by the given {@code Iterable}.
+     * <p>
+     * If the given iterable is itself an immutable sorted array set, and
+     * identical comparator, then it will be returned.
+     * <p>
+     * Otherwise, the returned set will have both elements sorted by the
+     * supplied comparator.
+     *
+     * @param it the elements to be copied
+     * @param cmp the comparator for sorting the elements
+     * @param <E> the element type of the set
+     * @return an {@code ImmutableSortedArraySet} containing the elements from
+     * the given {@code Iterable}
+     */
+    @SuppressWarnings("unchecked")
+    public static <E> ImmutableSortedArraySet<E> copyOf(Iterable<E> it, Comparator<? super E> cmp) {
+        if(it instanceof ImmutableSortedArraySet) {
+            ImmutableSortedArraySet<E> sortedSet = (ImmutableSortedArraySet<E>) it;
+            if(sortedSet.comparator() == cmp) {
+                return sortedSet;
+            }
+        }
+        return new ImmutableSortedArraySetBuilder<E>().with(it).byComparing(cmp).build();
+    }
+
+    /**
      * Deserialization.
      *
      * @param stream the object stream to be deserialized

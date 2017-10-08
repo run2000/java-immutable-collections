@@ -282,7 +282,7 @@ public final class ImmutableHashedArrayMapBuilder<K,V> {
 
         Object[] elements = new Object[m_Size * 2];
         int[] hashCodes = new int[m_Size * 2];
-        Set<Object> dups = new HashSet<Object>(m_Size);
+        Set<Object> dups = new HashSet<>(m_Size);
         for(int i = 0; i < m_Size; i++) {
             Object o = m_Keys[i];
             if(dups.contains(o)) {

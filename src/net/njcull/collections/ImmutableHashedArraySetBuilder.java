@@ -209,7 +209,7 @@ public final class ImmutableHashedArraySetBuilder<E> {
             return new ImmutableHashedArraySet<E>(elements, hashCodes);
         }
 
-        Set<Object> dups = new HashSet<Object>(m_Size);
+        Set<Object> dups = new HashSet<>(m_Size);
         // Scan for and remove any duplicates, using a set to detect duplicates.
         int prev = 0;
         dups.add(elements[0]);

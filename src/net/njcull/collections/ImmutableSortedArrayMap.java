@@ -619,6 +619,186 @@ public final class ImmutableSortedArrayMap<K,V> extends AbstractMap<K,V>
     }
 
     /**
+     * Returns an {@code ImmutableSortedArrayMap} that contains the data
+     * supplied by the given map. If the supplier map is itself an
+     * {@code ImmutableSortedArrayMap}, it will be returned.
+     * <p>
+     * If the given map is itself a sorted map, the returned map will be
+     * sorted by the same key comparator, and natural value order.
+     * <p>
+     * Otherwise, the returned map will have both keys and values sorted by
+     * their natural order.
+     *
+     * @param map the map to be copied
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @return an {@code ImmutableSortedArrayMap} containing the data from the
+     * given map
+     */
+    @SuppressWarnings("unchecked")
+    public static <K,V> ImmutableSortedArrayMap<K,V> copyOf(Map<? extends K, ? extends V> map) {
+        if(map instanceof ImmutableSortedArrayMap) {
+            return (ImmutableSortedArrayMap<K,V>)map;
+        } else if(map instanceof SortedMap) {
+            return ImmutableSortedArrayMapBuilder.<K,V>newMap().with(map).byComparingKeys(((SortedMap)map).comparator()).build();
+        }
+
+        return ImmutableSortedArrayMapBuilder.<K,V>newMap().with(map).build();
+    }
+
+    /**
+     * Returns an {@code ImmutableSortedArrayMap} that contains the data
+     * supplied by the given map, with keys ordered by the given comparator.
+     * If the supplier map is itself an {@code ImmutableSortedArrayMap}, and
+     * identical key comparator, it will be returned.
+     * <p>
+     * Otherwise, the returned map will have the keys sorted by the given
+     * comparator, and values sorted by their natural order.
+     *
+     * @param map the map to be copied
+     * @param keyCmp the key comparator
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @return an {@code ImmutableSortedArrayMap} containing the data from the
+     * given map
+     */
+    @SuppressWarnings("unchecked")
+    public static <K,V> ImmutableSortedArrayMap<K,V> copyOf(Map<? extends K, ? extends V> map, Comparator<? super K> keyCmp) {
+        if(map instanceof ImmutableSortedArrayMap) {
+            ImmutableSortedArrayMap<K, V> sortedMap = (ImmutableSortedArrayMap<K, V>) map;
+            Comparator<? super K> keyOther = sortedMap.comparator();
+            if (keyOther == keyCmp) {
+                return sortedMap;
+            }
+        }
+        return ImmutableSortedArrayMapBuilder.<K,V>newMap().with(map).byComparingKeys(keyCmp).build();
+    }
+
+    /**
+     * Returns an {@code ImmutableSortedArrayMap} that contains the data
+     * supplied by the given map, with keys ordered by the given comparator.
+     * If the supplier map is itself an {@code ImmutableSortedArrayMap}, and
+     * identical key and value comparator, it will be returned.
+     * <p>
+     * Otherwise, the returned map will have the keys and values sorted by
+     * the given comparators.
+     *
+     * @param map the map to be copied
+     * @param cmpKey the key comparator
+     * @param cmpVal the value comparator
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @return an {@code ImmutableSortedArrayMap} containing the data from the
+     * given map
+     */
+    @SuppressWarnings("unchecked")
+    public static <K,V> ImmutableSortedArrayMap<K,V> copyOf(Map<? extends K, ? extends V> map,
+            Comparator<? super K> cmpKey, Comparator<? super V> cmpVal) {
+        if(map instanceof ImmutableSortedArrayMap) {
+            ImmutableSortedArrayMap<K, V> sortedMap = (ImmutableSortedArrayMap<K, V>) map;
+            Comparator<? super K> otherKey = sortedMap.comparator();
+            Comparator<? super V> otherVal = sortedMap.valueComparator();
+            if ((otherKey == cmpKey) && (otherVal == cmpVal)) {
+                return sortedMap;
+            }
+        }
+        return ImmutableSortedArrayMapBuilder.<K,V>newMap().with(map).byComparingKeys(cmpKey).byComparingValues(cmpVal).build();
+    }
+
+    /**
+     * Returns an {@code ImmutableSortedArrayMap} that contains the data
+     * supplied by the given map. If the supplier map is itself an
+     * {@code ImmutableSortedArrayMap}, as a bi-map, it will be returned.
+     * <p>
+     * If the given map is itself a sorted map, the returned map will be
+     * sorted by the same key comparator, and natural value order.
+     * <p>
+     * Otherwise, the returned bi-map will have both keys and values sorted
+     * by their natural order.
+     *
+     * @param map the map to be copied
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @return an {@code ImmutableSortedArrayMap} containing the data from the
+     * given map
+     */
+    @SuppressWarnings("unchecked")
+    public static <K,V> ImmutableSortedArrayMap<K,V> copyOfBiMap(Map<? extends K, ? extends V> map) {
+        if(map instanceof ImmutableSortedArrayMap) {
+            ImmutableSortedArrayMap<K, V> sortedMap = (ImmutableSortedArrayMap<K, V>) map;
+            if(sortedMap.m_BiMap) {
+                // guarantee that this is a bi-map
+                return sortedMap;
+            }
+        }
+        if(map instanceof SortedMap) {
+            return ImmutableSortedArrayMapBuilder.<K,V>newBiMap().with(map).byComparingKeys(((SortedMap)map).comparator()).build();
+        }
+        return ImmutableSortedArrayMapBuilder.<K,V>newBiMap().with(map).build();
+    }
+
+    /**
+     * Returns an {@code ImmutableSortedArrayMap} that contains the data
+     * supplied by the given map, with keys ordered by the given comparator.
+     * If the supplier map is itself an {@code ImmutableSortedArrayMap}, as
+     * a bi-map, and identical key comparator, it will be returned.
+     * <p>
+     * Otherwise, the returned bi-map will have the keys sorted by the given
+     * comparator, and values sorted by their natural order.
+     *
+     * @param map the map to be copied
+     * @param keyCmp the key comparator
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @return an {@code ImmutableSortedArrayMap} containing the data from the
+     * given map
+     */
+    @SuppressWarnings("unchecked")
+    public static <K,V> ImmutableSortedArrayMap<K,V> copyOfBiMap(Map<? extends K, ? extends V> map, Comparator<? super K> keyCmp) {
+        if(map instanceof ImmutableSortedArrayMap) {
+            ImmutableSortedArrayMap<K, V> sortedMap = (ImmutableSortedArrayMap<K, V>) map;
+            Comparator<? super K> other = sortedMap.comparator();
+            if ((sortedMap.m_BiMap) && (other == keyCmp)) {
+                // guarantee that this is a bi-map
+                return sortedMap;
+            }
+        }
+        return ImmutableSortedArrayMapBuilder.<K,V>newBiMap().with(map).byComparingKeys(keyCmp).build();
+    }
+
+    /**
+     * Returns an {@code ImmutableSortedArrayMap} that contains the data
+     * supplied by the given map, with keys ordered by the given comparator.
+     * If the supplier map is itself an {@code ImmutableSortedArrayMap}, as a
+     * bi-map, and identical key and value comparator, it will be returned.
+     * <p>
+     * Otherwise, the returned bi-map will have the keys and values sorted by
+     * the given comparators.
+     *
+     * @param map the map to be copied
+     * @param cmpKey the key comparator
+     * @param cmpVal the value comparator
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @return an {@code ImmutableSortedArrayMap} containing the data from the
+     * given map
+     */
+    @SuppressWarnings("unchecked")
+    public static <K,V> ImmutableSortedArrayMap<K,V> copyOfBiMap(Map<? extends K, ? extends V> map,
+            Comparator<? super K> cmpKey, Comparator<? super V> cmpVal) {
+        if(map instanceof ImmutableSortedArrayMap) {
+            ImmutableSortedArrayMap<K, V> sortedMap = (ImmutableSortedArrayMap<K, V>) map;
+            Comparator<? super K> otherKey = sortedMap.comparator();
+            Comparator<? super V> otherVal = sortedMap.valueComparator();
+            if ((sortedMap.m_BiMap) && (otherKey == cmpKey) && (otherVal == cmpVal)) {
+                // guarantee that this is a bi-map
+                return sortedMap;
+            }
+        }
+        return ImmutableSortedArrayMapBuilder.<K,V>newBiMap().with(map).byComparingKeys(cmpKey).byComparingValues(cmpVal).build();
+    }
+
+    /**
      * Deserialization.
      *
      * @param stream the object stream to be deserialized

@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.SortedMap;
@@ -520,6 +521,121 @@ public final class ImmutableUniSortedArrayMap<K,V> extends AbstractMap<K,V>
      */
     public static <K,V> ImmutableUniSortedArrayMapBuilder<K,V> builder() {
         return new ImmutableUniSortedArrayMapBuilder<K,V>();
+    }
+
+    /**
+     * Returns an {@code ImmutableUniSortedArrayMap} that contains the data
+     * supplied by the given map. If the supplier map is itself an
+     * {@code ImmutableUniSortedArrayMap}, it will be returned.
+     * <p>
+     * If the given map is itself a sorted map, the returned map will be
+     * sorted by the same key comparator.
+     * <p>
+     * Otherwise, the returned map will have keys sorted by their natural order.
+     *
+     * @param map the map to be copied
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @return an {@code ImmutableUniSortedArrayMap} containing the data from
+     * the given map
+     */
+    @SuppressWarnings("unchecked")
+    public static <K,V> ImmutableUniSortedArrayMap<K,V> copyOf(Map<? extends K, ? extends V> map) {
+        if(map instanceof ImmutableUniSortedArrayMap) {
+            return (ImmutableUniSortedArrayMap<K,V>)map;
+        }
+        if(map instanceof SortedMap) {
+            return ImmutableUniSortedArrayMapBuilder.<K,V>newMap().with(map).byComparing(((SortedMap)map).comparator()).build();
+        }
+
+        return ImmutableUniSortedArrayMapBuilder.<K,V>newMap().with(map).build();
+    }
+
+    /**
+     * Returns an {@code ImmutableUniSortedArrayMap} that contains the data
+     * supplied by the given map, with keys ordered by the given comparator.
+     * If the supplier map is itself an {@code ImmutableUniSortedArrayMap}, and
+     * identical key comparator, it will be returned.
+     * <p>
+     * Otherwise, the returned map will have the keys sorted by the given
+     * comparator.
+     *
+     * @param map the map to be copied
+     * @param cmp the key comparator
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @return an {@code ImmutableUniSortedArrayMap} containing the data from
+     * the given map
+     */
+    @SuppressWarnings("unchecked")
+    public static <K,V> ImmutableUniSortedArrayMap<K,V> copyOf(Map<? extends K, ? extends V> map, Comparator<? super K> cmp) {
+        if(map instanceof ImmutableUniSortedArrayMap) {
+            Comparator<? super K> other = ((ImmutableUniSortedArrayMap<K, V>) map).comparator();
+            if (other == cmp) {
+                return (ImmutableUniSortedArrayMap<K, V>) map;
+            }
+        }
+        return ImmutableUniSortedArrayMapBuilder.<K,V>newMap().with(map).byComparing(cmp).build();
+    }
+
+    /**
+     * Returns an {@code ImmutableUniSortedArrayMap} that contains the data
+     * supplied by the given map. If the supplier map is itself an
+     * {@code ImmutableUniSortedArrayMap}, as a bi-map, it will be returned.
+     * <p>
+     * If the given map is itself a sorted map, the returned map will be
+     * sorted by the same key comparator.
+     * <p>
+     * Otherwise, the returned bi-map will have keys sorted by their natural
+     * order.
+     *
+     * @param map the map to be copied
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @return an {@code ImmutableUniSortedArrayMap} containing the data from
+     * the given map
+     */
+    @SuppressWarnings("unchecked")
+    public static <K,V> ImmutableUniSortedArrayMap<K,V> copyOfBiMap(Map<? extends K, ? extends V> map) {
+        if(map instanceof ImmutableUniSortedArrayMap) {
+            ImmutableUniSortedArrayMap<K, V> sortedMap = (ImmutableUniSortedArrayMap<K, V>) map;
+            if(sortedMap.m_BiMap) {
+                // guarantee that this is a bi-map
+                return sortedMap;
+            }
+        }
+        if(map instanceof SortedMap) {
+            return ImmutableUniSortedArrayMapBuilder.<K,V>newMap().with(map).byComparing(((SortedMap)map).comparator()).build();
+        }
+        return ImmutableUniSortedArrayMapBuilder.<K,V>newBiMap().with(map).build();
+    }
+
+    /**
+     * Returns an {@code ImmutableUniSortedArrayMap} that contains the data
+     * supplied by the given map, with keys ordered by the given comparator.
+     * If the supplier map is itself an {@code ImmutableUniSortedArrayMap}, as
+     * a bi-map, and identical key comparator, it will be returned.
+     * <p>
+     * Otherwise, the returned bi-map will have the keys sorted by the given
+     * comparator.
+     *
+     * @param map the map to be copied
+     * @param cmp the key comparator
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @return an {@code ImmutableUniSortedArrayMap} containing the data from
+     * the given map
+     */
+    @SuppressWarnings("unchecked")
+    public static <K,V> ImmutableUniSortedArrayMap<K,V> copyOfBiMap(Map<? extends K, ? extends V> map, Comparator<? super K> cmp) {
+        if(map instanceof ImmutableUniSortedArrayMap) {
+            ImmutableUniSortedArrayMap<K, V> sortedMap = (ImmutableUniSortedArrayMap<K, V>) map;
+            if ((sortedMap.m_BiMap) && (sortedMap.comparator() == cmp)) {
+                // guarantee that this is a bi-map
+                return sortedMap;
+            }
+        }
+        return ImmutableUniSortedArrayMapBuilder.<K,V>newBiMap().with(map).byComparing(cmp).build();
     }
 
     /**

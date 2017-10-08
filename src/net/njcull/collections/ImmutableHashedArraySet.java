@@ -416,6 +416,26 @@ public final class ImmutableHashedArraySet<E> extends AbstractSet<E>
     }
 
     /**
+     * Returns an {@code ImmutableHashedArraySet} that contains the elements
+     * supplied by the given {@code Iterable}.
+     * <p>
+     * If the given iterable is itself an immutable hashed array set, then
+     * it will be returned.
+     *
+     * @param it the elements to be copied
+     * @param <E> the element type of the set
+     * @return an {@code ImmutableHashedArraySet} containing the elements from
+     * the given {@code Iterable}
+     */
+    @SuppressWarnings("unchecked")
+    public static <E> ImmutableHashedArraySet<E> copyOf(Iterable<E> it) {
+        if(it instanceof ImmutableHashedArraySet) {
+            return (ImmutableHashedArraySet<E>) it;
+        }
+        return new ImmutableHashedArraySetBuilder<E>().with(it).build();
+    }
+
+    /**
      * Deserialization.
      *
      * @param stream the object stream to be deserialized

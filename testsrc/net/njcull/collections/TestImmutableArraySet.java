@@ -424,6 +424,27 @@ public final class TestImmutableArraySet {
         Assert.assertEquals(6, result2.indexOf("g"));
     }
 
+    @Test
+    public void testCopyOf() throws Exception {
+        List<String> abcdefg = Arrays.asList("d", "e", "Qrst", "f", "a", "abc", "b", "c", "g");
+
+        ImmutableArraySet<String> result = ImmutableArraySet.copyOf(abcdefg);
+
+        Assert.assertTrue(result.contains("d"));
+        Assert.assertTrue(result.contains("e"));
+        Assert.assertTrue(result.contains("Qrst"));
+        Assert.assertTrue(result.contains("f"));
+        Assert.assertTrue(result.contains("a"));
+        Assert.assertTrue(result.contains("abc"));
+        Assert.assertTrue(result.contains("b"));
+        Assert.assertTrue(result.contains("c"));
+        Assert.assertTrue(result.contains("g"));
+
+        ImmutableArraySet<String> result2 = ImmutableArraySet.copyOf(result);
+
+        Assert.assertSame(result, result2);
+    }
+
     @SuppressWarnings("unchecked")
     @Test
     public void testExceptions() throws Exception {

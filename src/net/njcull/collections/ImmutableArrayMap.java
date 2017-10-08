@@ -423,6 +423,48 @@ public final class ImmutableArrayMap<K,V> extends AbstractMap<K,V>
     }
 
     /**
+     * Returns an {@code ImmutableArrayMap} that contains the data supplied by
+     * the given map. If the supplier map is itself an {@code ImmutableArrayMap},
+     * it will be returned.
+     *
+     * @param map the map to be copied
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @return an {@code ImmutableArrayMap} containing the data from the given
+     * map
+     */
+    @SuppressWarnings("unchecked")
+    public static <K,V> ImmutableArrayMap<K,V> copyOf(Map<? extends K, ? extends V> map) {
+        if(map instanceof ImmutableArrayMap) {
+            return (ImmutableArrayMap<K,V>)map;
+        }
+        return ImmutableArrayMapBuilder.<K,V>newMap().with(map).build();
+    }
+
+    /**
+     * Returns an {@code ImmutableArrayMap}, as a bi-map, that contains the
+     * data supplied by the given map. If the supplier map is itself an
+     * {@code ImmutableArrayMap} that is a bi-map, it will be returned.
+     *
+     * @param map the map to be copied
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @return an {@code ImmutableArrayMap} containing the data from the given
+     * map
+     */
+    @SuppressWarnings("unchecked")
+    public static <K,V> ImmutableArrayMap<K,V> copyOfBiMap(Map<? extends K, ? extends V> map) {
+        if(map instanceof ImmutableArrayMap) {
+            ImmutableArrayMap<K, V> arrayMap = (ImmutableArrayMap<K, V>) map;
+            if(arrayMap.m_BiMap) {
+                // guarantee that this is a bi-map
+                return arrayMap;
+            }
+        }
+        return ImmutableArrayMapBuilder.<K,V>newBiMap().with(map).build();
+    }
+
+    /**
      * Deserialization.
      *
      * @param stream the object stream to be deserialized
